@@ -1168,6 +1168,38 @@ camposAutosave.forEach(id=>{
     }
   }
 })();
+
+// ===== FORMATADOR AUTOMÁTICO DE HORÁRIO (SEM ":" NO CELULAR) =====
+function formatarHorarioAuto(id){
+  const campo = document.getElementById(id);
+  campo.addEventListener("input", () => {
+    let v = campo.value.replace(/\D/g, ""); // remove tudo que não for número
+
+    if(v.length >= 3){
+      // transforma "830" em "08:30", "1234" em "12:34", etc.
+      v = v.padStart(4, "0"); 
+      const hh = v.slice(0, 2);
+      const mm = v.slice(2, 4);
+      campo.value = `${hh}:${mm}`;
+    } else {
+      campo.value = v; // ainda digitando
+    }
+  });
+}
+
+// Aplica a todos os campos de horário
+[
+  "h_ddsChecklist",
+  "h_disposicao",
+  "h_chegada",
+  "h_liberacaoPT",
+  "h_inicio",
+  "h_fim",
+  "h_inicioIntervalo",
+  "h_fimIntervalo",
+  "h_trocaTurno"
+].forEach(id => formatarHorarioAuto(id));
+  
 </script>
 </body>
 </html>
