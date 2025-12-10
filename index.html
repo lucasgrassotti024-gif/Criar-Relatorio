@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Relatórios de Campo</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --primary:#0078ff;
+  --accent:#00b4ff;
+  --bg:#f5f8fb;
+  --white:#ffffff;
+  --card:#ffffff;
+  --text:#1a1a1a;
+  --muted:#666;
+  --border:#e3e6eb;
+  --shadow:0 8px 28px rgba(0,0,0,0.08);
+}
+.dark {
+  --bg:#0f1419;
+  --white:#1b2128;
+  --card:#1e252d;
+  --text:#e9eef5;
+  --muted:#a7b0bc;
+  --border:#2b3139;
+  --shadow:0 4px 16px rgba(0,0,0,0.6);
+}
+
+*{box-sizing:border-box;font-family:"Inter",sans-serif;transition:all .25s ease;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* HEADER */
+header{
+  backdrop-filter:blur(14px);
+  background:var(--white);
+  padding:14px 22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:10;
+  border-bottom:1px solid var(--border);
+  box-shadow:var(--shadow);
+}
+.dark header{background:rgba(30,37,45,0.9);}
+header h1{
+  font-family:"Outfit";
+  font-weight:800;
+  font-size:1.3rem;
+  color:var(--primary);
+  margin:0;
+}
+
+/* TEMA */
+#themeToggle{
+  cursor:pointer;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:50%;
+  width:38px;
+  height:38px;
+  font-size:1.2rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:var(--shadow);
+}
+#themeToggle:hover{transform:scale(1.05);}
+.dark #themeToggle{background:var(--white);color:var(--primary);}
+
+/* CONTEÚDO */
+main{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:32px 18px;
+}
+.box{
+  max-width:420px;
+  width:100%;
+  background:var(--card);
+  border-radius:18px;
+  padding:24px 22px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+  text-align:center;
+}
+.box h2{
+  margin:0 0 8px 0;
+  font-family:"Outfit";
+  font-weight:800;
+  color:var(--primary);
+}
+.box p{
+  margin:0 0 20px 0;
+  color:var(--muted);
+  font-size:.95rem;
+}
+.box button{
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  border:none;
+  color:#fff;
+  padding:12px 20px;
+  border-radius:12px;
+  font-weight:700;
+  font-size:1rem;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(0,120,255,0.35);
+}
+.box button:hover{transform:translateY(-2px);}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:14px;
+  color:var(--muted);
+  font-size:.85rem;
+  background:var(--white);
+  border-top:1px solid var(--border);
+  box-shadow:0 -3px 12px rgba(0,0,0,0.06);
+}
+.dark footer{background:var(--card);}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Relatórios de Campo</h1>
+  <button id="themeToggle">🌙</button>
+</header>
+
+<main>
+  <div class="box">
+    <h2>Área do Operador</h2>
+    <p>
+      Registre as atividades de campo de forma rápida e padronizada.
+      Preencha os dados da PT, horários, especificações e observações.
+    </p>
+    <button id="novoRelatorioBtn" type="button">➕ Novo relatório</button>
+  </div>
+</main>
+
+<footer>
+  © 2025 | Relatórios de Campo — Desenvolvido por <b>Lucas Grassotti Spolavori</b>
+</footer>
+
+<script>
+/* TEMA (igual outros sites) */
+const toggle = document.getElementById("themeToggle");
+if(localStorage.getItem("tema")==="dark"){
+  document.body.classList.add("dark");
+  toggle.textContent="☀️";
+}
+toggle.onclick=()=>{
+  document.body.classList.toggle("dark");
+  const dark = document.body.classList.contains("dark");
+  toggle.textContent = dark ? "☀️" : "🌙";
+  localStorage.setItem("tema", dark ? "dark" : "light");
+};
+
+/* IR PARA FORMULÁRIO */
+document.getElementById("novoRelatorioBtn").addEventListener("click",()=>{
+  window.location.href = "relatorio.html";
+});
+</script>
+
+</body>
+</html>
