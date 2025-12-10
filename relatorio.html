@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Relatório de Campo</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --primary:#0078ff;
+  --accent:#00b4ff;
+  --bg:#f5f8fb;
+  --card:#ffffff;
+  --text:#1a1a1a;
+  --muted:#666;
+  --border:#e3e6eb;
+  --shadow:0 8px 28px rgba(0,0,0,0.08);
+}
+.dark{
+  --bg:#0f1419;
+  --card:#1b2228;
+  --text:#e8eef5;
+  --muted:#a7b0bc;
+  --border:#2b3139;
+  --shadow:0 6px 22px rgba(0,0,0,0.6);
+}
+*{
+  box-sizing:border-box;
+  font-family:"Inter",sans-serif;
+  transition:background-color .18s ease,color .18s ease,border-color .18s ease;
+}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* HEADER */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 16px;
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+  box-shadow:var(--shadow);
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+header h1{
+  margin:0;
+  font-family:"Outfit";
+  font-weight:800;
+  font-size:1.2rem;
+  color:var(--primary);
+}
+#themeToggle{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:transparent;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-size:1.1rem;
+}
+
+/* MAIN */
+main{
+  flex:1;
+  max-width:920px;
+  margin:20px auto;
+  padding:16px;
+}
+.card{
+  background:var(--card);
+  border-radius:12px;
+  padding:16px;
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+}
+h2{
+  margin:0 0 10px;
+  font-family:"Outfit";
+  font-weight:800;
+  color:var(--primary);
+  font-size:1.1rem;
+}
+.section-title{
+  margin:18px 0 8px;
+  font-weight:700;
+  font-size:.95rem;
+  color:var(--primary);
+}
+label{
+  display:block;
+  margin-top:10px;
+  font-weight:600;
+  font-size:.85rem;
+}
+input,select,textarea{
+  width:100%;
+  padding:9px 10px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text);
+  font-size:.9rem;
+  outline:none;
+}
+textarea{resize:vertical;min-height:70px;}
+input::placeholder,textarea::placeholder{color:#9aa4b2;}
+.dark input,.dark select,.dark textarea{
+  background:#232a30;
+  border-color:#333a42;
+  color:#eaf0f7;
+}
+.dark input::placeholder,.dark textarea::placeholder{color:#aeb9c4;}
+
+/* small grid */
+.grid-2{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:10px;
+}
+
+/* HORÁRIOS */
+.horario-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:8px;
+}
+.horario-row input{
+  flex:1;
+}
+.horario-row button{
+  flex:0 0 120px;
+}
+
+/* BUTTONS */
+.btn{
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:#fff;
+  border:none;
+  padding:11px 14px;
+  border-radius:10px;
+  font-weight:700;
+  font-size:.95rem;
+  cursor:pointer;
+}
+.btn:hover{
+  transform:translateY(-1px);
+}
+.btn-sec{
+  background:#ddd;
+  color:#222;
+}
+
+/* QUICK OPTIONS (chips) */
+.quick-options{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:4px;
+}
+.quick-btn{
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:rgba(15,23,42,0.03);
+  padding:4px 9px;
+  font-size:.75rem;
+  cursor:pointer;
+  color:var(--muted);
+}
+.dark .quick-btn{
+  background:#232a30;
+  border-color:#333a42;
+  color:#e5e7eb;
+}
+.quick-btn:hover{
+  background:rgba(0,120,255,0.06);
+}
+
+/* IMAGENS */
+#imagePreview{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:8px;
+}
+.thumb-img{
+  width:120px;
+  height:80px;
+  object-fit:cover;
+  border-radius:8px;
+  box-shadow:0 4px 14px rgba(0,0,0,0.25);
+  cursor:zoom-in;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:12px;
+  font-size:.8rem;
+  color:var(--muted);
+  background:var(--card);
+  border-top:1px solid var(--border);
+}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  padding:8px 14px;
+  border-radius:999px;
+  background:#111827;
+  color:#f9fafb;
+  font-size:.78rem;
+  font-weight:600;
+  display:none;
+  z-index:9999;
+  box-shadow:0 8px 20px rgba(0,0,0,0.45);
+}
+.toast.show{
+  display:block;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  main{padding:10px;}
+  .horario-row button{flex:0 0 100px;font-size:.75rem;padding:9px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Relatório de Campo</h1>
+  <button id="themeToggle" type="button">🌙</button>
+</header>
+
+<main>
+  <div class="card">
+    <h2>Preencher Relatório</h2>
+
+    <!-- DADOS PRINCIPAIS -->
+    <div class="section-title">Dados principais</div>
+    <div class="grid-2">
+      <div>
+        <label>Número da PT</label>
+        <!-- pode digitar -->
+        <input id="numeroPt" type="text" autocomplete="off">
+      </div>
+      <div>
+        <label>Data</label>
+        <input id="data" type="date" autocomplete="off">
+      </div>
+      <div>
+        <label>Equipamento</label>
+        <select id="equipamento">
+          <option value="">Selecione...</option>
+          <option value="Hidrojato">Hidrojato</option>
+          <option value="Hidrovacuo">Hidrovácuo</option>
+        </select>
+      </div>
+      <div>
+        <label>Placa</label>
+        <select id="placaSelect">
+          <option value="">Selecione...</option>
+          <option value="FOQ6H01">FOQ6H01</option>
+          <option value="IVR1B32">IVR1B32</option>
+          <option value="JBK7F63">JBK7F63</option>
+          <option value="JBL1H84">JBL1H84</option>
+          <option value="LRA8855">LRA8855</option>
+          <option value="SKID">SKID</option>
+          <option value="PPC6I87">PPC6I87</option>
+          <option value="TDK6G18">TDK6G18</option>
+          <option value="KPR0F00">KPR0F00</option>
+          <option value="outra">Outra (digitar)</option>
+        </select>
+        <input id="placaTexto" type="text" placeholder="Digite a placa..." style="margin-top:6px;display:none;" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <label>Local</label>
+        <input id="local" type="text" autocomplete="off">
+      </div>
+      <div>
+        <label>TAG</label>
+        <input id="tag" type="text" autocomplete="off">
+      </div>
+      <div>
+        <label>Solicitante</label>
+        <input id="solicitante" type="text" autocomplete="off">
+        <div class="quick-options">
+          <button type="button" class="quick-btn" data-fill-target="solicitante" data-fill-value="CMPC">CMPC</button>
+        </div>
+      </div>
+      <div>
+        <label>Emitente abertura</label>
+        <input id="emitAbertura" type="text" autocomplete="off">
+      </div>
+      <div>
+        <label>Emitente encerramento</label>
+        <input id="emitEncerramento" type="text" autocomplete="off">
+      </div>
+      <div>
+        <label>Operador</label>
+        <select id="operadorSelect">
+          <option value="">Selecione...</option>
+          <option value="Bruno Ramos">Bruno Ramos</option>
+          <option value="Carlos Alexandre">Carlos Alexandre</option>
+          <option value="Jaques">Jaques</option>
+          <option value="Júlio César">Júlio César</option>
+          <option value="Lucas Coelho">Lucas Coelho</option>
+          <option value="Robson Silva">Robson Silva</option>
+          <option value="outra">Outro (digitar)</option>
+        </select>
+        <input id="operadorTexto" type="text" placeholder="Digite o nome do operador..." style="margin-top:6px;display:none;" autocomplete="off">
+      </div>
+      <div>
+        <label>Ajudante</label>
+        <input id="ajudante" type="text" autocomplete="off">
+      </div>
+      <div>
+        <label>Tipo de serviço</label>
+        <input id="tipoServico" type="text" placeholder="Ex.: Limpeza de caixa..." autocomplete="off">
+      </div>
+    </div>
+
+    <!-- HORÁRIOS -->
+    <div class="section-title">Horários</div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>DDS e Checklist</label>
+        <input id="h_ddsChecklist" type="text" placeholder="hh:mm" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_ddsChecklist">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Disposição da coordenação</label>
+        <input id="h_disposicao" type="text" placeholder="hh:mm" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_disposicao">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Chegada ao local</label>
+        <input id="h_chegada" type="text" placeholder="hh:mm" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_chegada">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Liberação da PT</label>
+        <input id="h_liberacaoPT" type="text" placeholder="hh:mm" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_liberacaoPT">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Início da atividade</label>
+        <input id="h_inicio" type="text" placeholder="hh:mm" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_inicio">Marcar</button>
+    </div>
+
+    <!-- FIM ATIVIDADE ANTES DOS INTERVALOS -->
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Fim da atividade</label>
+        <input id="h_fim" type="text" placeholder="hh:mm" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_fim">Marcar</button>
+    </div>
+
+    <!-- INTERVALOS AGORA VÊM DEPOIS DO FIM -->
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Início intervalo</label>
+        <input id="h_inicioIntervalo" type="text" placeholder="hh:mm" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_inicioIntervalo">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Fim intervalo</label>
+        <input id="h_fimIntervalo" type="text" placeholder="hh:mm" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_fimIntervalo">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Troca de turno</label>
+        <input id="h_trocaTurno" type="text" placeholder="hh:mm" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_trocaTurno">Marcar</button>
+    </div>
+
+    <!-- ENCERRAMENTO DA PT -->
+    <div class="section-title">Encerramento da PT</div>
+    <div class="grid-2">
+      <div>
+        <label>Encerramento da PT?</label>
+        <select id="encerramentoPt">
+          <option value="">Selecione...</option>
+          <option value="Sim">Sim</option>
+          <option value="Não">Não</option>
+        </select>
+      </div>
+      <div id="boxMotivoNao" style="display:none;">
+        <label>Por que não foi finalizada?</label>
+        <input id="motivoNaoFinalizada" type="text" autocomplete="off">
+      </div>
+    </div>
+
+    <!-- ESPECIFICAÇÕES -->
+    <div class="section-title">Especificações da atividade</div>
+    <div class="grid-2">
+      <div>
+        <label>Tipo</label>
+        <select id="tipoAtividade">
+          <option value="">Selecione...</option>
+          <option value="Sucção">Sucção</option>
+          <option value="Descarte">Descarte</option>
+          <option value="Hidrojato">Hidrojato</option>
+        </select>
+      </div>
+      <div>
+        <label>Óleo</label>
+        <select id="oleo">
+          <option value="">Selecione...</option>
+          <option value="Sim">Sim</option>
+          <option value="Não">Não</option>
+        </select>
+      </div>
+      <div id="boxQuantidade" style="display:none;">
+        <label>Quantidade (se tiver óleo)</label>
+        <input id="quantidade" type="text" placeholder="Ex.: 500 L" autocomplete="off">
+      </div>
+    </div>
+
+    <!-- NOVO BLOCO: ONDE FOI DESCARTADO / IBCs vs Outros -->
+    <div id="boxDescartes" style="display:none; margin-top:8px;">
+      <label>Onde foi descartado?</label>
+      <select id="ondeDescartadoTipo">
+        <option value="">Selecione...</option>
+        <option value="IBCs">IBCs</option>
+        <option value="Outros">Outros</option>
+      </select>
+      <div id="boxOndeOutros" style="display:none; margin-top:8px;">
+        <input id="ondeDescartadoTexto" type="text"
+               placeholder="Descreva o local (ex.: lago, caixa, tanque...)" autocomplete="off">
+      </div>
+    </div>
+    <!-- FIM BLOCO NOVO -->
+
+    <!-- FOTOS -->
+    <div class="section-title">Fotos</div>
+    <div style="display:flex;gap:10px;align-items:center;margin-top:6px;flex-wrap:wrap;">
+      <button id="btnAddFoto" class="btn" type="button">Adicionar foto</button>
+      <input id="inputFotos" type="file" accept="image/*" multiple style="display:none">
+      <span style="font-size:.75rem;color:var(--muted);">Máx. 5 fotos</span>
+    </div>
+    <div id="imagePreview"></div>
+
+    <!-- OBSERVAÇÕES -->
+    <label style="margin-top:16px;">Observações</label>
+    <textarea id="observacoes" placeholder="Algo importante sobre a atividade..." autocomplete="off"></textarea>
+
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button id="btnSalvar" class="btn" type="button">Salvar relatório</button>
+      <button id="btnLimpar" class="btn btn-sec" type="button">Limpar campos</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  © 2025 | Relatórios de Campo — RSS3
+</footer>
+
+<div id="toast" class="toast"></div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCxI5gx0LS0ny2y6UnPUCyW0zf1BjnTSco",
+  authDomain: "checklist-rss3.firebaseapp.com",
+  projectId: "checklist-rss3",
+  storageBucket: "checklist-rss3.appspot.com",
+  messagingSenderId: "179261205524",
+  appId: "1:179261205524:web:376152c3b94fb115f14b01",
+  measurementId: "G-47CPMQ3ZTC"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+</script>
+
+<script>
+// ===== THEMA =====
+const themeToggle=document.getElementById("themeToggle");
+if(localStorage.getItem("tema")==="dark"){
+  document.body.classList.add("dark");
+  themeToggle.textContent="☀️";
+}
+themeToggle.onclick=()=>{
+  document.body.classList.toggle("dark");
+  const dark=document.body.classList.contains("dark");
+  themeToggle.textContent=dark?"☀️":"🌙";
+  localStorage.setItem("tema",dark?"dark":"light");
+};
+
+// ===== TOAST =====
+const toastEl=document.getElementById("toast");
+function showToast(msg,color){
+  toastEl.textContent=msg;
+  toastEl.style.background=color || "#111827";
+  toastEl.classList.add("show");
+  setTimeout(()=>toastEl.classList.remove("show"),2800);
+}
+
+// Identificação silenciosa
+function getDeviceId(){
+  let id=localStorage.getItem("deviceId_relatorios");
+  if(!id){
+    id="dev-"+Math.random().toString(36).slice(2,10);
+    localStorage.setItem("deviceId_relatorios",id);
+  }
+  return id;
+}
+function getOperadorIdFixo(){
+  let id=localStorage.getItem("operadorIdFixo_relatorios");
+  if(!id){
+    id="op-"+Math.random().toString(36).slice(2,10);
+    localStorage.setItem("operadorIdFixo_relatorios",id);
+  }
+  return id;
+}
+
+// ===== RASCUNHO LOCAL =====
+const DRAFT_KEY = "relatorioCampo_rascunho";
+
+let numeroPtAtual=null;
+let fotosSelecionadas=[];
+
+function $(id){return document.getElementById(id);}
+
+function saveDraft(){
+  try{
+    const draft={
+      numeroPtAtual,
+      numeroPt: $("numeroPt").value,
+      data: $("data").value,
+      equipamento: $("equipamento").value,
+      placaSelect: $("placaSelect").value,
+      placaTexto: $("placaTexto").value,
+      local: $("local").value,
+      tag: $("tag").value,
+      solicitante: $("solicitante").value,
+      emitAbertura: $("emitAbertura").value,
+      emitEncerramento: $("emitEncerramento").value,
+      operadorSelect: $("operadorSelect").value,
+      operadorTexto: $("operadorTexto").value,
+      ajudante: $("ajudante").value,
+      tipoServico: $("tipoServico").value,
+      tipoAtividade: $("tipoAtividade").value,
+      oleo: $("oleo").value,
+      quantidade: $("quantidade").value,
+      encerramentoPt: $("encerramentoPt").value,
+      motivoNaoFinalizada: $("motivoNaoFinalizada").value,
+      ondeDescartadoTipo: $("ondeDescartadoTipo").value,
+      ondeDescartadoTexto: $("ondeDescartadoTexto").value,
+      horarios:{
+        ddsChecklist: $("h_ddsChecklist").value,
+        disposicao: $("h_disposicao").value,
+        chegada: $("h_chegada").value,
+        liberacaoPT: $("h_liberacaoPT").value,
+        inicio: $("h_inicio").value,
+        inicioIntervalo: $("h_inicioIntervalo").value,
+        fimIntervalo: $("h_fimIntervalo").value,
+        fim: $("h_fim").value,
+        trocaTurno: $("h_trocaTurno").value
+      },
+      observacoes: $("observacoes").value,
+      fotos: fotosSelecionadas
+    };
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+  }catch(e){
+    console.warn("Erro ao salvar rascunho:",e);
+  }
+}
+
+function loadDraft(){
+  try{
+    const raw=localStorage.getItem(DRAFT_KEY);
+    if(!raw) return false;
+    const d=JSON.parse(raw);
+
+    if(d.numeroPt){
+      $("numeroPt").value=d.numeroPt;
+    }
+    if(d.numeroPtAtual){
+      numeroPtAtual=d.numeroPtAtual;
+    }
+
+    if(d.data) $("data").value=d.data;
+    if(d.equipamento) $("equipamento").value=d.equipamento;
+    if(d.placaSelect){
+      $("placaSelect").value=d.placaSelect;
+      if(d.placaSelect==="outra"){
+        $("placaTexto").style.display="block";
+      }
+    }
+    if(d.placaTexto) $("placaTexto").value=d.placaTexto;
+    if(d.local) $("local").value=d.local;
+    if(d.tag) $("tag").value=d.tag;
+    if(d.solicitante) $("solicitante").value=d.solicitante;
+    if(d.emitAbertura) $("emitAbertura").value=d.emitAbertura;
+    if(d.emitEncerramento) $("emitEncerramento").value=d.emitEncerramento;
+
+    // Operador: select + texto
+    if(d.operadorSelect){
+      $("operadorSelect").value=d.operadorSelect;
+      if(d.operadorSelect==="outra"){
+        $("operadorTexto").style.display="block";
+      }
+    }
+    if(d.operadorTexto){
+      $("operadorTexto").value=d.operadorTexto;
+    }
+    // compat com rascunhos antigos que tinham "operador" direto
+    if(!d.operadorSelect && d.operador){
+      $("operadorSelect").value="outra";
+      $("operadorTexto").style.display="block";
+      $("operadorTexto").value=d.operador;
+    }
+
+    if(d.ajudante) $("ajudante").value=d.ajudante;
+    if(d.tipoServico) $("tipoServico").value=d.tipoServico;
+    if(d.tipoAtividade) $("tipoAtividade").value=d.tipoAtividade;
+    if(d.oleo){
+      $("oleo").value=d.oleo;
+      if(d.oleo==="Sim"){
+        $("boxQuantidade").style.display="block";
+      }
+    }
+    if(d.quantidade) $("quantidade").value=d.quantidade;
+
+    if(d.encerramentoPt){
+      $("encerramentoPt").value=d.encerramentoPt;
+      if(d.encerramentoPt==="Não"){
+        $("boxMotivoNao").style.display="block";
+      }
+    }
+    if(d.motivoNaoFinalizada) $("motivoNaoFinalizada").value=d.motivoNaoFinalizada;
+
+    if(d.ondeDescartadoTipo) $("ondeDescartadoTipo").value=d.ondeDescartadoTipo;
+    if(d.ondeDescartadoTexto) $("ondeDescartadoTexto").value=d.ondeDescartadoTexto;
+
+    if(d.horarios){
+      $("h_ddsChecklist").value=d.horarios.ddsChecklist || "";
+      $("h_disposicao").value=d.horarios.disposicao || "";
+      $("h_chegada").value=d.horarios.chegada || "";
+      $("h_liberacaoPT").value=d.horarios.liberacaoPT || "";
+      $("h_inicio").value=d.horarios.inicio || "";
+      $("h_inicioIntervalo").value=d.horarios.inicioIntervalo || "";
+      $("h_fimIntervalo").value=d.horarios.fimIntervalo || "";
+      $("h_fim").value=d.horarios.fim || "";
+      $("h_trocaTurno").value=d.horarios.trocaTurno || "";
+    }
+
+    fotosSelecionadas = Array.isArray(d.fotos) ? d.fotos : [];
+    renderPreview();
+
+    // garante estado correto dos blocos
+    updateDescartesBoxVisibility();
+
+    // se já veio "Outros", mostra o campo de texto
+    if($("ondeDescartadoTipo").value==="Outros"){
+      $("boxOndeOutros").style.display="block";
+    }
+
+    return true;
+  }catch(e){
+    console.warn("Erro ao carregar rascunho:",e);
+    return false;
+  }
+}
+
+// Numero PT auto (a partir de 100000)
+async function gerarNumeroPt(){
+  try{
+    const docRef=db.collection("config").doc("contadorPTCampo");
+    const prox=await db.runTransaction(async(tx)=>{
+      const snap=await tx.get(docRef);
+      let atual=99999;
+      if(snap.exists && typeof snap.data().valor==="number"){
+        atual=snap.data().valor;
+      }
+      const novo=atual+1;
+      tx.set(docRef,{valor:novo});
+      return novo;
+    });
+    numeroPtAtual=prox;
+    // só preenche se o campo estiver vazio (pra não sobrescrever algo digitado)
+    if(!$("numeroPt").value){
+      $("numeroPt").value=prox;
+    }
+    saveDraft();
+  }catch(err){
+    console.error("Erro ao gerar número PT:",err);
+    alert("Erro ao gerar número da PT. Ver console.");
+  }
+}
+
+// Data padrão hoje
+function setDataHoje(){
+  const hoje=new Date();
+  const ano=hoje.getFullYear();
+  const mes=String(hoje.getMonth()+1).padStart(2,"0");
+  const dia=String(hoje.getDate()).padStart(2,"0");
+  $("data").value=`${ano}-${mes}-${dia}`;
+}
+
+// Placa: select + texto
+const placaSelect=$("placaSelect");
+const placaTexto=$("placaTexto");
+placaSelect.addEventListener("change",()=>{
+  if(placaSelect.value==="outra"){
+    placaTexto.style.display="block";
+  }else{
+    placaTexto.style.display="none";
+    placaTexto.value="";
+  }
+  saveDraft();
+});
+
+// Operador: select + texto
+const operadorSelect=$("operadorSelect");
+const operadorTexto=$("operadorTexto");
+operadorSelect.addEventListener("change",()=>{
+  if(operadorSelect.value==="outra"){
+    operadorTexto.style.display="block";
+  }else{
+    operadorTexto.style.display="none";
+    operadorTexto.value="";
+  }
+  saveDraft();
+});
+
+// Óleo + Tipo: controle de quantidade e descarte
+const oleoSelect=$("oleo");
+const boxQuantidade=$("boxQuantidade");
+const boxDescartes=$("boxDescartes");
+const tipoAtividadeSelect=$("tipoAtividade");
+const ondeDescartadoTipoEl=$("ondeDescartadoTipo");
+const ondeDescartadoTextoEl=$("ondeDescartadoTexto");
+const boxOndeOutros=$("boxOndeOutros");
+
+function updateDescartesBoxVisibility(){
+  const tipoVal=tipoAtividadeSelect.value;
+  const oleoVal=oleoSelect.value;
+  if(tipoVal==="Descarte" && oleoVal==="Sim"){
+    boxDescartes.style.display="block";
+  }else{
+    boxDescartes.style.display="none";
+    ondeDescartadoTipoEl.value="";
+    ondeDescartadoTextoEl.value="";
+    boxOndeOutros.style.display="none";
+  }
+}
+
+oleoSelect.addEventListener("change",()=>{
+  if(oleoSelect.value==="Sim"){
+    boxQuantidade.style.display="block";
+  }else{
+    boxQuantidade.style.display="none";
+    $("quantidade").value="";
+  }
+  updateDescartesBoxVisibility();
+  saveDraft();
+});
+
+tipoAtividadeSelect.addEventListener("change",()=>{
+  updateDescartesBoxVisibility();
+  saveDraft();
+});
+
+// Onde foi descartado: IBCs x Outros
+ondeDescartadoTipoEl.addEventListener("change",()=>{
+  if(ondeDescartadoTipoEl.value==="Outros"){
+    boxOndeOutros.style.display="block";
+  }else{
+    boxOndeOutros.style.display="none";
+    ondeDescartadoTextoEl.value="";
+  }
+  saveDraft();
+});
+
+// Encerramento da PT
+const encerramentoPtSelect=$("encerramentoPt");
+const boxMotivoNao=$("boxMotivoNao");
+const motivoNaoEl=$("motivoNaoFinalizada");
+encerramentoPtSelect.addEventListener("change",()=>{
+  if(encerramentoPtSelect.value==="Não"){
+    boxMotivoNao.style.display="block";
+  }else{
+    boxMotivoNao.style.display="none";
+    motivoNaoEl.value="";
+  }
+  saveDraft();
+});
+
+// Botões de horário
+function formatHoraAgora(){
+  const agora=new Date();
+  const hh=String(agora.getHours()).padStart(2,"0");
+  const mm=String(agora.getMinutes()).padStart(2,"0");
+  return `${hh}:${mm}`;
+}
+document.querySelectorAll('button[data-horario]').forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const id=btn.getAttribute("data-horario");
+    const campo=$(id);
+    campo.value=formatHoraAgora();
+    saveDraft();
+  });
+});
+
+// QUICK FILL (Solicitante)
+document.querySelectorAll("[data-fill-target]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const targetId=btn.getAttribute("data-fill-target");
+    const value=btn.getAttribute("data-fill-value") || btn.textContent.trim();
+    const input=$(targetId);
+    if(input){
+      input.value=value;
+      saveDraft();
+    }
+  });
+});
+
+// Fotos
+const btnAddFoto=$("btnAddFoto");
+const inputFotos=$("inputFotos");
+const imagePreview=$("imagePreview");
+btnAddFoto.addEventListener("click",()=>inputFotos.click());
+inputFotos.addEventListener("change",(e)=>{
+  const files=Array.from(e.target.files||[]);
+  files.slice(0,5-fotosSelecionadas.length).forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      fotosSelecionadas.push(ev.target.result);
+      renderPreview();
+      saveDraft();
+    };
+    reader.readAsDataURL(file);
+  });
+  inputFotos.value="";
+});
+function renderPreview(){
+  imagePreview.innerHTML="";
+  fotosSelecionadas.forEach((src,i)=>{
+    const img=document.createElement("img");
+    img.src=src;
+    img.className="thumb-img";
+    img.alt="Foto "+(i+1);
+    img.onclick=()=>{
+      const ov=document.createElement("div");
+      ov.style.position="fixed";
+      ov.style.inset="0";
+      ov.style.background="rgba(0,0,0,0.85)";
+      ov.style.display="flex";
+      ov.style.alignItems="center";
+      ov.style.justifyContent="center";
+      ov.style.zIndex="9999";
+      ov.style.cursor="zoom-out";
+      const big=document.createElement("img");
+      big.src=src;
+      big.style.maxWidth="92%";
+      big.style.maxHeight="92%";
+      ov.appendChild(big);
+      ov.onclick=()=>ov.remove();
+      document.body.appendChild(ov);
+    };
+    imagePreview.appendChild(img);
+  });
+}
+
+// Limpar campos
+$("btnLimpar").addEventListener("click",()=>{
+  if(!confirm("Limpar todos os campos do relatório?")) return;
+  document.querySelectorAll("input,textarea,select").forEach(el=>{
+    if(el.type==="date") return;
+    el.value="";
+  });
+  placaTexto.style.display="none";
+  operadorTexto.style.display="none";
+  oleoSelect.value="";
+  boxQuantidade.style.display="none";
+  encerramentoPtSelect.value="";
+  boxMotivoNao.style.display="none";
+  boxDescartes.style.display="none";
+  boxOndeOutros.style.display="none";
+  fotosSelecionadas=[];
+  renderPreview();
+  localStorage.removeItem(DRAFT_KEY);
+});
+
+// Dia da semana
+function getDiaSemana(dataStr){
+  if(!dataStr) return "";
+  const [ano,mes,dia]=dataStr.split("-").map(Number);
+  const d=new Date(ano,mes-1,dia);
+  const nomes=["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+  return nomes[d.getDay()]||"";
+}
+
+// duração em minutos
+function calcularDuracaoMin(hInicio,hFim){
+  if(!hInicio || !hFim) return null;
+  const [hi,mi]=hInicio.split(":").map(Number);
+  const [hf,mf]=hFim.split(":").map(Number);
+  if([hi,mi,hf,mf].some(v=>isNaN(v))) return null;
+  const inicio=hi*60+mi;
+  const fim=hf*60+mf;
+  const diff=fim-inicio;
+  return diff>0?diff:null;
+}
+
+// Salvar relatório
+const btnSalvar=$("btnSalvar");
+btnSalvar.addEventListener("click",async()=>{
+  const numeroPtInput=$("numeroPt").value.trim();
+  const data=$("data").value;
+  const equipamento=$("equipamento").value;
+  const placaSel=placaSelect.value;
+  const placa = placaSel==="outra" ? placaTexto.value.trim() : placaSel;
+
+  const local=$("local").value.trim();
+  const tag=$("tag").value.trim();
+  const solicitante=$("solicitante").value.trim();
+  const emitAbertura=$("emitAbertura").value.trim();
+  const emitEncerramento=$("emitEncerramento").value.trim();
+
+  const operadorSel=operadorSelect.value;
+  const operadorTxt=operadorTexto.value.trim();
+  const operador = operadorSel==="outra" ? operadorTxt : operadorSel;
+
+  const ajudante=$("ajudante").value.trim();
+  const tipoServico=$("tipoServico").value.trim();
+  const tipoAtividade=$("tipoAtividade").value;
+  const oleo=$("oleo").value;
+  const quantidade=$("quantidade").value.trim();
+  const obs=$("observacoes").value.trim();
+  const encerramentoPt=encerramentoPtSelect.value;
+  const motivoNao=motivoNaoEl.value.trim();
+
+  const ondeTipo=ondeDescartadoTipoEl.value;
+  const ondeTexto=ondeDescartadoTextoEl.value.trim();
+
+  if(!numeroPtInput){
+    alert("Informe o número da PT.");
+    return;
+  }
+
+  // Campos obrigatórios principais
+  if(
+    !data || !equipamento || !placa ||
+    !local || !tag || !solicitante ||
+    !emitAbertura || !emitEncerramento ||
+    !operador || !ajudante || !tipoServico
+  ){
+    alert("Preencha todos os campos principais (dados e pessoas).");
+    return;
+  }
+
+  if(!tipoAtividade){
+    alert("Selecione o tipo da atividade.");
+    return;
+  }
+  if(oleo===""){
+    alert("Informe se houve óleo (Sim ou Não).");
+    return;
+  }
+  if(oleo==="Sim" && !quantidade){
+    alert("Informe a quantidade de óleo.");
+    return;
+  }
+
+  // Se for Descarte com óleo, exige informações de descarte/IBCs
+  if(tipoAtividade==="Descarte" && oleo==="Sim"){
+    if(!ondeTipo){
+      alert('Informe em "Onde foi descartado?" (IBCs ou Outros).');
+      return;
+    }
+    if(ondeTipo==="Outros" && !ondeTexto){
+      alert('Descreva o local do descarte em "Outros".');
+      return;
+    }
+  }
+
+  if(!encerramentoPt){
+    alert("Informe se houve encerramento da PT (Sim ou Não).");
+    return;
+  }
+  if(encerramentoPt==="Não" && !motivoNao){
+    alert('Preencha o campo "Por que não foi finalizada?".');
+    return;
+  }
+
+  const h_dds=$("h_ddsChecklist").value.trim();
+  const h_disp=$("h_disposicao").value.trim();
+  const h_chegada=$("h_chegada").value.trim();
+  const h_libPT=$("h_liberacaoPT").value.trim();
+  const h_inicio=$("h_inicio").value.trim();
+  const h_iniInt=$("h_inicioIntervalo").value.trim();
+  const h_fimInt=$("h_fimIntervalo").value.trim();
+  const h_fim=$("h_fim").value.trim();
+  const h_troca=$("h_trocaTurno").value.trim();
+
+  const horariosIds = [
+    "h_ddsChecklist","h_disposicao","h_chegada","h_liberacaoPT",
+    "h_inicio","h_inicioIntervalo","h_fimIntervalo","h_fim","h_trocaTurno"
+  ];
+
+  if(encerramentoPt==="Sim"){
+    for(const id of horariosIds){
+      const v=$(id).value.trim();
+      if(!v){
+        alert("Preencha todos os horários (DDS, coordenação, chegada, liberação, início/fim, intervalo, troca de turno).");
+        return;
+      }
+    }
+  }
+
+  let duracaoMinutos=null;
+  if(encerramentoPt==="Sim"){
+    duracaoMinutos=calcularDuracaoMin(h_inicio,h_fim);
+  }
+
+  const diaSemana=getDiaSemana(data);
+
+  const payload={
+    numeroPT:String(numeroPtInput),
+    data,
+    diaSemana,
+    equipamento,
+    placa,
+    local,
+    tag,
+    solicitante,
+    emitenteAbertura:emitAbertura,
+    emitenteEncerramento:emitEncerramento,
+    operador,
+    ajudante,
+    tipoServico,
+    horarios:{
+      ddsChecklist:h_dds,
+      disposicao:h_disp,
+      chegada:h_chegada,
+      liberacaoPT:h_libPT,
+      inicio:h_inicio,
+      inicioIntervalo:h_iniInt,
+      fimIntervalo:h_fimInt,
+      fim:h_fim,
+      trocaTurno:h_troca
+    },
+    especificacoes:{
+      tipoAtividade,
+      oleo,
+      quantidade,
+      tipoServico,
+      ondeDescartadoTipo: ondeTipo || "",
+      ondeDescartadoTexto: ondeTexto || ""
+    },
+    encerramentoPt,
+    motivoNaoFinalizada: encerramentoPt==="Não" ? motivoNao : "",
+    observacoes:obs,
+    fotos:fotosSelecionadas,
+    duracaoMinutos,
+    criadoEm:firebase.firestore.FieldValue.serverTimestamp(),
+    deviceId:getDeviceId(),
+    operadorIdFixo:getOperadorIdFixo()
+  };
+
+  // Se não tiver internet: não tenta enviar, só avisa
+  if(!navigator.onLine){
+    showToast("Sem internet. O relatório continua salvo neste aparelho.", "#eab308");
+    return;
+  }
+
+  try{
+    btnSalvar.disabled=true;
+    btnSalvar.textContent="Salvando...";
+
+    await db.collection("relatoriosCampo").add(payload);
+
+    // Limpa rascunho local só depois de salvar no Firebase
+    localStorage.removeItem(DRAFT_KEY);
+
+    // Redireciona direto, sem popup
+    window.location.href="index.html";
+  }catch(err){
+    console.error("Erro ao salvar relatório:",err);
+    showToast("Erro ao salvar relatório. Verifique a conexão.", "#dc2626");
+  }finally{
+    btnSalvar.disabled=false;
+    btnSalvar.textContent="Salvar relatório";
+  }
+});
+
+// ===== AUTOSAVE: listeners em todos os campos =====
+const camposAutosave = [
+  "numeroPt",
+  "data","equipamento","placaSelect","placaTexto","local","tag",
+  "solicitante","emitAbertura","emitEncerramento",
+  "operadorSelect","operadorTexto",
+  "ajudante","tipoServico","tipoAtividade","oleo","quantidade",
+  "encerramentoPt","motivoNaoFinalizada",
+  "ondeDescartadoTipo","ondeDescartadoTexto",
+  "h_ddsChecklist","h_disposicao","h_chegada","h_liberacaoPT",
+  "h_inicio","h_inicioIntervalo","h_fimIntervalo","h_fim","h_trocaTurno",
+  "observacoes"
+];
+camposAutosave.forEach(id=>{
+  const el=$(id);
+  if(!el) return;
+  ["input","change"].forEach(ev=>{
+    el.addEventListener(ev, saveDraft);
+  });
+});
+
+// Init: carregar rascunho ou gerar novo
+(function init(){
+  renderPreview(); // caso tenha fotos
+  const temDraft = loadDraft();
+  if(!temDraft){
+    setDataHoje();
+    gerarNumeroPt();
+  }else{
+    // Se rascunho não tinha PT preenchido, garante um número padrão
+    if(!$("numeroPt").value){
+      gerarNumeroPt();
+    }
+  }
+})();
+</script>
+</body>
+</html>
