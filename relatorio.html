@@ -1169,29 +1169,53 @@ camposAutosave.forEach(id=>{
   }
 })();
 
-// ===== FORMATADOR AUTOMÁTICO CORRIGIDO (SEM ":") =====
-function formatarHorarioAuto(id){
+  // ===== FORMATADOR DEFINITIVO "HH:MM" COM PLACEHOLDER FIXO =====
+function configurarCampoHorario(id){
   const campo = document.getElementById(id);
+
+  // valor inicial
+  campo.value = "__:__";
 
   campo.addEventListener("input", () => {
     let v = campo.value.replace(/\D/g, ""); // só números
 
-    // Se ainda não digitou os 4 dígitos, só mostra os números
-    if(v.length < 4){
-      campo.value = v;
-      return;
+    // limita a 4 números
+    v = v.slice(0, 4);
+
+    // monta a máscara __:__
+    let hh = v.slice(0, 2);
+    let mm = v.slice(2, 4);
+
+    while(hh.length < 2) hh += "_";
+    while(mm.length < 2) mm += "_";
+
+    campo.value = hh + ":" + mm;
+  });
+
+  campo.addEventListener("keydown", e => {
+    // impede apagar o ":" e impede apagar tudo de uma vez
+    if(e.key === "Backspace"){
+      e.preventDefault();
+
+      // pega só números já digitados
+      let v = campo.value.replace(/\D/g, "");
+
+      // remove último número
+      v = v.slice(0, -1);
+
+      // remonta a máscara
+      let hh = v.slice(0, 2);
+      let mm = v.slice(2, 4);
+
+      while(hh.length < 2) hh += "_";
+      while(mm.length < 2) mm += "_";
+
+      campo.value = hh + ":" + mm;
     }
-
-    // Quando completar 4 dígitos, formata corretamente
-    v = v.slice(0, 4); // garante máximo 4 dígitos
-    const hh = v.slice(0, 2);
-    const mm = v.slice(2, 4);
-
-    campo.value = `${hh}:${mm}`;
   });
 }
 
-// Aplica nos campos de horário
+// ativa a máscara nesses campos:
 [
   "h_ddsChecklist",
   "h_disposicao",
@@ -1202,8 +1226,8 @@ function formatarHorarioAuto(id){
   "h_inicioIntervalo",
   "h_fimIntervalo",
   "h_trocaTurno"
-].forEach(id => formatarHorarioAuto(id));
-  
+].forEach(configurarCampoHorario);
+
 </script>
 </body>
 </html>
