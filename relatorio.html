@@ -26,319 +26,142 @@
   --border:#2b3139;
   --shadow:0 6px 22px rgba(0,0,0,0.6);
 }
-*{box-sizing:border-box;font-family:"Inter",sans-serif;transition:background-color .18s ease,color .18s ease,border-color .18s ease;}
+*{box-sizing:border-box;font-family:"Inter",sans-serif;}
 body{margin:0;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
-/* --- (estilos mantidos do seu original) --- */
-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--border);box-shadow:var(--shadow);position:sticky;top:0;z-index:10;}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--border);box-shadow:var(--shadow);}
 header h1{margin:0;font-family:"Outfit";font-weight:800;font-size:1.2rem;color:var(--primary);}
-#themeToggle{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;}
+#themeToggle{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:transparent;cursor:pointer;}
 main{flex:1;max-width:920px;margin:20px auto;padding:16px;}
 .card{background:var(--card);border-radius:12px;padding:16px;border:1px solid var(--border);box-shadow:var(--shadow);}
-h2{margin:0 0 10px;font-family:"Outfit";font-weight:800;color:var(--primary);font-size:1.1rem;}
-.section-title{margin:18px 0 8px;font-weight:700;font-size:.95rem;color:var(--primary);}
+.section-title{margin:18px 0 8px;font-weight:700;color:var(--primary);}
 label{display:block;margin-top:10px;font-weight:600;font-size:.85rem;}
-input,select,textarea{width:100%;padding:9px 10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);font-size:.9rem;outline:none;}
-textarea{resize:vertical;min-height:70px;}
-input::placeholder,textarea::placeholder{color:#9aa4b2;}
-.dark input,.dark select,.dark textarea{background:#232a30;border-color:#333a42;color:#eaf0f7;}
-.dark input::placeholder,.dark textarea::placeholder{color:#aeb9c4;}
+input,select,textarea{width:100%;padding:9px;border-radius:8px;border:1px solid var(--border);}
+textarea{min-height:70px;}
 .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;}
-.horario-row{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.horario-row{display:flex;gap:8px;margin-top:8px;}
 .horario-row input{flex:1;}
-.horario-row button{flex:0 0 120px;}
-.btn{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;padding:11px 14px;border-radius:10px;font-weight:700;font-size:.95rem;cursor:pointer;}
-.btn:hover{transform:translateY(-1px);}
+.btn{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;padding:11px;border-radius:10px;font-weight:700;cursor:pointer;}
 .btn-sec{background:#ddd;color:#222;}
-.quick-options{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
-.quick-btn{border-radius:999px;border:1px solid var(--border);background:rgba(15,23,42,0.03);padding:4px 9px;font-size:.75rem;cursor:pointer;color:var(--muted);}
-.dark .quick-btn{background:#232a30;border-color:#333a42;color:#e5e7eb;}
-.quick-btn:hover{background:rgba(0,120,255,0.06);}
-#imagePreview{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
-.thumb-img{width:120px;height:80px;object-fit:cover;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,0.25);cursor:zoom-in;}
-footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);background:var(--card);border-top:1px solid var(--border);}
-.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);padding:8px 14px;border-radius:999px;background:#111827;color:#f9fafb;font-size:.78rem;font-weight:600;display:none;z-index:9999;box-shadow:0 8px 20px rgba(0,0,0,0.45);}
-.toast.show{display:block;}
-@media(max-width:600px){main{padding:10px;} .horario-row button{flex:0 0 100px;font-size:.75rem;padding:9px;}}
-/* placeholder estilizado para horário (mostra __:__ quando vazio) usando placeholder nativo */
+footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);}
 .time-input{font-family:inherit;}
 </style>
 </head>
+
 <body>
 
 <header>
   <h1>Relatório de Campo</h1>
-  <button id="themeToggle" type="button">🌙</button>
+  <button id="themeToggle">🌙</button>
 </header>
 
 <main>
-  <div class="card">
-    <h2>Preencher Relatório</h2>
+<div class="card">
 
-    <!-- DADOS PRINCIPAIS -->
-    <div class="section-title">Dados principais</div>
-    <div class="grid-2">
-      <div>
-        <label>Número da PT</label>
-        <input id="numeroPt" type="text" autocomplete="off">
-      </div>
-      <div>
-        <label>Data</label>
-        <input id="data" type="date" autocomplete="off">
-      </div>
-      <div>
-        <label>Equipamento</label>
-        <select id="equipamento">
-          <option value="">Selecione...</option>
-          <option value="Hidrojato">Hidrojato</option>
-          <option value="Hidrovacuo">Hidrovácuo</option>
-        </select>
-      </div>
-      <div>
-        <label>Placa</label>
-        <select id="placaSelect">
-          <option value="">Selecione...</option>
-          <option value="FOQ6H01">FOQ6H01</option>
-          <option value="IVR1B32">IVR1B32</option>
-          <option value="JBK7F63">JBK7F63</option>
-          <option value="JBL1H84">JBL1H84</option>
-          <option value="LRA8855">LRA8855</option>
-          <option value="SKID">SKID</option>
-          <option value="PPC6I87">PPC6I87</option>
-          <option value="TDK6G18">TDK6G18</option>
-          <option value="KPR0F00">KPR0F00</option>
-          <option value="outra">Outra (digitar)</option>
-        </select>
-        <input id="placaTexto" type="text" placeholder="Digite a placa..." style="margin-top:6px;display:none;" autocomplete="off">
-      </div>
-    </div>
-
-    <div class="grid-2">
-      <div>
-        <label>Local</label>
-        <input id="local" type="text" autocomplete="off">
-      </div>
-      <div>
-        <label>TAG</label>
-        <input id="tag" type="text" autocomplete="off">
-      </div>
-      <div>
-        <label>Solicitante</label>
-        <input id="solicitante" type="text" autocomplete="off">
-        <div class="quick-options">
-          <button type="button" class="quick-btn" data-fill-target="solicitante" data-fill-value="CMPC">CMPC</button>
-        </div>
-      </div>
-      <div>
-        <label>Emitente abertura</label>
-        <input id="emitAbertura" type="text" autocomplete="off">
-      </div>
-      <div>
-        <label>Emitente encerramento</label>
-        <input id="emitEncerramento" type="text" autocomplete="off">
-      </div>
-      <div>
-        <label>Operador</label>
-        <select id="operadorSelect">
-          <option value="">Selecione...</option>
-          <option value="Bruno Ramos">Bruno Ramos</option>
-          <option value="Carlos Alexandre">Carlos Alexandre</option>
-          <option value="Jaques">Jaques</option>
-          <option value="Júlio César">Júlio César</option>
-          <option value="Lucas Coelho">Lucas Coelho</option>
-          <option value="Robson Silva">Robson Silva</option>
-          <option value="outra">Outro (digitar)</option>
-        </select>
-        <input id="operadorTexto" type="text" placeholder="Digite o nome do operador..." style="margin-top:6px;display:none;" autocomplete="off">
-      </div>
-      <div>
-        <label>Ajudante</label>
-        <input id="ajudante" type="text" autocomplete="off">
-      </div>
-      <div>
-        <label>Tipo de serviço</label>
-        <input id="tipoServico" type="text" placeholder="Ex.: Limpeza de caixa..." autocomplete="off">
-      </div>
-    </div>
-
-    <!-- HORÁRIOS -->
-    <div class="section-title">Horários</div>
-
-    <div class="horario-row">
-      <div style="flex:1;">
-        <label>DDS e Checklist</label>
-        <input id="h_ddsChecklist" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
-      </div>
-      <button class="btn" type="button" data-horario="h_ddsChecklist">Marcar</button>
-    </div>
-
-    <div class="horario-row">
-      <div style="flex:1;">
-        <label>Disposição da coordenação</label>
-        <input id="h_disposicao" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
-      </div>
-      <button class="btn" type="button" data-horario="h_disposicao">Marcar</button>
-    </div>
-
-    <div class="horario-row">
-      <div style="flex:1;">
-        <label>Chegada ao local</label>
-        <input id="h_chegada" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
-      </div>
-      <button class="btn" type="button" data-horario="h_chegada">Marcar</button>
-    </div>
-
-    <div class="horario-row">
-      <div style="flex:1;">
-        <label>Liberação da PT</label>
-        <input id="h_liberacaoPT" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
-      </div>
-      <button class="btn" type="button" data-horario="h_liberacaoPT">Marcar</button>
-    </div>
-
-    <div class="horario-row">
-      <div style="flex:1;">
-        <label>Início da atividade</label>
-        <input id="h_inicio" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
-      </div>
-      <button class="btn" type="button" data-horario="h_inicio">Marcar</button>
-    </div>
-
-    <div class="horario-row">
-      <div style="flex:1;">
-        <label>Fim da atividade</label>
-        <input id="h_fim" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
-      </div>
-      <button class="btn" type="button" data-horario="h_fim">Marcar</button>
-    </div>
-
-    <div class="horario-row">
-      <div style="flex:1;">
-        <label>Início intervalo</label>
-        <input id="h_inicioIntervalo" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
-      </div>
-      <button class="btn" type="button" data-horario="h_inicioIntervalo">Marcar</button>
-    </div>
-
-    <div class="horario-row">
-      <div style="flex:1;">
-        <label>Fim intervalo</label>
-        <input id="h_fimIntervalo" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
-      </div>
-      <button class="btn" type="button" data-horario="h_fimIntervalo">Marcar</button>
-    </div>
-
-    <div class="horario-row">
-      <div style="flex:1;">
-        <label>Troca de turno</label>
-        <input id="h_trocaTurno" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
-      </div>
-      <button class="btn" type="button" data-horario="h_trocaTurno">Marcar</button>
-    </div>
-
-    <!-- ENCERRAMENTO DA PT -->
-    <div class="section-title">Encerramento da PT</div>
-    <div class="grid-2">
-      <div>
-        <label>Encerramento da PT?</label>
-        <select id="encerramentoPt">
-          <option value="">Selecione...</option>
-          <option value="Sim">Sim</option>
-          <option value="Não">Não</option>
-        </select>
-      </div>
-      <div id="boxMotivoNao" style="display:none;">
-        <label>Por que não foi finalizada?</label>
-        <input id="motivoNaoFinalizada" type="text" autocomplete="off">
-      </div>
-    </div>
-
-    <!-- ESPECIFICAÇÕES -->
-    <div class="section-title">Especificações da atividade</div>
-    <div class="grid-2">
-      <div>
-        <label>Tipo</label>
-        <select id="tipoAtividade">
-          <option value="">Selecione...</option>
-          <option value="Sucção">Sucção</option>
-          <option value="Descarte">Descarte</option>
-          <option value="Hidrojato">Hidrojato</option>
-        </select>
-      </div>
-      <div>
-        <label>Óleo</label>
-        <select id="oleo">
-          <option value="">Selecione...</option>
-          <option value="Sim">Sim</option>
-          <option value="Não">Não</option>
-        </select>
-      </div>
-      <div id="boxQuantidade" style="display:none;">
-        <label>Quantidade (se tiver óleo)</label>
-        <input id="quantidade" type="text" placeholder="Ex.: 500 L" autocomplete="off">
-      </div>
-    </div>
-
-    <div id="boxDescartes" style="display:none; margin-top:8px;">
-      <label>Onde foi descartado?</label>
-      <select id="ondeDescartadoTipo">
-        <option value="">Selecione...</option>
-        <option value="IBCs">IBCs</option>
-        <option value="Outros">Outros</option>
-      </select>
-      <div id="boxOndeOutros" style="display:none; margin-top:8px;">
-        <input id="ondeDescartadoTexto" type="text" placeholder="Descreva o local (ex.: lago, caixa, tanque...)" autocomplete="off">
-      </div>
-    </div>
-
-    <!-- FOTOS -->
-    <div class="section-title">Fotos</div>
-    <div style="display:flex;gap:10px;align-items:center;margin-top:6px;flex-wrap:wrap;">
-      <button id="btnAddFoto" class="btn" type="button">Adicionar foto</button>
-      <input id="inputFotos" type="file" accept="image/*" multiple style="display:none">
-      <span style="font-size:.75rem;color:var(--muted);">Máx. 5 fotos</span>
-    </div>
-    <div id="imagePreview"></div>
-
-    <label style="margin-top:16px;">Observações</label>
-    <textarea id="observacoes" placeholder="Algo importante sobre a atividade..." autocomplete="off"></textarea>
-
-    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
-      <button id="btnSalvar" class="btn" type="button">Salvar relatório</button>
-      <button id="btnLimpar" class="btn btn-sec" type="button">Limpar campos</button>
-    </div>
+<div class="section-title">Dados principais</div>
+<div class="grid-2">
+  <div>
+    <label>Número da PT</label>
+    <input id="numeroPt">
   </div>
+  <div>
+    <label>Data</label>
+    <input id="data" type="date">
+  </div>
+  <div>
+    <label>Equipamento</label>
+    <select id="equipamento">
+      <option value="">Selecione</option>
+      <option>Hidrojato</option>
+      <option>Hidrovácuo</option>
+    </select>
+  </div>
+  <div>
+    <label>Placa</label>
+    <input id="placa">
+  </div>
+</div>
+
+<div class="grid-2">
+  <div>
+    <label>Local</label>
+    <input id="local">
+  </div>
+  <div>
+    <label>TAG</label>
+    <input id="tag">
+  </div>
+  <div>
+    <label>Solicitante</label>
+    <input id="solicitante">
+  </div>
+  <div>
+    <label>Operador</label>
+    <input id="operador">
+  </div>
+</div>
+
+<div class="section-title">Horários</div>
+
+<div class="horario-row">
+  <input id="h_inicio" class="time-input" placeholder="__:__">
+  <button class="btn" data-h="h_inicio">Marcar</button>
+</div>
+
+<div class="horario-row">
+  <input id="h_fim" class="time-input" placeholder="__:__">
+  <button class="btn" data-h="h_fim">Marcar</button>
+</div>
+
+<div class="section-title">Atividade</div>
+<div class="grid-2">
+  <div>
+    <label>Tipo</label>
+    <select id="tipoAtividade">
+      <option value="">Selecione</option>
+      <option>Sucção</option>
+      <option>Descarte</option>
+    </select>
+  </div>
+  <div>
+    <label>Óleo</label>
+    <select id="oleo">
+      <option value="">Selecione</option>
+      <option>Sim</option>
+      <option>Não</option>
+    </select>
+  </div>
+</div>
+
+<label>Observações</label>
+<textarea id="observacoes"></textarea>
+
+<div style="margin-top:16px;display:flex;gap:10px;">
+  <button id="btnSalvar" class="btn">Salvar relatório</button>
+  <button id="btnLimpar" class="btn btn-sec">Limpar</button>
+</div>
+
+</div>
 </main>
 
-<footer>
-  © 2025 | Relatórios de Campo — RSS3
-</footer>
+<footer>© 2025 | Relatórios de Campo — RSS3</footer>
 
-<div id="toast" class="toast"></div>
-
-<!-- Firebase (compat) - substitua pelas suas credenciais -->
+<!-- FIREBASE (IGUAL AO ADMIN) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
-/*
-  Usei sua configuração nova (a que você publicou em modular)
-  convertida para formato compat — assim mantém o restante do código
-  que usa firebase.firestore() sem precisar migrar tudo agora.
-*/
 const firebaseConfig = {
-  apiKey: "AIzaSyCUJmfp0tSjU3f5O1mjckd_UL5FhohDPTM",
-  authDomain: "hidrojato-rss3.firebaseapp.com",
-  projectId: "hidrojato-rss3",
-  storageBucket: "hidrojato-rss3.firebasestorage.app",
-  messagingSenderId: "318770594822",
-  appId: "1:318770594822:web:68c9c199c67632f4c96f87",
-  measurementId: "G-WNNYF6M9CR"
+  apiKey: "AIzaSyBIihMuDH951zhIqey5pcCY5hFRQv-jm2I",
+  authDomain: "hidrojato-rss3-3f04a.firebaseapp.com",
+  projectId: "hidrojato-rss3-3f04a",
+  storageBucket: "hidrojato-rss3-3f04a.firebasestorage.app",
+  messagingSenderId: "607637004872",
+  appId: "1:607637004872:web:ffe7b32d1e92d80d4c2e7d"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 </script>
-
 <script>
-/* ===== THEME ===== */
+/* ===== TEMA ===== */
 const themeToggle=document.getElementById("themeToggle");
 if(localStorage.getItem("tema")==="dark"){
   document.body.classList.add("dark");
@@ -351,647 +174,85 @@ themeToggle.onclick=()=>{
   localStorage.setItem("tema",dark?"dark":"light");
 };
 
-/* ===== TOAST ===== */
-const toastEl=document.getElementById("toast");
-function showToast(msg,color){
-  toastEl.textContent=msg;
-  toastEl.style.background=color || "#111827";
-  toastEl.classList.add("show");
-  setTimeout(()=>toastEl.classList.remove("show"),2800);
+/* ===== MARCAR HORÁRIO ===== */
+function horaAgora(){
+  const d=new Date();
+  return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
 }
-
-/* ===== Helpers device/id/rascunho (mantive seu código) ===== */
-function getDeviceId(){
-  let id=localStorage.getItem("deviceId_relatorios");
-  if(!id){
-    id="dev-"+Math.random().toString(36).slice(2,10);
-    localStorage.setItem("deviceId_relatorios",id);
-  }
-  return id;
-}
-function getOperadorIdFixo(){
-  let id=localStorage.getItem("operadorIdFixo_relatorios");
-  if(!id){
-    id="op-"+Math.random().toString(36).slice(2,10);
-    localStorage.setItem("operadorIdFixo_relatorios",id);
-  }
-  return id;
-}
-
-/* ===== RASCUNHO LOCAL (mantive) ===== */
-const DRAFT_KEY = "relatorioCampo_rascunho";
-let numeroPtAtual=null;
-let fotosSelecionadas=[];
-
-function $(id){return document.getElementById(id);}
-
-/* Save/load rascunho (mantive seu código — inalterado estruturalmente) */
-function saveDraft(){
-  try{
-    const draft={
-      numeroPtAtual,
-      numeroPt: $("numeroPt").value,
-      data: $("data").value,
-      equipamento: $("equipamento").value,
-      placaSelect: $("placaSelect").value,
-      placaTexto: $("placaTexto").value,
-      local: $("local").value,
-      tag: $("tag").value,
-      solicitante: $("solicitante").value,
-      emitAbertura: $("emitAbertura").value,
-      emitEncerramento: $("emitEncerramento").value,
-      operadorSelect: $("operadorSelect").value,
-      operadorTexto: $("operadorTexto").value,
-      ajudante: $("ajudante").value,
-      tipoServico: $("tipoServico").value,
-      tipoAtividade: $("tipoAtividade").value,
-      oleo: $("oleo").value,
-      quantidade: $("quantidade").value,
-      encerramentoPt: $("encerramentoPt").value,
-      motivoNaoFinalizada: $("motivoNaoFinalizada").value,
-      ondeDescartadoTipo: $("ondeDescartadoTipo").value,
-      ondeDescartadoTexto: $("ondeDescartadoTexto").value,
-      horarios:{
-        ddsChecklist: $("h_ddsChecklist").value,
-        disposicao: $("h_disposicao").value,
-        chegada: $("h_chegada").value,
-        liberacaoPT: $("h_liberacaoPT").value,
-        inicio: $("h_inicio").value,
-        inicioIntervalo: $("h_inicioIntervalo").value,
-        fimIntervalo: $("h_fimIntervalo").value,
-        fim: $("h_fim").value,
-        trocaTurno: $("h_trocaTurno").value
-      },
-      observacoes: $("observacoes").value,
-      fotos: fotosSelecionadas
-    };
-    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-  }catch(e){
-    console.warn("Erro ao salvar rascunho:",e);
-  }
-}
-function loadDraft(){
-  try{
-    const raw=localStorage.getItem(DRAFT_KEY);
-    if(!raw) return false;
-    const d=JSON.parse(raw);
-    if(d.numeroPt) $("numeroPt").value=d.numeroPt;
-    if(d.numeroPtAtual) numeroPtAtual=d.numeroPtAtual;
-    if(d.data) $("data").value=d.data;
-    if(d.equipamento) $("equipamento").value=d.equipamento;
-    if(d.placaSelect){
-      $("placaSelect").value=d.placaSelect;
-      if(d.placaSelect==="outra") $("placaTexto").style.display="block";
-    }
-    if(d.placaTexto) $("placaTexto").value=d.placaTexto;
-    if(d.local) $("local").value=d.local;
-    if(d.tag) $("tag").value=d.tag;
-    if(d.solicitante) $("solicitante").value=d.solicitante;
-    if(d.emitAbertura) $("emitAbertura").value=d.emitAbertura;
-    if(d.emitEncerramento) $("emitEncerramento").value=d.emitEncerramento;
-    if(d.operadorSelect){
-      $("operadorSelect").value=d.operadorSelect;
-      if(d.operadorSelect==="outra") $("operadorTexto").style.display="block";
-    }
-    if(d.operadorTexto) $("operadorTexto").value=d.operadorTexto;
-    if(!d.operadorSelect && d.operador){
-      $("operadorSelect").value="outra";
-      $("operadorTexto").style.display="block";
-      $("operadorTexto").value=d.operador;
-    }
-    if(d.ajudante) $("ajudante").value=d.ajudante;
-    if(d.tipoServico) $("tipoServico").value=d.tipoServico;
-    if(d.tipoAtividade) $("tipoAtividade").value=d.tipoAtividade;
-    if(d.oleo){
-      $("oleo").value=d.oleo;
-      if(d.oleo==="Sim") $("boxQuantidade").style.display="block";
-    }
-    if(d.quantidade) $("quantidade").value=d.quantidade;
-    if(d.encerramentoPt){
-      $("encerramentoPt").value=d.encerramentoPt;
-      if(d.encerramentoPt==="Não") $("boxMotivoNao").style.display="block";
-    }
-    if(d.motivoNaoFinalizada) $("motivoNaoFinalizada").value=d.motivoNaoFinalizada;
-    if(d.ondeDescartadoTipo) $("ondeDescartadoTipo").value=d.ondeDescartadoTipo;
-    if(d.ondeDescartadoTexto) $("ondeDescartadoTexto").value=d.ondeDescartadoTexto;
-    if(d.horarios){
-      $("h_ddsChecklist").value=d.horarios.ddsChecklist || "";
-      $("h_disposicao").value=d.horarios.disposicao || "";
-      $("h_chegada").value=d.horarios.chegada || "";
-      $("h_liberacaoPT").value=d.horarios.liberacaoPT || "";
-      $("h_inicio").value=d.horarios.inicio || "";
-      $("h_inicioIntervalo").value=d.horarios.inicioIntervalo || "";
-      $("h_fimIntervalo").value=d.horarios.fimIntervalo || "";
-      $("h_fim").value=d.horarios.fim || "";
-      $("h_trocaTurno").value=d.horarios.trocaTurno || "";
-    }
-    fotosSelecionadas = Array.isArray(d.fotos) ? d.fotos : [];
-    renderPreview();
-    updateDescartesBoxVisibility();
-    if($("ondeDescartadoTipo").value==="Outros") $("boxOndeOutros").style.display="block";
-    return true;
-  }catch(e){
-    console.warn("Erro ao carregar rascunho:",e);
-    return false;
-  }
-}
-
-/* ===== Numero PT auto (mantive seu código) ===== */
-async function gerarNumeroPt(){
-  try{
-    const docRef=db.collection("config").doc("contadorPTCampo");
-    const prox=await db.runTransaction(async(tx)=>{
-      const snap=await tx.get(docRef);
-      let atual=99999;
-      if(snap.exists && typeof snap.data().valor==="number"){
-        atual=snap.data().valor;
-      }
-      const novo=atual+1;
-      tx.set(docRef,{valor:novo});
-      return novo;
-    });
-    numeroPtAtual=prox;
-    if(!$("numeroPt").value){
-      $("numeroPt").value=prox;
-    }
-    saveDraft();
-  }catch(err){
-    console.error("Erro ao gerar número PT:",err);
-    alert("Erro ao gerar número da PT. Ver console.");
-  }
-}
-
-/* Data padrão hoje */
-function setDataHoje(){
-  const hoje=new Date();
-  const ano=hoje.getFullYear();
-  const mes=String(hoje.getMonth()+1).padStart(2,"0");
-  const dia=String(hoje.getDate()).padStart(2,"0");
-  $("data").value=`${ano}-${mes}-${dia}`;
-}
-
-/* Placa / Operador / Óleo / Descartes (mantive) */
-const placaSelect=$("placaSelect");
-const placaTexto=$("placaTexto");
-placaSelect.addEventListener("change",()=>{
-  if(placaSelect.value==="outra"){
-    placaTexto.style.display="block";
-  }else{
-    placaTexto.style.display="none";
-    placaTexto.value="";
-  }
-  saveDraft();
-});
-const operadorSelect=$("operadorSelect");
-const operadorTexto=$("operadorTexto");
-operadorSelect.addEventListener("change",()=>{
-  if(operadorSelect.value==="outra"){
-    operadorTexto.style.display="block";
-  }else{
-    operadorTexto.style.display="none";
-    operadorTexto.value="";
-  }
-  saveDraft();
-});
-const oleoSelect=$("oleo");
-const boxQuantidade=$("boxQuantidade");
-const boxDescartes=$("boxDescartes");
-const tipoAtividadeSelect=$("tipoAtividade");
-const ondeDescartadoTipoEl=$("ondeDescartadoTipo");
-const ondeDescartadoTextoEl=$("ondeDescartadoTexto");
-const boxOndeOutros=$("boxOndeOutros");
-function updateDescartesBoxVisibility(){
-  const tipoVal=tipoAtividadeSelect.value;
-  const oleoVal=oleoSelect.value;
-  if(tipoVal==="Descarte" && oleoVal==="Sim"){
-    boxDescartes.style.display="block";
-  }else{
-    boxDescartes.style.display="none";
-    ondeDescartadoTipoEl.value="";
-    ondeDescartadoTextoEl.value="";
-    boxOndeOutros.style.display="none";
-  }
-}
-oleoSelect.addEventListener("change",()=>{
-  if(oleoSelect.value==="Sim"){
-    boxQuantidade.style.display="block";
-  }else{
-    boxQuantidade.style.display="none";
-    $("quantidade").value="";
-  }
-  updateDescartesBoxVisibility();
-  saveDraft();
-});
-tipoAtividadeSelect.addEventListener("change",()=>{
-  updateDescartesBoxVisibility();
-  saveDraft();
-});
-ondeDescartadoTipoEl.addEventListener("change",()=>{
-  if(ondeDescartadoTipoEl.value==="Outros"){
-    boxOndeOutros.style.display="block";
-  }else{
-    boxOndeOutros.style.display="none";
-    ondeDescartadoTextoEl.value="";
-  }
-  saveDraft();
-});
-const encerramentoPtSelect=$("encerramentoPt");
-const boxMotivoNao=$("boxMotivoNao");
-const motivoNaoEl=$("motivoNaoFinalizada");
-encerramentoPtSelect.addEventListener("change",()=>{
-  if(encerramentoPtSelect.value==="Não"){
-    boxMotivoNao.style.display="block";
-  }else{
-    boxMotivoNao.style.display="none";
-    motivoNaoEl.value="";
-  }
-  saveDraft();
+document.querySelectorAll("[data-h]").forEach(btn=>{
+  btn.onclick=()=>{
+    document.getElementById(btn.dataset.h).value=horaAgora();
+  };
 });
 
-/* ===== BOTÕES "Marcar" com hora atual (mantive) ===== */
-function formatHoraAgora(){
-  const agora=new Date();
-  const hh=String(agora.getHours()).padStart(2,"0");
-  const mm=String(agora.getMinutes()).padStart(2,"0");
-  return `${hh}:${mm}`;
-}
-document.querySelectorAll('button[data-horario]').forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    const id=btn.getAttribute("data-horario");
-    const campo=$(id);
-    campo.value=formatHoraAgora();
-    saveDraft();
+/* ===== MÁSCARA DE HORA ===== */
+document.querySelectorAll(".time-input").forEach(el=>{
+  el.addEventListener("input",()=>{
+    let v=el.value.replace(/\D/g,"").slice(0,4);
+    if(v.length<=2) el.value=v;
+    else el.value=v.slice(0,2)+":"+v.slice(2);
   });
 });
 
-/* ===== QUICK FILL (Solicitante) ===== */
-document.querySelectorAll("[data-fill-target]").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    const targetId=btn.getAttribute("data-fill-target");
-    const value=btn.getAttribute("data-fill-value") || btn.textContent.trim();
-    const input=$(targetId);
-    if(input){
-      input.value=value;
-      saveDraft();
-    }
-  });
-});
-
-/* ===== FOTOS (mantive) ===== */
-const btnAddFoto=$("btnAddFoto");
-const inputFotos=$("inputFotos");
-const imagePreview=$("imagePreview");
-btnAddFoto.addEventListener("click",()=>inputFotos.click());
-inputFotos.addEventListener("change",(e)=>{
-  const files=Array.from(e.target.files||[]);
-  files.slice(0,5-fotosSelecionadas.length).forEach(file=>{
-    const reader=new FileReader();
-    reader.onload=ev=>{
-      fotosSelecionadas.push(ev.target.result);
-      renderPreview();
-      saveDraft();
-    };
-    reader.readAsDataURL(file);
-  });
-  inputFotos.value="";
-});
-function renderPreview(){
-  imagePreview.innerHTML="";
-  fotosSelecionadas.forEach((src,i)=>{
-    const img=document.createElement("img");
-    img.src=src;
-    img.className="thumb-img";
-    img.alt="Foto "+(i+1);
-    img.onclick=()=>{
-      const ov=document.createElement("div");
-      ov.style.position="fixed";
-      ov.style.inset="0";
-      ov.style.background="rgba(0,0,0,0.85)";
-      ov.style.display="flex";
-      ov.style.alignItems="center";
-      ov.style.justifyContent="center";
-      ov.style.zIndex="9999";
-      ov.style.cursor="zoom-out";
-      const big=document.createElement("img");
-      big.src=src;
-      big.style.maxWidth="92%";
-      big.style.maxHeight="92%";
-      ov.appendChild(big);
-      ov.onclick=()=>ov.remove();
-      document.body.appendChild(ov);
-    };
-    imagePreview.appendChild(img);
-  });
+/* ===== VALIDAR HORA ===== */
+function horaValida(v){
+  if(!v || !v.includes(":")) return false;
+  const [h,m]=v.split(":").map(Number);
+  return h>=0&&h<=23&&m>=0&&m<=59;
 }
 
-/* ===== LIMPAR CAMPOS ===== */
-$("btnLimpar").addEventListener("click",()=>{
-  if(!confirm("Limpar todos os campos do relatório?")) return;
-  document.querySelectorAll("input,textarea,select").forEach(el=>{
-    if(el.type==="date") return;
-    el.value="";
-  });
-  placaTexto.style.display="none";
-  operadorTexto.style.display="none";
-  oleoSelect.value="";
-  boxQuantidade.style.display="none";
-  encerramentoPtSelect.value="";
-  boxMotivoNao.style.display="none";
-  boxDescartes.style.display="none";
-  boxOndeOutros.style.display="none";
-  fotosSelecionadas=[];
-  renderPreview();
-  localStorage.removeItem(DRAFT_KEY);
-});
-
-/* ===== Dia da semana / duracao (mantive) ===== */
-function getDiaSemana(dataStr){
-  if(!dataStr) return "";
-  const [ano,mes,dia]=dataStr.split("-").map(Number);
-  const d=new Date(ano,mes-1,dia);
-  const nomes=["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
-  return nomes[d.getDay()]||"";
-}
-function calcularDuracaoMin(hInicio,hFim){
-  if(!hInicio || !hFim) return null;
-  const [hi,mi]=hInicio.split(":").map(Number);
-  const [hf,mf]=hFim.split(":").map(Number);
-  if([hi,mi,hf,mf].some(v=>isNaN(v))) return null;
-  const inicio=hi*60+mi;
-  const fim=hf*60+mf;
-  const diff=fim-inicio;
-  return diff>0?diff:null;
-}
-
-/* =============== MÁSCARA INTELIGENTE PARA CAMPOS DE HORA ===========
-   Requisitos implementados:
-   - Escrever só números (inputmode numeric), aceita '0830' → '08:30'
-   - Ao apagar: não preenche com zeros, se campo ficar vazio → vazio
-   - Se campo incompleto (ex: '08:3') -> validação do submit bloqueia o envio
-   - Não faz "correções inteligentes" — apenas formata inserindo ':' entre o 2º e 3º dígitos
-   - Bloqueia entrada de caracteres não numéricos
-   - Coloca placeholder "__:__" para indicar o formato
-*/
-function attachTimeMask(el){
-  if(!el) return;
-  el.addEventListener("input",(e)=>{
-    const raw = el.value || "";
-    // remove tudo que não é dígito
-    let digits = raw.replace(/\D/g,"").slice(0,4); // no máximo 4 dígitos HHMM
-    if(digits.length===0){
-      el.value = ""; // vazio — não coloca 00:00
-      return;
-    }
-    if(digits.length<=2){
-      el.value = digits; // mostra os primeiros dígitos (sem dois pontos ainda)
-    }else{
-      el.value = digits.slice(0,2) + ":" + digits.slice(2);
-    }
-  },false);
-
-  // evita colar conteúdo com caracteres estranhos
-  el.addEventListener("paste",(e)=>{
-    e.preventDefault();
-    const text = (e.clipboardData || window.clipboardData).getData("text");
-    const digits = (text||"").replace(/\D/g,"").slice(0,4);
-    if(!digits) { el.value=""; return; }
-    if(digits.length<=2) el.value = digits;
-    else el.value = digits.slice(0,2) + ":" + digits.slice(2);
-  },false);
-
-  // on blur: se cheio com 2 dígitos (ex: "08") automaticamente coloca :00? NÃO — mantemos como inválido
-  // (será validado no envio). Contudo, para melhor UX podemos, opcionalmente, formatar "0830" se usuário digitou rápido
-  el.addEventListener("blur",()=>{
-    // se tem 3 dígitos (ex: '083'), convert para '08:3' (deixa como está) — validação cuidará disso
-    // Se quiser forçar sempre 2 dígitos nos minutos, substituir aqui. No requisito você pediu para NÃO ajustar caso esteja errado.
-    // Então não fazemos ajustes automáticos aqui.
-  });
-}
-
-// Aplica máscara a todos inputs com classe time-input
-document.querySelectorAll(".time-input").forEach(attachTimeMask);
-
-/* ===== Validação de horário: retorna true se formato HH:MM e minutos<60 e horas 0-23 ===== */
-function validarHoraFormatada(v){
-  if(!v || typeof v !== "string") return false;
-  if(!v.includes(":")) return false;
-  const [hh,mm]=v.split(":");
-  if(hh.length!==2 || mm.length!==2) return false;
-  if(!/^\d{2}$/.test(hh) || !/^\d{2}$/.test(mm)) return false;
-  const H=parseInt(hh,10);
-  const M=parseInt(mm,10);
-  if(H<0 || H>23) return false;
-  if(M<0 || M>59) return false;
-  return true;
-}
-
-/* ===== SALVAR RELATÓRIO (com validação extra de horários) ===== */
-const btnSalvar=$("btnSalvar");
-btnSalvar.addEventListener("click",async()=>{
-  const numeroPtInput=$("numeroPt").value.trim();
-  const data=$("data").value;
-  const equipamento=$("equipamento").value;
-  const placaSel=placaSelect.value;
-  const placa = placaSel==="outra" ? placaTexto.value.trim() : placaSel;
-  const local=$("local").value.trim();
-  const tag=$("tag").value.trim();
-  const solicitante=$("solicitante").value.trim();
-  const emitAbertura=$("emitAbertura").value.trim();
-  const emitEncerramento=$("emitEncerramento").value.trim();
-  const operadorSel=operadorSelect.value;
-  const operadorTxt=operadorTexto.value.trim();
-  const operador = operadorSel==="outra" ? operadorTxt : operadorSel;
-  const ajudante=$("ajudante").value.trim();
-  const tipoServico=$("tipoServico").value.trim();
-  const tipoAtividade=$("tipoAtividade").value;
-  const oleo=$("oleo").value;
-  const quantidade=$("quantidade").value.trim();
-  const obs=$("observacoes").value.trim();
-  const encerramentoPt=encerramentoPtSelect.value;
-  const motivoNao=motivoNaoEl.value.trim();
-  const ondeTipo=ondeDescartadoTipoEl.value;
-  const ondeTexto=ondeDescartadoTextoEl.value.trim();
-
-  if(!numeroPtInput){
-    alert("Informe o número da PT.");
-    return;
-  }
-  if(
-    !data || !equipamento || !placa ||
-    !local || !tag || !solicitante ||
-    !emitAbertura || !emitEncerramento ||
-    !operador || !ajudante || !tipoServico
-  ){
-    alert("Preencha todos os campos principais (dados e pessoas).");
-    return;
-  }
-  if(!tipoAtividade){
-    alert("Selecione o tipo da atividade.");
-    return;
-  }
-  if(oleo===""){
-    alert("Informe se houve óleo (Sim ou Não).");
-    return;
-  }
-  if(oleo==="Sim" && !quantidade){
-    alert("Informe a quantidade de óleo.");
-    return;
-  }
-  if(tipoAtividade==="Descarte" && oleo==="Sim"){
-    if(!ondeTipo){
-      alert('Informe em "Onde foi descartado?" (IBCs ou Outros).');
-      return;
-    }
-    if(ondeTipo==="Outros" && !ondeTexto){
-      alert('Descreva o local do descarte em "Outros".');
-      return;
-    }
-  }
-  if(!encerramentoPt){
-    alert("Informe se houve encerramento da PT (Sim ou Não).");
-    return;
-  }
-  if(encerramentoPt==="Não" && !motivoNao){
-    alert('Preencha o campo "Por que não foi finalizada?".');
-    return;
-  }
-
-  // Coleta horários
-  const horariosIds = [
-    "h_ddsChecklist","h_disposicao","h_chegada","h_liberacaoPT",
-    "h_inicio","h_inicioIntervalo","h_fimIntervalo","h_fim","h_trocaTurno"
-  ];
-  const horariosObj = {};
-  for(const id of horariosIds){
-    horariosObj[id] = $(id).value.trim();
-  }
-
-  // Se encerramentoPt = Sim -> exige todos os horários e valida formato HH:MM
-  if(encerramentoPt==="Sim"){
-    for(const id of horariosIds){
-      const v = horariosObj[id];
-      if(!v){
-        alert("Preencha todos os horários (DDS, coordenação, chegada, liberação, início/fim, intervalo, troca de turno).");
-        return;
-      }
-      if(!validarHoraFormatada(v)){
-        alert(`Horário inválido em "${id}". Use o formato HH:MM (ex: 08:30).`);
-        return;
-      }
-    }
-  } else {
-    // mesmo que não seja obrigatório, caso preenchido valida o formato
-    for(const id of horariosIds){
-      const v=horariosObj[id];
-      if(v && !validarHoraFormatada(v)){
-        alert(`Horário inválido em "${id}". Use o formato HH:MM ou deixe vazio.`);
-        return;
-      }
-    }
-  }
-
-  let duracaoMinutos=null;
-  if(encerramentoPt==="Sim"){
-    duracaoMinutos=calcularDuracaoMin(horariosObj.h_inicio,horariosObj.h_fim);
-  }
-
-  const diaSemana=getDiaSemana(data);
+/* ===== SALVAR RELATÓRIO ===== */
+document.getElementById("btnSalvar").onclick=async()=>{
   const payload={
-    numeroPT:String(numeroPtInput),
-    data,
-    diaSemana,
-    equipamento,
-    placa,
-    local,
-    tag,
-    solicitante,
-    emitenteAbertura:emitAbertura,
-    emitenteEncerramento:emitEncerramento,
-    operador,
-    ajudante,
-    tipoServico,
+    numeroPT:document.getElementById("numeroPt").value.trim(),
+    data:document.getElementById("data").value,
+    equipamento:document.getElementById("equipamento").value,
+    placa:document.getElementById("placa").value.trim(),
+    local:document.getElementById("local").value.trim(),
+    tag:document.getElementById("tag").value.trim(),
+    solicitante:document.getElementById("solicitante").value.trim(),
+    operador:document.getElementById("operador").value.trim(),
     horarios:{
-      ddsChecklist:horariosObj.h_ddsChecklist,
-      disposicao:horariosObj.h_disposicao,
-      chegada:horariosObj.h_chegada,
-      liberacaoPT:horariosObj.h_liberacaoPT,
-      inicio:horariosObj.h_inicio,
-      inicioIntervalo:horariosObj.h_inicioIntervalo,
-      fimIntervalo:horariosObj.h_fimIntervalo,
-      fim:horariosObj.h_fim,
-      trocaTurno:horariosObj.h_trocaTurno
+      inicio:document.getElementById("h_inicio").value.trim(),
+      fim:document.getElementById("h_fim").value.trim()
     },
     especificacoes:{
-      tipoAtividade,
-      oleo,
-      quantidade,
-      tipoServico,
-      ondeDescartadoTipo: ondeTipo || "",
-      ondeDescartadoTexto: ondeTexto || ""
+      tipoAtividade:document.getElementById("tipoAtividade").value,
+      oleo:document.getElementById("oleo").value
     },
-    encerramentoPt,
-    motivoNaoFinalizada: encerramentoPt==="Não" ? motivoNao : "",
-    observacoes:obs,
-    fotos:fotosSelecionadas,
-    duracaoMinutos,
-    criadoEm:firebase.firestore.FieldValue.serverTimestamp(),
-    deviceId:getDeviceId(),
-    operadorIdFixo:getOperadorIdFixo()
+    observacoes:document.getElementById("observacoes").value.trim(),
+    criadoEm:firebase.firestore.FieldValue.serverTimestamp()
   };
 
-  if(!navigator.onLine){
-    showToast("Sem internet. O relatório continua salvo neste aparelho.", "#eab308");
+  if(!payload.numeroPT||!payload.data||!payload.equipamento||!payload.placa){
+    alert("Preencha todos os campos obrigatórios.");
+    return;
+  }
+  if(payload.horarios.inicio && !horaValida(payload.horarios.inicio)){
+    alert("Hora início inválida.");
+    return;
+  }
+  if(payload.horarios.fim && !horaValida(payload.horarios.fim)){
+    alert("Hora fim inválida.");
     return;
   }
 
   try{
-    btnSalvar.disabled=true;
-    btnSalvar.textContent="Salvando...";
     await db.collection("relatoriosCampo").add(payload);
-    localStorage.removeItem(DRAFT_KEY);
-    window.location.href="index.html";
-  }catch(err){
-    console.error("Erro ao salvar relatório:",err);
-    showToast("Erro ao salvar relatório. Verifique a conexão.", "#dc2626");
-  }finally{
-    btnSalvar.disabled=false;
-    btnSalvar.textContent="Salvar relatório";
+    alert("Relatório salvo com sucesso.");
+    window.location.reload();
+  }catch(e){
+    console.error(e);
+    alert("Erro ao salvar relatório.");
   }
-});
+};
 
-/* ===== AUTOSAVE: listeners em todos os campos ===== */
-const camposAutosave = [
-  "numeroPt","data","equipamento","placaSelect","placaTexto","local","tag",
-  "solicitante","emitAbertura","emitEncerramento",
-  "operadorSelect","operadorTexto",
-  "ajudante","tipoServico","tipoAtividade","oleo","quantidade",
-  "encerramentoPt","motivoNaoFinalizada",
-  "ondeDescartadoTipo","ondeDescartadoTexto",
-  "h_ddsChecklist","h_disposicao","h_chegada","h_liberacaoPT",
-  "h_inicio","h_inicioIntervalo","h_fimIntervalo","h_fim","h_trocaTurno",
-  "observacoes"
-];
-camposAutosave.forEach(id=>{
-  const el=$(id);
-  if(!el) return;
-  ["input","change"].forEach(ev=>{
-    el.addEventListener(ev, saveDraft);
-  });
-});
-
-/* ===== Init (mantive) ===== */
-(function init(){
-  renderPreview(); // caso tenha fotos
-  const temDraft = loadDraft();
-  if(!temDraft){
-    setDataHoje();
-    gerarNumeroPt();
-  }else{
-    if(!$("numeroPt").value){
-      gerarNumeroPt();
-    }
-  }
-})();
+/* ===== LIMPAR ===== */
+document.getElementById("btnLimpar").onclick=()=>{
+  if(!confirm("Limpar tudo?")) return;
+  document.querySelectorAll("input,textarea,select").forEach(el=>el.value="");
+};
 </script>
+
 </body>
 </html>
