@@ -3,491 +3,328 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Planilha — Relatórios de Campo</title>
+<title>Relatório de Campo</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-:root {
-  --primary:#2563eb;
-  --accent:#1d4ed8;
-  --bg:#f3f6fb;
+:root{
+  --primary:#0078ff;
+  --accent:#00b4ff;
+  --bg:#f5f8fb;
   --card:#ffffff;
-  --text:#111827;
-  --muted:#6b7280;
-  --border:#e5e7eb;
-  --shadow-soft:0 10px 30px rgba(15,23,42,0.10);
-  --shadow-hard:0 18px 45px rgba(15,23,42,0.20);
-
-  --sidebar-bg:#ffffff;
-  --sidebar-text:#111827;
-  --sidebar-link:#111827;
-
-  /* NOVOS: para tabela */
-  --table-header-bg:rgba(37,99,235,0.06);
-  --table-header-border:#cbd5f5;
-  --table-row-alt:rgba(15,23,42,0.015);
+  --text:#1a1a1a;
+  --muted:#666;
+  --border:#e3e6eb;
+  --shadow:0 8px 28px rgba(0,0,0,0.08);
 }
-.dark {
-  --bg:#020617;
-  --card:#020617;
-  --text:#e5e7eb;
-  --muted:#9ca3af;
-  --border:#111827;
-  --shadow-soft:0 10px 30px rgba(0,0,0,0.60);
-  --shadow-hard:0 18px 45px rgba(0,0,0,0.80);
-
-  --sidebar-bg:#020617;
-  --sidebar-text:#e5e7eb;
-  --sidebar-link:#e5e7eb;
-
-  --table-header-bg:rgba(15,23,42,0.92);
-  --table-header-border:#1e293b;
-  --table-row-alt:rgba(15,23,42,0.45);
+.dark{
+  --bg:#0f1419;
+  --card:#1b2228;
+  --text:#e8eef5;
+  --muted:#a7b0bc;
+  --border:#2b3139;
+  --shadow:0 6px 22px rgba(0,0,0,0.6);
 }
-
-*{
-  box-sizing:border-box;
-  font-family:"Inter",sans-serif;
-  transition:background-color .25s ease,color .25s ease,border-color .25s ease;
-}
-
-/* FUNDO */
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  display:flex;
-}
-
-/* SIDEBAR (igual dashboard) */
-.sidebar{
-  width:230px;
-  background:var(--sidebar-bg);
-  color:var(--sidebar-text);
-  display:flex;
-  flex-direction:column;
-  padding:14px 12px;
-  gap:14px;
-  position:fixed;
-  inset-block:0;
-  left:0;
-  z-index:40;
-  box-shadow:var(--shadow-hard);
-  transform:translateX(-100%);
-  transition:transform .25s ease, background-color .25s ease, color .25s ease;
-}
-body.sidebar-open .sidebar{
-  transform:translateX(0);
-}
-.sidebar-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-.sidebar-title-block{
-  display:flex;
-  flex-direction:column;
-}
-.sidebar-title{
-  font-family:"Outfit";
-  font-weight:800;
-  font-size:1.0rem;
-}
-.sidebar-sub{
-  font-size:.72rem;
-  color:var(--muted);
-}
-.sidebar-toggle-theme{
-  width:32px;
-  height:32px;
-  border-radius:50%;
-  border:1px solid rgba(148,163,184,0.5);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  background:transparent;
-  font-size:1rem;
-  color:var(--sidebar-text);
-}
-.sidebar-nav{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
-.sidebar-link{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 9px;
-  border-radius:10px;
-  text-decoration:none;
-  font-size:.85rem;
-  color:var(--sidebar-link);
-  cursor:pointer;
-}
-.sidebar-link span.icon{width:18px;text-align:center;}
-.sidebar-link:hover,
-.sidebar-link.active{
-  background:rgba(37,99,235,0.15);
-}
-.sidebar-footer{
-  margin-top:auto;
-  font-size:.7rem;
-  color:var(--muted);
-  border-top:1px solid rgba(148,163,184,0.3);
-  padding-top:8px;
-}
-
-/* BOTÃO FLOANTE SIDEBAR */
-.sidebar-handle{
-  position:fixed;
-  top:14px;
-  left:10px;
-  z-index:45;
-  width:30px;
-  height:30px;
-  border-radius:999px;
-  border:none;
-  cursor:pointer;
-  background:#2563eb;
-  color:#f9fafb;
-  box-shadow:0 8px 20px rgba(37,99,235,0.6);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:1.1rem;
-}
-
-/* MAIN WRAPPER */
-.main-wrapper{
-  flex:1;
-  min-height:100vh;
-  padding:18px 20px 24px;
-  display:flex;
-  flex-direction:column;
-}
-@media(max-width:900px){
-  .main-wrapper{
-    padding-top:56px;
-  }
-}
-
-/* TOPBAR MOBILE */
-.topbar-mobile{
-  position:fixed;
-  top:0;left:0;right:0;
-  height:48px;
-  background:var(--sidebar-bg);
-  color:var(--sidebar-text);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:"Outfit";
-  font-weight:700;
-  font-size:.9rem;
-  z-index:30;
-}
-@media(min-width:901px){
-  .topbar-mobile{display:none;}
-}
-
-/* HEADER */
-.page-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap:12px;
-  margin-bottom:10px;
-}
-.page-title{
-  font-family:"Outfit";
-  font-weight:800;
-  font-size:1.4rem;
-}
-.page-sub{
-  font-size:.8rem;
-  color:var(--muted);
-}
-
-/* AÇÕES ACIMA DA TABELA */
-.table-actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:6px;
-  margin-bottom:4px;
-  align-items:center;
-}
-.table-actions button{
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  background:var(--card);
-  font-size:.78rem;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:4px;
-}
-.table-actions button.primary{
-  background:linear-gradient(135deg,#2563eb,#1d4ed8);
-  color:#f9fafb;
-  border:none;
-  box-shadow:var(--shadow-soft);
-}
-
-/* WRAPPER DA TABELA (drag-scroll) */
-.table-wrapper{
-  margin-top:12px;
-  background:var(--card);
-  border-radius:18px;
-  box-shadow:var(--shadow-soft);
-  border:1px solid var(--table-header-border); /* mais visível */
-  padding:12px;
-  overflow:auto;
-  cursor:grab;
-}
-.table-wrapper.dragging{
-  cursor:grabbing;
-}
-
-/* TABELA */
-table{
-  border-collapse:collapse;
-  min-width:900px;
-  background:var(--card);
-}
-thead{
-  position:sticky;
-  top:0;
-  z-index:5;
-  background:var(--table-header-bg);
-  box-shadow:0 2px 4px rgba(15,23,42,0.08);
-}
-th,td{
-  border:1px solid var(--border);
-  padding:6px 8px;
-  font-size:.8rem;
-  white-space:nowrap;
-}
-th{
-  background:var(--table-header-bg);
-  border-bottom:1px solid var(--table-header-border);
-  font-weight:700;
-  text-align:left;
-}
-th.filterable{
-  padding:0;
-}
-.th-inner-btn{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:6px;
-  padding:6px 8px;
-  width:100%;
-  background:transparent;
-  border:none;
-  font-size:.78rem;
-  font-weight:700;
-  cursor:pointer;
-  color:var(--text);
-}
-.th-inner-btn span.chevron{
-  font-size:.7rem;
-}
-
-/* LINHAS ZEBRADAS + HOVER */
-tbody tr:nth-child(even){
-  background:var(--table-row-alt);
-}
-tbody tr:hover{
-  background:rgba(37,99,235,0.06);
-}
-
-/* CÉLULAS EDITÁVEIS */
-td[contenteditable="true"]{
-  background:rgba(37,99,235,0.02);
-}
-td[contenteditable="true"]:focus{
-  outline:2px solid rgba(37,99,235,0.7);
-  background:rgba(37,99,235,0.08);
-}
-
-/* COLUNAS AVANÇADAS (escondidas por padrão) */
-.advanced-col{
-  display:none;
-}
-body.show-advanced .advanced-col{
-  display:table-cell;
-}
-
-/* PAINEL DE FILTRO POR COLUNA */
-#colFilterPanel{
-  position:fixed;
-  top:70px;
-  right:20px;
-  width:220px;
-  background:var(--card);
-  border-radius:12px;
-  border:1px solid var(--border);
-  box-shadow:var(--shadow-soft);
-  padding:8px;
-  display:none;
-  z-index:60;
-}
-#colFilterPanel.open{
-  display:block;
-}
-#colFilterTitle{
-  font-size:.8rem;
-  font-weight:600;
-  margin-bottom:4px;
-}
-#colFilterList{
-  max-height:210px;
-  overflow:auto;
-  margin-bottom:6px;
-}
-.col-option{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-size:.78rem;
-  padding:2px 0;
-}
-.col-option input{
-  width:14px;
-  height:14px;
-}
-#colFilterActions{
-  display:flex;
-  gap:6px;
-}
-#applyColFilter,#clearColFilter{
-  flex:1;
-  padding:5px 6px;
-  border-radius:8px;
-  border:none;
-  font-size:.75rem;
-  font-weight:600;
-  cursor:pointer;
-}
-#applyColFilter{
-  background:linear-gradient(135deg,#2563eb,#1d4ed8);
-  color:#f9fafb;
-}
-#clearColFilter{
-  background:rgba(15,23,42,0.04);
-  color:var(--text);
-}
-
-/* RODAPÉ */
-footer{
-  margin-top:10px;
-  font-size:.75rem;
-  color:var(--muted);
-  text-align:center;
-}
+*{box-sizing:border-box;font-family:"Inter",sans-serif;transition:background-color .18s ease,color .18s ease,border-color .18s ease;}
+body{margin:0;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+/* --- (estilos mantidos do seu original) --- */
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--border);box-shadow:var(--shadow);position:sticky;top:0;z-index:10;}
+header h1{margin:0;font-family:"Outfit";font-weight:800;font-size:1.2rem;color:var(--primary);}
+#themeToggle{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;}
+main{flex:1;max-width:920px;margin:20px auto;padding:16px;}
+.card{background:var(--card);border-radius:12px;padding:16px;border:1px solid var(--border);box-shadow:var(--shadow);}
+h2{margin:0 0 10px;font-family:"Outfit";font-weight:800;color:var(--primary);font-size:1.1rem;}
+.section-title{margin:18px 0 8px;font-weight:700;font-size:.95rem;color:var(--primary);}
+label{display:block;margin-top:10px;font-weight:600;font-size:.85rem;}
+input,select,textarea{width:100%;padding:9px 10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);font-size:.9rem;outline:none;}
+textarea{resize:vertical;min-height:70px;}
+input::placeholder,textarea::placeholder{color:#9aa4b2;}
+.dark input,.dark select,.dark textarea{background:#232a30;border-color:#333a42;color:#eaf0f7;}
+.dark input::placeholder,.dark textarea::placeholder{color:#aeb9c4;}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;}
+.horario-row{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.horario-row input{flex:1;}
+.horario-row button{flex:0 0 120px;}
+.btn{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;padding:11px 14px;border-radius:10px;font-weight:700;font-size:.95rem;cursor:pointer;}
+.btn:hover{transform:translateY(-1px);}
+.btn-sec{background:#ddd;color:#222;}
+.quick-options{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+.quick-btn{border-radius:999px;border:1px solid var(--border);background:rgba(15,23,42,0.03);padding:4px 9px;font-size:.75rem;cursor:pointer;color:var(--muted);}
+.dark .quick-btn{background:#232a30;border-color:#333a42;color:#e5e7eb;}
+.quick-btn:hover{background:rgba(0,120,255,0.06);}
+#imagePreview{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.thumb-img{width:120px;height:80px;object-fit:cover;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,0.25);cursor:zoom-in;}
+footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);background:var(--card);border-top:1px solid var(--border);}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);padding:8px 14px;border-radius:999px;background:#111827;color:#f9fafb;font-size:.78rem;font-weight:600;display:none;z-index:9999;box-shadow:0 8px 20px rgba(0,0,0,0.45);}
+.toast.show{display:block;}
+@media(max-width:600px){main{padding:10px;} .horario-row button{flex:0 0 100px;font-size:.75rem;padding:9px;}}
+/* placeholder estilizado para horário (mostra __:__ quando vazio) usando placeholder nativo */
+.time-input{font-family:inherit;}
 </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <div class="sidebar-title-block">
-      <span class="sidebar-title">Relatórios de Campo</span>
-      <span class="sidebar-sub">CMPC • RSS3</span>
+<header>
+  <h1>Relatório de Campo</h1>
+  <button id="themeToggle" type="button">🌙</button>
+</header>
+
+<main>
+  <div class="card">
+    <h2>Preencher Relatório</h2>
+
+    <!-- DADOS PRINCIPAIS -->
+    <div class="section-title">Dados principais</div>
+    <div class="grid-2">
+      <div>
+        <label>Número da PT</label>
+        <input id="numeroPt" type="text" autocomplete="off">
+      </div>
+      <div>
+        <label>Data</label>
+        <input id="data" type="date" autocomplete="off">
+      </div>
+      <div>
+        <label>Equipamento</label>
+        <select id="equipamento">
+          <option value="">Selecione...</option>
+          <option value="Hidrojato">Hidrojato</option>
+          <option value="Hidrovacuo">Hidrovácuo</option>
+        </select>
+      </div>
+      <div>
+        <label>Placa</label>
+        <select id="placaSelect">
+          <option value="">Selecione...</option>
+          <option value="FOQ6H01">FOQ6H01</option>
+          <option value="IVR1B32">IVR1B32</option>
+          <option value="JBK7F63">JBK7F63</option>
+          <option value="JBL1H84">JBL1H84</option>
+          <option value="LRA8855">LRA8855</option>
+          <option value="SKID">SKID</option>
+          <option value="PPC6I87">PPC6I87</option>
+          <option value="TDK6G18">TDK6G18</option>
+          <option value="KPR0F00">KPR0F00</option>
+          <option value="outra">Outra (digitar)</option>
+        </select>
+        <input id="placaTexto" type="text" placeholder="Digite a placa..." style="margin-top:6px;display:none;" autocomplete="off">
+      </div>
     </div>
-    <button id="themeToggle" class="sidebar-toggle-theme" type="button">🌙</button>
-  </div>
 
-  <nav class="sidebar-nav">
-    <a href="admin.html" class="sidebar-link">
-      <span class="icon">📋</span><span>Admin</span>
-    </a>
-    <a href="dashboard.html" class="sidebar-link">
-      <span class="icon">📊</span><span>Dashboard</span>
-    </a>
-    <a href="planilha.html" class="sidebar-link active">
-      <span class="icon">📑</span><span>Planilha</span>
-    </a>
-    <a href="oleo-ibcs.html" class="sidebar-link">
-      <span class="icon">🛢️</span><span>Óleo em IBCs</span>
-    </a>
-    <a href="excluidos.html" class="sidebar-link">
-      <span class="icon">🗑️</span><span>Excluídos</span>
-    </a>
-  </nav>
-
-  <div class="sidebar-footer">
-    Planilha dinâmica com filtros<br>e edição rápida.
-  </div>
-</aside>
-
-<button id="sidebarHandle" class="sidebar-handle" type="button">☰</button>
-
-<div class="topbar-mobile">Planilha — Relatórios</div>
-
-<!-- PAINEL DE FILTRO POR COLUNA -->
-<div id="colFilterPanel">
-  <div id="colFilterTitle">Filtrar</div>
-  <div id="colFilterList"></div>
-  <div id="colFilterActions">
-    <button type="button" id="clearColFilter">Limpar</button>
-    <button type="button" id="applyColFilter">Aplicar</button>
-  </div>
-</div>
-
-<!-- MAIN -->
-<div class="main-wrapper">
-  <header class="page-header">
-    <div>
-      <div class="page-title">Planilha de Relatórios</div>
-      <div class="page-sub" id="subtitleInfo">Carregando dados...</div>
+    <div class="grid-2">
+      <div>
+        <label>Local</label>
+        <input id="local" type="text" autocomplete="off">
+      </div>
+      <div>
+        <label>TAG</label>
+        <input id="tag" type="text" autocomplete="off">
+      </div>
+      <div>
+        <label>Solicitante</label>
+        <input id="solicitante" type="text" autocomplete="off">
+        <div class="quick-options">
+          <button type="button" class="quick-btn" data-fill-target="solicitante" data-fill-value="CMPC">CMPC</button>
+        </div>
+      </div>
+      <div>
+        <label>Emitente abertura</label>
+        <input id="emitAbertura" type="text" autocomplete="off">
+      </div>
+      <div>
+        <label>Emitente encerramento</label>
+        <input id="emitEncerramento" type="text" autocomplete="off">
+      </div>
+      <div>
+        <label>Operador</label>
+        <select id="operadorSelect">
+          <option value="">Selecione...</option>
+          <option value="Bruno Ramos">Bruno Ramos</option>
+          <option value="Carlos Alexandre">Carlos Alexandre</option>
+          <option value="Jaques">Jaques</option>
+          <option value="Júlio César">Júlio César</option>
+          <option value="Lucas Coelho">Lucas Coelho</option>
+          <option value="Robson Silva">Robson Silva</option>
+          <option value="outra">Outro (digitar)</option>
+        </select>
+        <input id="operadorTexto" type="text" placeholder="Digite o nome do operador..." style="margin-top:6px;display:none;" autocomplete="off">
+      </div>
+      <div>
+        <label>Ajudante</label>
+        <input id="ajudante" type="text" autocomplete="off">
+      </div>
+      <div>
+        <label>Tipo de serviço</label>
+        <input id="tipoServico" type="text" placeholder="Ex.: Limpeza de caixa..." autocomplete="off">
+      </div>
     </div>
-  </header>
 
-  <!-- AÇÕES DA PLANILHA -->
-  <div class="table-actions">
-    <button type="button" id="btnToggleAdvanced">
-      <span id="labelAdvanced">Mostrar colunas avançadas</span>
-    </button>
-    <button type="button" class="primary" id="btnExportCsv">
-      Exportar CSV
-    </button>
+    <!-- HORÁRIOS -->
+    <div class="section-title">Horários</div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>DDS e Checklist</label>
+        <input id="h_ddsChecklist" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_ddsChecklist">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Disposição da coordenação</label>
+        <input id="h_disposicao" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_disposicao">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Chegada ao local</label>
+        <input id="h_chegada" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_chegada">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Liberação da PT</label>
+        <input id="h_liberacaoPT" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_liberacaoPT">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Início da atividade</label>
+        <input id="h_inicio" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_inicio">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Fim da atividade</label>
+        <input id="h_fim" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_fim">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Início intervalo</label>
+        <input id="h_inicioIntervalo" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_inicioIntervalo">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Fim intervalo</label>
+        <input id="h_fimIntervalo" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_fimIntervalo">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Troca de turno</label>
+        <input id="h_trocaTurno" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_trocaTurno">Marcar</button>
+    </div>
+
+    <!-- ENCERRAMENTO DA PT -->
+    <div class="section-title">Encerramento da PT</div>
+    <div class="grid-2">
+      <div>
+        <label>Encerramento da PT?</label>
+        <select id="encerramentoPt">
+          <option value="">Selecione...</option>
+          <option value="Sim">Sim</option>
+          <option value="Não">Não</option>
+        </select>
+      </div>
+      <div id="boxMotivoNao" style="display:none;">
+        <label>Por que não foi finalizada?</label>
+        <input id="motivoNaoFinalizada" type="text" autocomplete="off">
+      </div>
+    </div>
+
+    <!-- ESPECIFICAÇÕES -->
+    <div class="section-title">Especificações da atividade</div>
+    <div class="grid-2">
+      <div>
+        <label>Tipo</label>
+        <select id="tipoAtividade">
+          <option value="">Selecione...</option>
+          <option value="Sucção">Sucção</option>
+          <option value="Descarte">Descarte</option>
+          <option value="Hidrojato">Hidrojato</option>
+        </select>
+      </div>
+      <div>
+        <label>Óleo</label>
+        <select id="oleo">
+          <option value="">Selecione...</option>
+          <option value="Sim">Sim</option>
+          <option value="Não">Não</option>
+        </select>
+      </div>
+      <div id="boxQuantidade" style="display:none;">
+        <label>Quantidade (se tiver óleo)</label>
+        <input id="quantidade" type="text" placeholder="Ex.: 500 L" autocomplete="off">
+      </div>
+    </div>
+
+    <div id="boxDescartes" style="display:none; margin-top:8px;">
+      <label>Onde foi descartado?</label>
+      <select id="ondeDescartadoTipo">
+        <option value="">Selecione...</option>
+        <option value="IBCs">IBCs</option>
+        <option value="Outros">Outros</option>
+      </select>
+      <div id="boxOndeOutros" style="display:none; margin-top:8px;">
+        <input id="ondeDescartadoTexto" type="text" placeholder="Descreva o local (ex.: lago, caixa, tanque...)" autocomplete="off">
+      </div>
+    </div>
+
+    <!-- FOTOS -->
+    <div class="section-title">Fotos</div>
+    <div style="display:flex;gap:10px;align-items:center;margin-top:6px;flex-wrap:wrap;">
+      <button id="btnAddFoto" class="btn" type="button">Adicionar foto</button>
+      <input id="inputFotos" type="file" accept="image/*" multiple style="display:none">
+      <span style="font-size:.75rem;color:var(--muted);">Máx. 5 fotos</span>
+    </div>
+    <div id="imagePreview"></div>
+
+    <label style="margin-top:16px;">Observações</label>
+    <textarea id="observacoes" placeholder="Algo importante sobre a atividade..." autocomplete="off"></textarea>
+
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button id="btnSalvar" class="btn" type="button">Salvar relatório</button>
+      <button id="btnLimpar" class="btn btn-sec" type="button">Limpar campos</button>
+    </div>
   </div>
+</main>
 
-  <div class="table-wrapper" id="tableWrapper">
-    <table id="sheetTable">
-      <thead>
-        <tr id="sheetHeaderRow">
-          <!-- cabeçalho montado via JS -->
-        </tr>
-      </thead>
-      <tbody id="sheetBody">
-        <!-- linhas montadas via JS -->
-      </tbody>
-    </table>
-  </div>
+<footer>
+  © 2025 | Relatórios de Campo — RSS3
+</footer>
 
-  <footer>
-    © 2025 | Relatórios de Campo — Planilha
-  </footer>
-</div>
+<div id="toast" class="toast"></div>
 
-<!-- Firebase -->
+<!-- Firebase (compat) - substitua pelas suas credenciais -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
+/*
+  Configuração atualizada para o projeto relatorio-rss3.
+  (Mantive o uso da API compat para não precisar migrar o restante do código.)
+*/
 const firebaseConfig = {
-  apiKey: "AIzaSyC8loXqt9Vaup9baWt6cFhYU8ikX8BQv5U",
+  apiKey: "AIzaSyC8loXqt9Vaup9baWt6cFhYU8ikX8BQv5",
   authDomain: "relatorio-rss3.firebaseapp.com",
   projectId: "relatorio-rss3",
   storageBucket: "relatorio-rss3.firebasestorage.app",
@@ -500,12 +337,7 @@ const db = firebase.firestore();
 </script>
 
 <script>
-// Proteção básica (comente o redirect se não quiser)
-if(localStorage.getItem("auth_relatorios")!=="true"){
-  // window.location.href="index.html";
-}
-
-/* Tema */
+/* ===== THEME ===== */
 const themeToggle=document.getElementById("themeToggle");
 if(localStorage.getItem("tema")==="dark"){
   document.body.classList.add("dark");
@@ -518,481 +350,647 @@ themeToggle.onclick=()=>{
   localStorage.setItem("tema",dark?"dark":"light");
 };
 
-/* Sidebar */
-const sidebarHandle=document.getElementById("sidebarHandle");
-sidebarHandle.addEventListener("click",()=>{
-  document.body.classList.toggle("sidebar-open");
-});
-</script>
-
-<script>
-const tableWrapper=document.getElementById("tableWrapper");
-const sheetHeaderRow=document.getElementById("sheetHeaderRow");
-const sheetBody=document.getElementById("sheetBody");
-const subtitleInfo=document.getElementById("subtitleInfo");
-
-const btnToggleAdvanced=document.getElementById("btnToggleAdvanced");
-const labelAdvanced=document.getElementById("labelAdvanced");
-const btnExportCsv=document.getElementById("btnExportCsv");
-let advancedVisible=false;
-
-// drag-scroll horizontal
-let isDown=false,startX,scrollLeft;
-tableWrapper.addEventListener("mousedown",(e)=>{
-  if(e.target.closest('td[contenteditable="true"]')) return;
-  isDown=true;
-  tableWrapper.classList.add("dragging");
-  startX=e.pageX - tableWrapper.offsetLeft;
-  scrollLeft=tableWrapper.scrollLeft;
-});
-tableWrapper.addEventListener("mouseleave",()=>{isDown=false;tableWrapper.classList.remove("dragging");});
-tableWrapper.addEventListener("mouseup",()=>{isDown=false;tableWrapper.classList.remove("dragging");});
-tableWrapper.addEventListener("mousemove",(e)=>{
-  if(!isDown) return;
-  e.preventDefault();
-  const x=e.pageX - tableWrapper.offsetLeft;
-  const walk=x-startX;
-  tableWrapper.scrollLeft = scrollLeft - walk;
-});
-
-// touch
-tableWrapper.addEventListener("touchstart",(e)=>{
-  if(e.target.closest('td[contenteditable="true"]')) return;
-  isDown=true;
-  tableWrapper.classList.add("dragging");
-  startX=e.touches[0].pageX - tableWrapper.offsetLeft;
-  scrollLeft=tableWrapper.scrollLeft;
-},{passive:true});
-tableWrapper.addEventListener("touchend",()=>{isDown=false;tableWrapper.classList.remove("dragging");});
-tableWrapper.addEventListener("touchmove",(e)=>{
-  if(!isDown) return;
-  const x=e.touches[0].pageX - tableWrapper.offsetLeft;
-  const walk=x-startX;
-  tableWrapper.scrollLeft = scrollLeft - walk;
-},{passive:true});
-
-/* ===== Helpers de duração ===== */
-function formatMinutesAsHhMm(min){
-  const n=parseInt(min,10);
-  if(isNaN(n) || n < 0) return "";
-  const h=Math.floor(n/60);
-  const m=n%60;
-  return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+/* ===== TOAST ===== */
+const toastEl=document.getElementById("toast");
+function showToast(msg,color){
+  toastEl.textContent=msg;
+  toastEl.style.background=color || "#111827";
+  toastEl.classList.add("show");
+  setTimeout(()=>toastEl.classList.remove("show"),2800);
 }
-function parseDurationInputToMinutes(str){
-  if(!str) return null;
-  str=str.trim();
-  // se vier no formato hh:mm
-  if(str.includes(":")){
-    const parts=str.split(":");
-    if(parts.length<2) return null;
-    const h=parseInt(parts[0],10);
-    const m=parseInt(parts[1],10);
-    if(isNaN(h)||isNaN(m)||h<0||m<0||m>=60) return null;
-    return h*60+m;
+
+/* ===== Helpers device/id/rascunho (mantive seu código) ===== */
+function getDeviceId(){
+  let id=localStorage.getItem("deviceId_relatorios");
+  if(!id){
+    id="dev-"+Math.random().toString(36).slice(2,10);
+    localStorage.setItem("deviceId_relatorios",id);
   }
-  // se o usuário digitar só minutos "310"
-  const n=parseInt(str,10);
-  if(isNaN(n) || n<0) return null;
-  return n;
+  return id;
 }
-
-/* ===== Definição de colunas ===== */
-const columns=[
-  {key:"numeroPT",            label:"Nº PT",                 editable:false},
-  {key:"data",                label:"Data",                  editable:true},
-  {key:"diaSemana",           label:"Dia Semana",            editable:false},
-  {key:"equipamento",         label:"Equipamento",           editable:true},
-  {key:"placa",               label:"Placa",                 editable:true},
-  {key:"local",               label:"Local",                 editable:true},
-  {key:"tag",                 label:"Tag",                   editable:true},
-  {key:"solicitante",         label:"Solicitante",           editable:true},
-  {key:"emitenteAbertura",    label:"Emitente Abertura",     editable:true},
-  {key:"emitenteEncerramento",label:"Emitente Encerr.",      editable:true},
-  {key:"operador",            label:"Operador",              editable:true},
-  {key:"ajudante",            label:"Ajudante",              editable:true},
-  {key:"tipoServico",         label:"Tipo Serviço",          editable:true},
-
-  {key:"h_ddsChecklist",      label:"DDS/Checklist",         editable:true},
-  {key:"h_disposicao",        label:"Disp. Coordenação",     editable:true},
-  {key:"h_chegada",           label:"Chegada Local",         editable:true},
-  {key:"h_liberacaoPT",       label:"Liberação PT",          editable:true},
-  {key:"h_inicio",            label:"Início Atividade",      editable:true},
-  {key:"h_fim",               label:"Fim Atividade",         editable:true},
-  {key:"h_inicioIntervalo",   label:"Início Intervalo",      editable:true},
-  {key:"h_fimIntervalo",      label:"Fim Intervalo",         editable:true},
-  {key:"h_trocaTurno",        label:"Troca Turno",           editable:true},
-
-  {key:"tipoAtividade",       label:"Tipo Atividade",        editable:true},
-  {key:"oleo",                label:"Óleo",                  editable:true},
-  {key:"quantidade",          label:"Qtd Óleo",              editable:true},
-
-  {key:"encerramentoPt",      label:"Encerramento PT",       editable:true},
-  {key:"motivoNaoFinalizada", label:"Motivo Não Finalizada", editable:true},
-
-  {key:"duracaoMinutos",      label:"Duração (hh:mm)",       editable:true},
-
-  {key:"observacoes",         label:"Observações",           editable:true},
-
-  {key:"criadoEm",            label:"Criado em",             editable:false},
-  {key:"deviceId",            label:"Device ID",             editable:false, advanced:true},
-  {key:"operadorIdFixo",      label:"Operador ID",           editable:false, advanced:true}
-];
-
-let relatoriosRaw=[];
-let relatoriosFiltrados=[];
-let activeFilters={};
-
-/* ===== Painel único de filtro por coluna ===== */
-const colFilterPanel=document.getElementById("colFilterPanel");
-const colFilterTitle=document.getElementById("colFilterTitle");
-const colFilterList=document.getElementById("colFilterList");
-const applyColFilter=document.getElementById("applyColFilter");
-const clearColFilter=document.getElementById("clearColFilter");
-
-let currentFilterCol=null;
-
-function openFilterPanelFor(colKey){
-  currentFilterCol=colKey;
-  const colConf=columns.find(c=>c.key===colKey);
-  colFilterTitle.textContent=`Filtrar: ${colConf ? colConf.label : colKey}`;
-
-  const valuesSet=new Set();
-  relatoriosRaw.forEach(r=>{
-    const v = r[colKey] ?? "";
-    valuesSet.add(String(v || "").trim());
-  });
-  const allValues=Array.from(valuesSet).sort((a,b)=>a.localeCompare(b));
-
-  const selectedSet = activeFilters[colKey] || new Set();
-
-  colFilterList.innerHTML="";
-  if(allValues.length===0){
-    colFilterList.innerHTML='<div style="font-size:.78rem;color:var(--muted);">Sem valores.</div>';
-  }else{
-    allValues.forEach(val=>{
-      const label=document.createElement("label");
-      label.className="col-option";
-      const checked = selectedSet.size===0 || selectedSet.has(val);
-      label.innerHTML=`
-        <input type="checkbox" data-value="${val.replace(/"/g,'&quot;')}" ${checked?"checked":""}>
-        <span>${val || "(vazio)"}</span>
-      `;
-      colFilterList.appendChild(label);
-    });
+function getOperadorIdFixo(){
+  let id=localStorage.getItem("operadorIdFixo_relatorios");
+  if(!id){
+    id="op-"+Math.random().toString(36).slice(2,10);
+    localStorage.setItem("operadorIdFixo_relatorios",id);
   }
-
-  colFilterPanel.classList.add("open");
+  return id;
 }
 
-applyColFilter.addEventListener("click",()=>{
-  if(!currentFilterCol){colFilterPanel.classList.remove("open");return;}
-  const checks=colFilterList.querySelectorAll('input[type="checkbox"]');
-  const set=new Set();
-  checks.forEach(ch=>{
-    if(ch.checked){
-      set.add(ch.dataset.value);
+/* ===== RASCUNHO LOCAL (mantive) ===== */
+const DRAFT_KEY = "relatorioCampo_rascunho";
+let numeroPtAtual=null;
+let fotosSelecionadas=[];
+
+function $(id){return document.getElementById(id);}
+
+/* Save/load rascunho (mantive seu código — inalterado estruturalmente) */
+function saveDraft(){
+  try{
+    const draft={
+      numeroPtAtual,
+      numeroPt: $("numeroPt").value,
+      data: $("data").value,
+      equipamento: $("equipamento").value,
+      placaSelect: $("placaSelect").value,
+      placaTexto: $("placaTexto").value,
+      local: $("local").value,
+      tag: $("tag").value,
+      solicitante: $("solicitante").value,
+      emitAbertura: $("emitAbertura").value,
+      emitEncerramento: $("emitEncerramento").value,
+      operadorSelect: $("operadorSelect").value,
+      operadorTexto: $("operadorTexto").value,
+      ajudante: $("ajudante").value,
+      tipoServico: $("tipoServico").value,
+      tipoAtividade: $("tipoAtividade").value,
+      oleo: $("oleo").value,
+      quantidade: $("quantidade").value,
+      encerramentoPt: $("encerramentoPt").value,
+      motivoNaoFinalizada: $("motivoNaoFinalizada").value,
+      ondeDescartadoTipo: $("ondeDescartadoTipo").value,
+      ondeDescartadoTexto: $("ondeDescartadoTexto").value,
+      horarios:{
+        ddsChecklist: $("h_ddsChecklist").value,
+        disposicao: $("h_disposicao").value,
+        chegada: $("h_chegada").value,
+        liberacaoPT: $("h_liberacaoPT").value,
+        inicio: $("h_inicio").value,
+        inicioIntervalo: $("h_inicioIntervalo").value,
+        fimIntervalo: $("h_fimIntervalo").value,
+        fim: $("h_fim").value,
+        trocaTurno: $("h_trocaTurno").value
+      },
+      observacoes: $("observacoes").value,
+      fotos: fotosSelecionadas
+    };
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+  }catch(e){
+    console.warn("Erro ao salvar rascunho:",e);
+  }
+}
+function loadDraft(){
+  try{
+    const raw=localStorage.getItem(DRAFT_KEY);
+    if(!raw) return false;
+    const d=JSON.parse(raw);
+    if(d.numeroPt) $("numeroPt").value=d.numeroPt;
+    if(d.numeroPtAtual) numeroPtAtual=d.numeroPtAtual;
+    if(d.data) $("data").value=d.data;
+    if(d.equipamento) $("equipamento").value=d.equipamento;
+    if(d.placaSelect){
+      $("placaSelect").value=d.placaSelect;
+      if(d.placaSelect==="outra") $("placaTexto").style.display="block";
     }
-  });
-  if(set.size===0 || set.size===checks.length){
-    delete activeFilters[currentFilterCol];
-  }else{
-    activeFilters[currentFilterCol]=set;
-  }
-  colFilterPanel.classList.remove("open");
-  aplicarFiltrosEAtualizar();
-});
-
-clearColFilter.addEventListener("click",()=>{
-  if(currentFilterCol){
-    delete activeFilters[currentFilterCol];
-  }
-  colFilterPanel.classList.remove("open");
-  aplicarFiltrosEAtualizar();
-});
-
-window.addEventListener("click",(e)=>{
-  if(!colFilterPanel.contains(e.target)) colFilterPanel.classList.remove("open");
-});
-
-/* ===== Cabeçalho ===== */
-function renderHeader(){
-  sheetHeaderRow.innerHTML="";
-  columns.forEach(col=>{
-    const th=document.createElement("th");
-    th.className="filterable";
-    th.dataset.colkey=col.key;
-    if(col.advanced) th.classList.add("advanced-col");
-    th.innerHTML=`
-      <button type="button" class="th-inner-btn">
-        <span>${col.label}</span>
-        <span class="chevron">▾</span>
-      </button>
-    `;
-    th.querySelector("button").addEventListener("click",(e)=>{
-      e.stopPropagation();
-      openFilterPanelFor(col.key);
-    });
-    sheetHeaderRow.appendChild(th);
-  });
-}
-
-/* ===== Corpo ===== */
-function renderBody(){
-  sheetBody.innerHTML="";
-  relatoriosFiltrados.forEach(r=>{
-    const tr=document.createElement("tr");
-    tr.dataset.id=r.id;
-    columns.forEach(col=>{
-      const td=document.createElement("td");
-      td.dataset.col=col.key;
-      if(col.advanced) td.classList.add("advanced-col");
-
-      let val = r[col.key];
-      if(col.key==="duracaoMinutos"){
-        // mostra sempre hh:mm
-        const n=parseInt(val,10);
-        val = isNaN(n) ? "" : formatMinutesAsHhMm(n);
-      }
-      if(val==null) val="";
-      td.textContent=String(val);
-      if(col.editable){
-        td.contentEditable="true";
-      }
-      tr.appendChild(td);
-    });
-    sheetBody.appendChild(tr);
-  });
-}
-
-/* ===== Filtros ===== */
-function aplicarFiltrosEAtualizar(){
-  relatoriosFiltrados = relatoriosRaw.filter(r=>{
-    for(const [colKey,set] of Object.entries(activeFilters)){
-      if(set && set.size>0){
-        const v=String(r[colKey] ?? "").trim();
-        if(!set.has(v)) return false;
-      }
+    if(d.placaTexto) $("placaTexto").value=d.placaTexto;
+    if(d.local) $("local").value=d.local;
+    if(d.tag) $("tag").value=d.tag;
+    if(d.solicitante) $("solicitante").value=d.solicitante;
+    if(d.emitAbertura) $("emitAbertura").value=d.emitAbertura;
+    if(d.emitEncerramento) $("emitEncerramento").value=d.emitEncerramento;
+    if(d.operadorSelect){
+      $("operadorSelect").value=d.operadorSelect;
+      if(d.operadorSelect==="outra") $("operadorTexto").style.display="block";
     }
+    if(d.operadorTexto) $("operadorTexto").value=d.operadorTexto;
+    if(!d.operadorSelect && d.operador){
+      $("operadorSelect").value="outra";
+      $("operadorTexto").style.display="block";
+      $("operadorTexto").value=d.operador;
+    }
+    if(d.ajudante) $("ajudante").value=d.ajudante;
+    if(d.tipoServico) $("tipoServico").value=d.tipoServico;
+    if(d.tipoAtividade) $("tipoAtividade").value=d.tipoAtividade;
+    if(d.oleo){
+      $("oleo").value=d.oleo;
+      if(d.oleo==="Sim") $("boxQuantidade").style.display="block";
+    }
+    if(d.quantidade) $("quantidade").value=d.quantidade;
+    if(d.encerramentoPt){
+      $("encerramentoPt").value=d.encerramentoPt;
+      if(d.encerramentoPt==="Não") $("boxMotivoNao").style.display="block";
+    }
+    if(d.motivoNaoFinalizada) $("motivoNaoFinalizada").value=d.motivoNaoFinalizada;
+    if(d.ondeDescartadoTipo) $("ondeDescartadoTipo").value=d.ondeDescartadoTipo;
+    if(d.ondeDescartadoTexto) $("ondeDescartadoTexto").value=d.ondeDescartadoTexto;
+    if(d.horarios){
+      $("h_ddsChecklist").value=d.horarios.ddsChecklist || "";
+      $("h_disposicao").value=d.horarios.disposicao || "";
+      $("h_chegada").value=d.horarios.chegada || "";
+      $("h_liberacaoPT").value=d.horarios.liberacaoPT || "";
+      $("h_inicio").value=d.horarios.inicio || "";
+      $("h_inicioIntervalo").value=d.horarios.inicioIntervalo || "";
+      $("h_fimIntervalo").value=d.horarios.fimIntervalo || "";
+      $("h_fim").value=d.horarios.fim || "";
+      $("h_trocaTurno").value=d.horarios.trocaTurno || "";
+    }
+    fotosSelecionadas = Array.isArray(d.fotos) ? d.fotos : [];
+    renderPreview();
+    updateDescartesBoxVisibility();
+    if($("ondeDescartadoTipo").value==="Outros") $("boxOndeOutros").style.display="block";
     return true;
-  });
-
-  subtitleInfo.textContent = `${relatoriosFiltrados.length} relatório(s) exibido(s)`;
-  renderBody();
-}
-
-/* ===== Update payload ===== */
-function buildUpdatePayload(colKey,newValue){
-  switch(colKey){
-    case "h_ddsChecklist":    return {"horarios.ddsChecklist": newValue};
-    case "h_disposicao":      return {"horarios.disposicao":   newValue};
-    case "h_chegada":         return {"horarios.chegada":      newValue};
-    case "h_liberacaoPT":     return {"horarios.liberacaoPT":  newValue};
-    case "h_inicio":          return {"horarios.inicio":       newValue};
-    case "h_inicioIntervalo": return {"horarios.inicioIntervalo": newValue};
-    case "h_fimIntervalo":    return {"horarios.fimIntervalo": newValue};
-    case "h_fim":             return {"horarios.fim":          newValue};
-    case "h_trocaTurno":      return {"horarios.trocaTurno":   newValue};
-
-    case "tipoAtividade":
-      return {
-        "tipoAtividade": newValue,
-        "especificacoes.tipoAtividade": newValue
-      };
-    case "oleo":
-      return {
-        "oleo": newValue,
-        "especificacoes.oleo": newValue
-      };
-    case "quantidade":
-      return {
-        "quantidade": newValue,
-        "especificacoes.quantidade": newValue
-      };
-    case "tipoServico":
-      return {
-        "tipoServico": newValue,
-        "especificacoes.tipoServico": newValue
-      };
-
-    case "duracaoMinutos":
-      return {"duracaoMinutos": newValue};
-
-    default:
-      return {[colKey]: newValue};
+  }catch(e){
+    console.warn("Erro ao carregar rascunho:",e);
+    return false;
   }
 }
 
-/* ===== Edição de células ===== */
-sheetBody.addEventListener("blur",async (e)=>{
-  const td=e.target;
-  if(td.tagName!=="TD" || !td.dataset.col) return;
-  const colKey=td.dataset.col;
-  const colConf=columns.find(c=>c.key===colKey);
-  if(!colConf || !colConf.editable) return;
-
-  const tr=td.closest("tr");
-  const id=tr.dataset.id;
-  let newValue=td.textContent.trim();
-
-  // tratamento especial para duração (HH:MM -> minutos)
-  if(colKey==="duracaoMinutos"){
-    const mins=parseDurationInputToMinutes(newValue);
-    if(mins==null){
-      // inválido: volta para o valor antigo que está em relatoriosRaw
-      const objOld = relatoriosRaw.find(r=>r.id===id);
-      if(objOld){
-        td.textContent = formatMinutesAsHhMm(objOld.duracaoMinutos);
+/* ===== Numero PT auto (mantive seu código) ===== */
+async function gerarNumeroPt(){
+  try{
+    const docRef=db.collection("config").doc("contadorPTCampo");
+    const prox=await db.runTransaction(async(tx)=>{
+      const snap=await tx.get(docRef);
+      let atual=99999;
+      if(snap.exists && typeof snap.data().valor==="number"){
+        atual=snap.data().valor;
       }
+      const novo=atual+1;
+      tx.set(docRef,{valor:novo});
+      return novo;
+    });
+    numeroPtAtual=prox;
+    if(!$("numeroPt").value){
+      $("numeroPt").value=prox;
+    }
+    saveDraft();
+  }catch(err){
+    console.error("Erro ao gerar número PT:",err);
+    alert("Erro ao gerar número da PT. Ver console.");
+  }
+}
+
+/* Data padrão hoje */
+function setDataHoje(){
+  const hoje=new Date();
+  const ano=hoje.getFullYear();
+  const mes=String(hoje.getMonth()+1).padStart(2,"0");
+  const dia=String(hoje.getDate()).padStart(2,"0");
+  $("data").value=`${ano}-${mes}-${dia}`;
+}
+
+/* Placa / Operador / Óleo / Descartes (mantive) */
+const placaSelect=$("placaSelect");
+const placaTexto=$("placaTexto");
+placaSelect.addEventListener("change",()=>{
+  if(placaSelect.value==="outra"){
+    placaTexto.style.display="block";
+  }else{
+    placaTexto.style.display="none";
+    placaTexto.value="";
+  }
+  saveDraft();
+});
+const operadorSelect=$("operadorSelect");
+const operadorTexto=$("operadorTexto");
+operadorSelect.addEventListener("change",()=>{
+  if(operadorSelect.value==="outra"){
+    operadorTexto.style.display="block";
+  }else{
+    operadorTexto.style.display="none";
+    operadorTexto.value="";
+  }
+  saveDraft();
+});
+const oleoSelect=$("oleo");
+const boxQuantidade=$("boxQuantidade");
+const boxDescartes=$("boxDescartes");
+const tipoAtividadeSelect=$("tipoAtividade");
+const ondeDescartadoTipoEl=$("ondeDescartadoTipo");
+const ondeDescartadoTextoEl=$("ondeDescartadoTexto");
+const boxOndeOutros=$("boxOndeOutros");
+function updateDescartesBoxVisibility(){
+  const tipoVal=tipoAtividadeSelect.value;
+  const oleoVal=oleoSelect.value;
+  if(tipoVal==="Descarte" && oleoVal==="Sim"){
+    boxDescartes.style.display="block";
+  }else{
+    boxDescartes.style.display="none";
+    ondeDescartadoTipoEl.value="";
+    ondeDescartadoTextoEl.value="";
+    boxOndeOutros.style.display="none";
+  }
+}
+oleoSelect.addEventListener("change",()=>{
+  if(oleoSelect.value==="Sim"){
+    boxQuantidade.style.display="block";
+  }else{
+    boxQuantidade.style.display="none";
+    $("quantidade").value="";
+  }
+  updateDescartesBoxVisibility();
+  saveDraft();
+});
+tipoAtividadeSelect.addEventListener("change",()=>{
+  updateDescartesBoxVisibility();
+  saveDraft();
+});
+ondeDescartadoTipoEl.addEventListener("change",()=>{
+  if(ondeDescartadoTipoEl.value==="Outros"){
+    boxOndeOutros.style.display="block";
+  }else{
+    boxOndeOutros.style.display="none";
+    ondeDescartadoTextoEl.value="";
+  }
+  saveDraft();
+});
+const encerramentoPtSelect=$("encerramentoPt");
+const boxMotivoNao=$("boxMotivoNao");
+const motivoNaoEl=$("motivoNaoFinalizada");
+encerramentoPtSelect.addEventListener("change",()=>{
+  if(encerramentoPtSelect.value==="Não"){
+    boxMotivoNao.style.display="block";
+  }else{
+    boxMotivoNao.style.display="none";
+    motivoNaoEl.value="";
+  }
+  saveDraft();
+});
+
+/* ===== BOTÕES "Marcar" com hora atual (mantive) ===== */
+function formatHoraAgora(){
+  const agora=new Date();
+  const hh=String(agora.getHours()).padStart(2,"0");
+  const mm=String(agora.getMinutes()).padStart(2,"0");
+  return `${hh}:${mm}`;
+}
+document.querySelectorAll('button[data-horario]').forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const id=btn.getAttribute("data-horario");
+    const campo=$(id);
+    campo.value=formatHoraAgora();
+    saveDraft();
+  });
+});
+
+/* ===== QUICK FILL (Solicitante) ===== */
+document.querySelectorAll("[data-fill-target]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const targetId=btn.getAttribute("data-fill-target");
+    const value=btn.getAttribute("data-fill-value") || btn.textContent.trim();
+    const input=$(targetId);
+    if(input){
+      input.value=value;
+      saveDraft();
+    }
+  });
+});
+
+/* ===== FOTOS (mantive) ===== */
+const btnAddFoto=$("btnAddFoto");
+const inputFotos=$("inputFotos");
+const imagePreview=$("imagePreview");
+btnAddFoto.addEventListener("click",()=>inputFotos.click());
+inputFotos.addEventListener("change",(e)=>{
+  const files=Array.from(e.target.files||[]);
+  files.slice(0,5-fotosSelecionadas.length).forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      fotosSelecionadas.push(ev.target.result);
+      renderPreview();
+      saveDraft();
+    };
+    reader.readAsDataURL(file);
+  });
+  inputFotos.value="";
+});
+function renderPreview(){
+  imagePreview.innerHTML="";
+  fotosSelecionadas.forEach((src,i)=>{
+    const img=document.createElement("img");
+    img.src=src;
+    img.className="thumb-img";
+    img.alt="Foto "+(i+1);
+    img.onclick=()=>{
+      const ov=document.createElement("div");
+      ov.style.position="fixed";
+      ov.style.inset="0";
+      ov.style.background="rgba(0,0,0,0.85)";
+      ov.style.display="flex";
+      ov.style.alignItems="center";
+      ov.style.justifyContent="center";
+      ov.style.zIndex="9999";
+      ov.style.cursor="zoom-out";
+      const big=document.createElement("img");
+      big.src=src;
+      big.style.maxWidth="92%";
+      big.style.maxHeight="92%";
+      ov.appendChild(big);
+      ov.onclick=()=>ov.remove();
+      document.body.appendChild(ov);
+    };
+    imagePreview.appendChild(img);
+  });
+}
+
+/* ===== LIMPAR CAMPOS ===== */
+$("btnLimpar").addEventListener("click",()=>{
+  if(!confirm("Limpar todos os campos do relatório?")) return;
+  document.querySelectorAll("input,textarea,select").forEach(el=>{
+    if(el.type==="date") return;
+    el.value="";
+  });
+  placaTexto.style.display="none";
+  operadorTexto.style.display="none";
+  oleoSelect.value="";
+  boxQuantidade.style.display="none";
+  encerramentoPtSelect.value="";
+  boxMotivoNao.style.display="none";
+  boxDescartes.style.display="none";
+  boxOndeOutros.style.display="none";
+  fotosSelecionadas=[];
+  renderPreview();
+  localStorage.removeItem(DRAFT_KEY);
+});
+
+/* ===== Dia da semana / duracao (mantive) ===== */
+function getDiaSemana(dataStr){
+  if(!dataStr) return "";
+  const [ano,mes,dia]=dataStr.split("-").map(Number);
+  const d=new Date(ano,mes-1,dia);
+  const nomes=["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+  return nomes[d.getDay()]||"";
+}
+function calcularDuracaoMin(hInicio,hFim){
+  if(!hInicio || !hFim) return null;
+  const [hi,mi]=hInicio.split(":").map(Number);
+  const [hf,mf]=hFim.split(":").map(Number);
+  if([hi,mi,hf,mf].some(v=>isNaN(v))) return null;
+  const inicio=hi*60+mi;
+  const fim=hf*60+mf;
+  const diff=fim-inicio;
+  return diff>0?diff:null;
+}
+
+/* =============== MÁSCARA INTELIGENTE PARA CAMPOS DE HORA ===========
+   Requisitos implementados:
+   - Escrever só números (inputmode numeric), aceita '0830' → '08:30'
+   - Ao apagar: não preenche com zeros, se campo ficar vazio → vazio
+   - Se campo incompleto (ex: '08:3') -> validação do submit bloqueia o envio
+   - Não faz "correções inteligentes" — apenas formata inserindo ':' entre o 2º e 3º dígitos
+   - Bloqueia entrada de caracteres não numéricos
+   - Coloca placeholder "__:__" para indicar o formato
+*/
+function attachTimeMask(el){
+  if(!el) return;
+  el.addEventListener("input",(e)=>{
+    const raw = el.value || "";
+    // remove tudo que não é dígito
+    let digits = raw.replace(/\D/g,"").slice(0,4); // no máximo 4 dígitos HHMM
+    if(digits.length===0){
+      el.value = ""; // vazio — não coloca 00:00
       return;
     }
-    newValue = mins;
-    td.textContent = formatMinutesAsHhMm(mins);
-  }
+    if(digits.length<=2){
+      el.value = digits; // mostra os primeiros dígitos (sem dois pontos ainda)
+    }else{
+      el.value = digits.slice(0,2) + ":" + digits.slice(2);
+    }
+  },false);
 
-  try{
-    const updatePayload = buildUpdatePayload(colKey,newValue);
-    await db.collection("relatoriosCampo").doc(id).update(updatePayload);
+  // evita colar conteúdo com caracteres estranhos
+  el.addEventListener("paste",(e)=>{
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData("text");
+    const digits = (text||"").replace(/\D/g,"").slice(0,4);
+    if(!digits) { el.value=""; return; }
+    if(digits.length<=2) el.value = digits;
+    else el.value = digits.slice(0,2) + ":" + digits.slice(2);
+  },false);
 
-    const obj=relatoriosRaw.find(r=>r.id===id);
-    if(obj) obj[colKey]=newValue;
-
-    aplicarFiltrosEAtualizar();
-  }catch(err){
-    console.error("Erro ao atualizar campo:",err);
-    td.style.background="rgba(220,38,38,0.15)";
-  }
-},true);
-
-/* ===== Botão colunas avançadas ===== */
-btnToggleAdvanced.addEventListener("click",()=>{
-  advancedVisible=!advancedVisible;
-  document.body.classList.toggle("show-advanced",advancedVisible);
-  labelAdvanced.textContent = advancedVisible
-    ? "Ocultar colunas avançadas"
-    : "Mostrar colunas avançadas";
-});
-
-/* ===== Exportar CSV (linhas filtradas) ===== */
-btnExportCsv.addEventListener("click",()=>{
-  if(!relatoriosFiltrados.length){
-    alert("Nenhum relatório para exportar.");
-    return;
-  }
-  const sep=";";
-  const header=columns.map(c=>c.label).join(sep);
-  const lines=[header];
-
-  relatoriosFiltrados.forEach(r=>{
-    const row=columns.map(col=>{
-      let v=r[col.key];
-      if(col.key==="duracaoMinutos"){
-        const n=parseInt(v,10);
-        v=isNaN(n)?"":formatMinutesAsHhMm(n);
-      }
-      if(v==null) v="";
-      let s=String(v);
-      s=s.replace(/"/g,'""');
-      if(s.includes(sep) || s.includes('"') || s.includes('\n')){
-        return `"${s}"`;
-      }
-      return s;
-    }).join(sep);
-    lines.push(row);
+  // on blur: se cheio com 2 dígitos (ex: "08") automaticamente coloca :00? NÃO — mantemos como inválido
+  // (será validado no envio). Contudo, para melhor UX podemos, opcionalmente, formatar "0830" se usuário digitou rápido
+  el.addEventListener("blur",()=>{
+    // se tem 3 dígitos (ex: '083'), convert para '08:3' (deixa como está) — validação cuidará disso
+    // Se quiser forçar sempre 2 dígitos nos minutos, substituir aqui. No requisito você pediu para NÃO ajustar caso esteja errado.
+    // Então não fazemos ajustes automáticos aqui.
   });
-
-  const csv=lines.join("\r\n");
-  const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  const now=new Date();
-  const yyyy=now.getFullYear();
-  const mm=String(now.getMonth()+1).padStart(2,"0");
-  const dd=String(now.getDate()).padStart(2,"0");
-  a.href=url;
-  a.download=`relatorios-planilha-${yyyy}${mm}${dd}.csv`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-});
-
-/* ===== Carregar relatórios ===== */
-async function carregarRelatorios(){
-  try{
-    subtitleInfo.textContent="Carregando dados do Firebase...";
-    const snap=await db.collection("relatoriosCampo").orderBy("numeroPT","desc").get();
-
-    relatoriosRaw=[];
-    snap.docs.forEach(doc=>{
-      const d = doc.data();
-      const h = d.horarios || {};
-      const e = d.especificacoes || {};
-
-      let criadoEmStr="";
-      if(d.criadoEm && typeof d.criadoEm.toDate==="function"){
-        const dt=d.criadoEm.toDate();
-        const dia=String(dt.getDate()).padStart(2,"0");
-        const mes=String(dt.getMonth()+1).padStart(2,"0");
-        const ano=dt.getFullYear();
-        const hh=String(dt.getHours()).padStart(2,"0");
-        const mm=String(dt.getMinutes()).padStart(2,"0");
-        criadoEmStr=`${dia}/${mes}/${ano} ${hh}:${mm}`;
-      }
-
-      relatoriosRaw.push({
-        id: doc.id,
-
-        numeroPT: d.numeroPT ?? d.numeroPt ?? "",
-        data: d.data || "",
-        diaSemana: d.diaSemana || "",
-        equipamento: d.equipamento || "",
-        placa: d.placa || "",
-        local: d.local || "",
-        tag: d.tag || "",
-        solicitante: d.solicitante || "",
-        emitenteAbertura: d.emitenteAbertura || "",
-        emitenteEncerramento: d.emitenteEncerramento || "",
-        operador: d.operador || "",
-        ajudante: d.ajudante || "",
-        tipoServico: d.tipoServico || e.tipoServico || "",
-
-        h_ddsChecklist: h.ddsChecklist || "",
-        h_disposicao:   h.disposicao   || "",
-        h_chegada:      h.chegada      || "",
-        h_liberacaoPT:  h.liberacaoPT  || "",
-        h_inicio:       h.inicio       || "",
-        h_inicioIntervalo: h.inicioIntervalo || "",
-        h_fimIntervalo: h.fimIntervalo || "",
-        h_fim:          h.fim          || "",
-        h_trocaTurno:   h.trocaTurno   || "",
-
-        tipoAtividade: e.tipoAtividade || d.tipoAtividade || "",
-        oleo:          e.oleo          || d.oleo          || "",
-        quantidade:    e.quantidade    || d.quantidade    || "",
-
-        encerramentoPt: d.encerramentoPt || "",
-        motivoNaoFinalizada: d.motivoNaoFinalizada || "",
-
-        duracaoMinutos: d.duracaoMinutos ?? "",
-        observacoes:    d.observacoes || "",
-        criadoEm:       criadoEmStr,
-        deviceId:       d.deviceId || "",
-        operadorIdFixo: d.operadorIdFixo || ""
-      });
-    });
-
-    subtitleInfo.textContent=`${relatoriosRaw.length} relatório(s) carregado(s)`;
-    renderHeader();
-    aplicarFiltrosEAtualizar();
-  }catch(err){
-    console.error("Erro ao carregar relatórios:",err);
-    subtitleInfo.textContent="Erro ao carregar dados. Veja o console.";
-  }
 }
 
-carregarRelatorios();
-</script>
+// Aplica máscara a todos inputs com classe time-input
+document.querySelectorAll(".time-input").forEach(attachTimeMask);
 
+/* ===== Validação de horário: retorna true se formato HH:MM e minutos<60 e horas 0-23 ===== */
+function validarHoraFormatada(v){
+  if(!v || typeof v !== "string") return false;
+  if(!v.includes(":")) return false;
+  const [hh,mm]=v.split(":");
+  if(hh.length!==2 || mm.length!==2) return false;
+  if(!/^\d{2}$/.test(hh) || !/^\d{2}$/.test(mm)) return false;
+  const H=parseInt(hh,10);
+  const M=parseInt(mm,10);
+  if(H<0 || H>23) return false;
+  if(M<0 || M>59) return false;
+  return true;
+}
+
+/* ===== SALVAR RELATÓRIO (com validação extra de horários) ===== */
+const btnSalvar=$("btnSalvar");
+btnSalvar.addEventListener("click",async()=>{
+  const numeroPtInput=$("numeroPt").value.trim();
+  const data=$("data").value;
+  const equipamento=$("equipamento").value;
+  const placaSel=placaSelect.value;
+  const placa = placaSel==="outra" ? placaTexto.value.trim() : placaSel;
+  const local=$("local").value.trim();
+  const tag=$("tag").value.trim();
+  const solicitante=$("solicitante").value.trim();
+  const emitAbertura=$("emitAbertura").value.trim();
+  const emitEncerramento=$("emitEncerramento").value.trim();
+  const operadorSel=operadorSelect.value;
+  const operadorTxt=operadorTexto.value.trim();
+  const operador = operadorSel==="outra" ? operadorTxt : operadorSel;
+  const ajudante=$("ajudante").value.trim();
+  const tipoServico=$("tipoServico").value.trim();
+  const tipoAtividade=$("tipoAtividade").value;
+  const oleo=$("oleo").value;
+  const quantidade=$("quantidade").value.trim();
+  const obs=$("observacoes").value.trim();
+  const encerramentoPt=encerramentoPtSelect.value;
+  const motivoNao=motivoNaoEl.value.trim();
+  const ondeTipo=ondeDescartadoTipoEl.value;
+  const ondeTexto=ondeDescartadoTextoEl.value.trim();
+
+  if(!numeroPtInput){
+    alert("Informe o número da PT.");
+    return;
+  }
+  if(
+    !data || !equipamento || !placa ||
+    !local || !tag || !solicitante ||
+    !emitAbertura || !emitEncerramento ||
+    !operador || !ajudante || !tipoServico
+  ){
+    alert("Preencha todos os campos principais (dados e pessoas).");
+    return;
+  }
+  if(!tipoAtividade){
+    alert("Selecione o tipo da atividade.");
+    return;
+  }
+  if(oleo===""){
+    alert("Informe se houve óleo (Sim ou Não).");
+    return;
+  }
+  if(oleo==="Sim" && !quantidade){
+    alert("Informe a quantidade de óleo.");
+    return;
+  }
+  if(tipoAtividade==="Descarte" && oleo==="Sim"){
+    if(!ondeTipo){
+      alert('Informe em "Onde foi descartado?" (IBCs ou Outros).');
+      return;
+    }
+    if(ondeTipo==="Outros" && !ondeTexto){
+      alert('Descreva o local do descarte em "Outros".');
+      return;
+    }
+  }
+  if(!encerramentoPt){
+    alert("Informe se houve encerramento da PT (Sim ou Não).");
+    return;
+  }
+  if(encerramentoPt==="Não" && !motivoNao){
+    alert('Preencha o campo "Por que não foi finalizada?".');
+    return;
+  }
+
+  // Coleta horários
+  const horariosIds = [
+    "h_ddsChecklist","h_disposicao","h_chegada","h_liberacaoPT",
+    "h_inicio","h_inicioIntervalo","h_fimIntervalo","h_fim","h_trocaTurno"
+  ];
+  const horariosObj = {};
+  for(const id of horariosIds){
+    horariosObj[id] = $(id).value.trim();
+  }
+
+  // Se encerramentoPt = Sim -> exige todos os horários e valida formato HH:MM
+  if(encerramentoPt==="Sim"){
+    for(const id of horariosIds){
+      const v = horariosObj[id];
+      if(!v){
+        alert("Preencha todos os horários (DDS, coordenação, chegada, liberação, início/fim, intervalo, troca de turno).");
+        return;
+      }
+      if(!validarHoraFormatada(v)){
+        alert(`Horário inválido em "${id}". Use o formato HH:MM (ex: 08:30).`);
+        return;
+      }
+    }
+  } else {
+    // mesmo que não seja obrigatório, caso preenchido valida o formato
+    for(const id of horariosIds){
+      const v=horariosObj[id];
+      if(v && !validarHoraFormatada(v)){
+        alert(`Horário inválido em "${id}". Use o formato HH:MM ou deixe vazio.`);
+        return;
+      }
+    }
+  }
+
+  let duracaoMinutos=null;
+  if(encerramentoPt==="Sim"){
+    duracaoMinutos=calcularDuracaoMin(horariosObj.h_inicio,horariosObj.h_fim);
+  }
+
+  const diaSemana=getDiaSemana(data);
+  const payload={
+    numeroPT:String(numeroPtInput),
+    data,
+    diaSemana,
+    equipamento,
+    placa,
+    local,
+    tag,
+    solicitante,
+    emitenteAbertura:emitAbertura,
+    emitenteEncerramento:emitEncerramento,
+    operador,
+    ajudante,
+    tipoServico,
+    horarios:{
+      ddsChecklist:horariosObj.h_ddsChecklist,
+      disposicao:horariosObj.h_disposicao,
+      chegada:horariosObj.h_chegada,
+      liberacaoPT:horariosObj.h_liberacaoPT,
+      inicio:horariosObj.h_inicio,
+      inicioIntervalo:horariosObj.h_inicioIntervalo,
+      fimIntervalo:horariosObj.h_fimIntervalo,
+      fim:horariosObj.h_fim,
+      trocaTurno:horariosObj.h_trocaTurno
+    },
+    especificacoes:{
+      tipoAtividade,
+      oleo,
+      quantidade,
+      tipoServico,
+      ondeDescartadoTipo: ondeTipo || "",
+      ondeDescartadoTexto: ondeTexto || ""
+    },
+    encerramentoPt,
+    motivoNaoFinalizada: encerramentoPt==="Não" ? motivoNao : "",
+    observacoes:obs,
+    fotos:fotosSelecionadas,
+    duracaoMinutos,
+    criadoEm:firebase.firestore.FieldValue.serverTimestamp(),
+    deviceId:getDeviceId(),
+    operadorIdFixo:getOperadorIdFixo()
+  };
+
+  if(!navigator.onLine){
+    showToast("Sem internet. O relatório continua salvo neste aparelho.", "#eab308");
+    return;
+  }
+
+  try{
+    btnSalvar.disabled=true;
+    btnSalvar.textContent="Salvando...";
+    await db.collection("relatoriosCampo").add(payload);
+    localStorage.removeItem(DRAFT_KEY);
+    window.location.href="index.html";
+  }catch(err){
+    console.error("Erro ao salvar relatório:",err);
+    showToast("Erro ao salvar relatório. Verifique a conexão.", "#dc2626");
+  }finally{
+    btnSalvar.disabled=false;
+    btnSalvar.textContent="Salvar relatório";
+  }
+});
+
+/* ===== AUTOSAVE: listeners em todos os campos ===== */
+const camposAutosave = [
+  "numeroPt","data","equipamento","placaSelect","placaTexto","local","tag",
+  "solicitante","emitAbertura","emitEncerramento",
+  "operadorSelect","operadorTexto",
+  "ajudante","tipoServico","tipoAtividade","oleo","quantidade",
+  "encerramentoPt","motivoNaoFinalizada",
+  "ondeDescartadoTipo","ondeDescartadoTexto",
+  "h_ddsChecklist","h_disposicao","h_chegada","h_liberacaoPT",
+  "h_inicio","h_inicioIntervalo","h_fimIntervalo","h_fim","h_trocaTurno",
+  "observacoes"
+];
+camposAutosave.forEach(id=>{
+  const el=$(id);
+  if(!el) return;
+  ["input","change"].forEach(ev=>{
+    el.addEventListener(ev, saveDraft);
+  });
+});
+
+/* ===== Init (mantive) ===== */
+(function init(){
+  renderPreview(); // caso tenha fotos
+  const temDraft = loadDraft();
+  if(!temDraft){
+    setDataHoje();
+    gerarNumeroPt();
+  }else{
+    if(!$("numeroPt").value){
+      gerarNumeroPt();
+    }
+  }
+})();
+</script>
 </body>
 </html>
