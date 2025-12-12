@@ -26,24 +26,136 @@
   --border:#2b3139;
   --shadow:0 6px 22px rgba(0,0,0,0.6);
 }
-*{box-sizing:border-box;font-family:"Inter",sans-serif;}
-body{margin:0;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--border);box-shadow:var(--shadow);}
-header h1{margin:0;font-family:"Outfit";font-weight:800;font-size:1.2rem;color:var(--primary);}
-#themeToggle{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:transparent;cursor:pointer;}
-main{flex:1;max-width:920px;margin:20px auto;padding:16px;}
-.card{background:var(--card);border-radius:12px;padding:16px;border:1px solid var(--border);box-shadow:var(--shadow);}
-.section-title{margin:18px 0 8px;font-weight:700;color:var(--primary);}
-label{display:block;margin-top:10px;font-weight:600;font-size:.85rem;}
-input,select,textarea{width:100%;padding:9px;border-radius:8px;border:1px solid var(--border);}
-textarea{min-height:70px;}
-.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;}
-.horario-row{display:flex;gap:8px;margin-top:8px;}
+*{
+  box-sizing:border-box;
+  font-family:"Inter",sans-serif;
+}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 16px;
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+  box-shadow:var(--shadow);
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+header h1{
+  margin:0;
+  font-family:"Outfit";
+  font-weight:800;
+  font-size:1.2rem;
+  color:var(--primary);
+}
+#themeToggle{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:transparent;
+  cursor:pointer;
+  font-size:1.1rem;
+}
+main{
+  flex:1;
+  max-width:920px;
+  margin:20px auto;
+  padding:16px;
+}
+.card{
+  background:var(--card);
+  border-radius:12px;
+  padding:16px;
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+}
+h2{
+  margin:0 0 10px;
+  font-family:"Outfit";
+  font-weight:800;
+  color:var(--primary);
+}
+label{
+  display:block;
+  margin-top:10px;
+  font-weight:600;
+  font-size:.85rem;
+}
+input,select,textarea{
+  width:100%;
+  padding:9px 10px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:transparent;
+  font-size:.9rem;
+}
+textarea{
+  resize:vertical;
+  min-height:70px;
+}
+.grid-2{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:10px;
+}
+.section-title{
+  margin:18px 0 8px;
+  font-weight:700;
+  color:var(--primary);
+}
+.horario-row{
+  display:flex;
+  gap:8px;
+  margin-top:8px;
+}
 .horario-row input{flex:1;}
-.btn{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;padding:11px;border-radius:10px;font-weight:700;cursor:pointer;}
-.btn-sec{background:#ddd;color:#222;}
-footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);}
-.time-input{font-family:inherit;}
+.btn{
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:#fff;
+  border:none;
+  padding:10px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+.btn-sec{
+  background:#ddd;
+  color:#222;
+}
+#imagePreview{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.thumb-img{
+  width:120px;
+  height:80px;
+  object-fit:cover;
+  border-radius:8px;
+}
+.toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:8px 14px;
+  border-radius:999px;
+  background:#111827;
+  color:#fff;
+  display:none;
+  font-size:.8rem;
+}
+.toast.show{display:block;}
 </style>
 </head>
 
@@ -56,6 +168,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);}
 
 <main>
 <div class="card">
+<h2>Preencher Relatório</h2>
 
 <div class="section-title">Dados principais</div>
 <div class="grid-2">
@@ -101,53 +214,27 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);}
 </div>
 
 <div class="section-title">Horários</div>
-
 <div class="horario-row">
-  <input id="h_inicio" class="time-input" placeholder="__:__">
-  <button class="btn" data-h="h_inicio">Marcar</button>
+  <input id="h_inicio" placeholder="Início (HH:MM)">
+  <input id="h_fim" placeholder="Fim (HH:MM)">
 </div>
 
-<div class="horario-row">
-  <input id="h_fim" class="time-input" placeholder="__:__">
-  <button class="btn" data-h="h_fim">Marcar</button>
-</div>
-
-<div class="section-title">Atividade</div>
-<div class="grid-2">
-  <div>
-    <label>Tipo</label>
-    <select id="tipoAtividade">
-      <option value="">Selecione</option>
-      <option>Sucção</option>
-      <option>Descarte</option>
-    </select>
-  </div>
-  <div>
-    <label>Óleo</label>
-    <select id="oleo">
-      <option value="">Selecione</option>
-      <option>Sim</option>
-      <option>Não</option>
-    </select>
-  </div>
-</div>
-
-<label>Observações</label>
+<div class="section-title">Observações</div>
 <textarea id="observacoes"></textarea>
 
 <div style="margin-top:16px;display:flex;gap:10px;">
   <button id="btnSalvar" class="btn">Salvar relatório</button>
   <button id="btnLimpar" class="btn btn-sec">Limpar</button>
 </div>
-
 </div>
 </main>
 
-<footer>© 2025 | Relatórios de Campo — RSS3</footer>
+<div id="toast" class="toast"></div>
 
 <!-- FIREBASE (IGUAL AO ADMIN) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyBIihMuDH951zhIqey5pcCY5hFRQv-jm2I",
@@ -162,95 +249,94 @@ const db = firebase.firestore();
 </script>
 <script>
 /* ===== TEMA ===== */
-const themeToggle=document.getElementById("themeToggle");
+const themeToggle = document.getElementById("themeToggle");
 if(localStorage.getItem("tema")==="dark"){
   document.body.classList.add("dark");
   themeToggle.textContent="☀️";
 }
-themeToggle.onclick=()=>{
+themeToggle.onclick = ()=>{
   document.body.classList.toggle("dark");
-  const dark=document.body.classList.contains("dark");
-  themeToggle.textContent=dark?"☀️":"🌙";
-  localStorage.setItem("tema",dark?"dark":"light");
+  const dark = document.body.classList.contains("dark");
+  themeToggle.textContent = dark ? "☀️" : "🌙";
+  localStorage.setItem("tema", dark ? "dark" : "light");
 };
 
-/* ===== MARCAR HORÁRIO ===== */
-function horaAgora(){
-  const d=new Date();
-  return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
+/* ===== TOAST ===== */
+const toast = document.getElementById("toast");
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"),3000);
 }
-document.querySelectorAll("[data-h]").forEach(btn=>{
-  btn.onclick=()=>{
-    document.getElementById(btn.dataset.h).value=horaAgora();
-  };
-});
 
-/* ===== MÁSCARA DE HORA ===== */
-document.querySelectorAll(".time-input").forEach(el=>{
-  el.addEventListener("input",()=>{
-    let v=el.value.replace(/\D/g,"").slice(0,4);
-    if(v.length<=2) el.value=v;
-    else el.value=v.slice(0,2)+":"+v.slice(2);
+/* ===== BOTÕES ===== */
+const btnSalvar = document.getElementById("btnSalvar");
+const btnLimpar = document.getElementById("btnLimpar");
+
+/* ===== LIMPAR ===== */
+btnLimpar.onclick = ()=>{
+  if(!confirm("Deseja limpar todos os campos?")) return;
+  document.querySelectorAll("input, textarea, select").forEach(el=>{
+    if(el.type==="date") return;
+    el.value="";
   });
-});
-
-/* ===== VALIDAR HORA ===== */
-function horaValida(v){
-  if(!v || !v.includes(":")) return false;
-  const [h,m]=v.split(":").map(Number);
-  return h>=0&&h<=23&&m>=0&&m<=59;
-}
+};
 
 /* ===== SALVAR RELATÓRIO ===== */
-document.getElementById("btnSalvar").onclick=async()=>{
-  const payload={
-    numeroPT:document.getElementById("numeroPt").value.trim(),
-    data:document.getElementById("data").value,
-    equipamento:document.getElementById("equipamento").value,
-    placa:document.getElementById("placa").value.trim(),
-    local:document.getElementById("local").value.trim(),
-    tag:document.getElementById("tag").value.trim(),
-    solicitante:document.getElementById("solicitante").value.trim(),
-    operador:document.getElementById("operador").value.trim(),
+btnSalvar.onclick = async ()=>{
+  const dados = {
+    numeroPT: document.getElementById("numeroPt").value.trim(),
+    data: document.getElementById("data").value,
+    equipamento: document.getElementById("equipamento").value,
+    placa: document.getElementById("placa").value.trim(),
+    local: document.getElementById("local").value.trim(),
+    tag: document.getElementById("tag").value.trim(),
+    solicitante: document.getElementById("solicitante").value.trim(),
+    operador: document.getElementById("operador").value.trim(),
     horarios:{
-      inicio:document.getElementById("h_inicio").value.trim(),
-      fim:document.getElementById("h_fim").value.trim()
+      inicio: document.getElementById("h_inicio").value.trim(),
+      fim: document.getElementById("h_fim").value.trim()
     },
-    especificacoes:{
-      tipoAtividade:document.getElementById("tipoAtividade").value,
-      oleo:document.getElementById("oleo").value
-    },
-    observacoes:document.getElementById("observacoes").value.trim(),
-    criadoEm:firebase.firestore.FieldValue.serverTimestamp()
+    observacoes: document.getElementById("observacoes").value.trim(),
+    criadoEm: firebase.firestore.FieldValue.serverTimestamp()
   };
 
-  if(!payload.numeroPT||!payload.data||!payload.equipamento||!payload.placa){
+  // validações mínimas
+  if(
+    !dados.numeroPT ||
+    !dados.data ||
+    !dados.equipamento ||
+    !dados.placa ||
+    !dados.local ||
+    !dados.operador
+  ){
     alert("Preencha todos os campos obrigatórios.");
     return;
   }
-  if(payload.horarios.inicio && !horaValida(payload.horarios.inicio)){
-    alert("Hora início inválida.");
-    return;
-  }
-  if(payload.horarios.fim && !horaValida(payload.horarios.fim)){
-    alert("Hora fim inválida.");
+
+  if(!navigator.onLine){
+    alert("Sem internet. Verifique a conexão.");
     return;
   }
 
   try{
-    await db.collection("relatoriosCampo").add(payload);
-    alert("Relatório salvo com sucesso.");
-    window.location.reload();
-  }catch(e){
-    console.error(e);
-    alert("Erro ao salvar relatório.");
-  }
-};
+    btnSalvar.disabled = true;
+    btnSalvar.textContent = "Salvando...";
 
-/* ===== LIMPAR ===== */
-document.getElementById("btnLimpar").onclick=()=>{
-  if(!confirm("Limpar tudo?")) return;
-  document.querySelectorAll("input,textarea,select").forEach(el=>el.value="");
+    await db.collection("relatoriosCampo").add(dados);
+
+    showToast("Relatório salvo com sucesso!");
+    setTimeout(()=>{
+      window.location.href = "index.html";
+    },1200);
+
+  }catch(err){
+    console.error(err);
+    alert("Erro ao salvar relatório. Verifique o Firebase.");
+  }finally{
+    btnSalvar.disabled = false;
+    btnSalvar.textContent = "Salvar relatório";
+  }
 };
 </script>
 
