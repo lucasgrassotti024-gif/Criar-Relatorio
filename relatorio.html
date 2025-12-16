@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
 
 <style>
+/* --- ESTILOS (Mantidos do seu código original) --- */
 :root{
   --primary:#0078ff;
   --accent:#00b4ff;
@@ -28,7 +29,6 @@
 }
 *{box-sizing:border-box;font-family:"Inter",sans-serif;transition:background-color .18s ease,color .18s ease,border-color .18s ease;}
 body{margin:0;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
-/* --- (estilos mantidos do seu original) --- */
 header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--border);box-shadow:var(--shadow);position:sticky;top:0;z-index:10;}
 header h1{margin:0;font-family:"Outfit";font-weight:800;font-size:1.2rem;color:var(--primary);}
 #themeToggle{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;}
@@ -59,7 +59,6 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
 .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);padding:8px 14px;border-radius:999px;background:#111827;color:#f9fafb;font-size:.78rem;font-weight:600;display:none;z-index:9999;box-shadow:0 8px 20px rgba(0,0,0,0.45);}
 .toast.show{display:block;}
 @media(max-width:600px){main{padding:10px;} .horario-row button{flex:0 0 100px;font-size:.75rem;padding:9px;}}
-/* placeholder estilizado para horário (mostra __:__ quando vazio) usando placeholder nativo */
 .time-input{font-family:inherit;}
 </style>
 </head>
@@ -74,7 +73,6 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
   <div class="card">
     <h2>Preencher Relatório</h2>
 
-    <!-- DADOS PRINCIPAIS -->
     <div class="section-title">Dados principais</div>
     <div class="grid-2">
       <div>
@@ -160,13 +158,12 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
       </div>
     </div>
 
-    <!-- HORÁRIOS -->
     <div class="section-title">Horários</div>
 
     <div class="horario-row">
       <div style="flex:1;">
         <label>DDS e Checklist</label>
-        <input id="h_ddsChecklist" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+        <input id="h_ddsChecklist" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_ddsChecklist">Marcar</button>
     </div>
@@ -174,7 +171,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Disposição da coordenação</label>
-        <input id="h_disposicao" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+        <input id="h_disposicao" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_disposicao">Marcar</button>
     </div>
@@ -182,7 +179,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Chegada ao local</label>
-        <input id="h_chegada" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+        <input id="h_chegada" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_chegada">Marcar</button>
     </div>
@@ -190,7 +187,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Liberação da PT</label>
-        <input id="h_liberacaoPT" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+        <input id="h_liberacaoPT" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_liberacaoPT">Marcar</button>
     </div>
@@ -198,7 +195,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Início da atividade</label>
-        <input id="h_inicio" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+        <input id="h_inicio" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_inicio">Marcar</button>
     </div>
@@ -206,7 +203,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Fim da atividade</label>
-        <input id="h_fim" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+        <input id="h_fim" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_fim">Marcar</button>
     </div>
@@ -214,7 +211,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Início intervalo</label>
-        <input id="h_inicioIntervalo" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+        <input id="h_inicioIntervalo" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_inicioIntervalo">Marcar</button>
     </div>
@@ -222,7 +219,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Fim intervalo</label>
-        <input id="h_fimIntervalo" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+        <input id="h_fimIntervalo" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_fimIntervalo">Marcar</button>
     </div>
@@ -230,12 +227,11 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Troca de turno</label>
-        <input id="h_trocaTurno" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+        <input id="h_trocaTurno" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_trocaTurno">Marcar</button>
     </div>
 
-    <!-- ENCERRAMENTO DA PT -->
     <div class="section-title">Encerramento da PT</div>
     <div class="grid-2">
       <div>
@@ -252,7 +248,6 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
       </div>
     </div>
 
-    <!-- ESPECIFICAÇÕES -->
     <div class="section-title">Especificações da atividade</div>
     <div class="grid-2">
       <div>
@@ -290,7 +285,6 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
       </div>
     </div>
 
-    <!-- FOTOS -->
     <div class="section-title">Fotos</div>
     <div style="display:flex;gap:10px;align-items:center;margin-top:6px;flex-wrap:wrap;">
       <button id="btnAddFoto" class="btn" type="button">Adicionar foto</button>
@@ -315,15 +309,9 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
 
 <div id="toast" class="toast"></div>
 
-<!-- Firebase (compat) - substitua pelas suas credenciais -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
-/*
-  Usei sua configuração nova (a que você publicou em modular)
-  convertida para formato compat — assim mantém o restante do código
-  que usa firebase.firestore() sem precisar migrar tudo agora.
-*/
 const firebaseConfig = {
   apiKey: "AIzaSyCUJmfp0tSjU3f5O1mjckd_UL5FhohDPTM",
   authDomain: "hidrojato-rss3.firebaseapp.com",
@@ -338,6 +326,7 @@ const db = firebase.firestore();
 </script>
 
 <script>
+/* --- LÓGICA JAVASCRIPT (Mantida do seu código original) --- */
 /* ===== THEME ===== */
 const themeToggle=document.getElementById("themeToggle");
 if(localStorage.getItem("tema")==="dark"){
@@ -527,7 +516,7 @@ function setDataHoje(){
   const ano=hoje.getFullYear();
   const mes=String(hoje.getMonth()+1).padStart(2,"0");
   const dia=String(hoje.getDate()).padStart(2,"0");
-  $("data").value=`${ano}-${mes}-${dia}`;
+  $("data").value=${ano}-${mes}-${dia};
 }
 
 /* Placa / Operador / Óleo / Descartes (mantive) */
@@ -613,7 +602,7 @@ function formatHoraAgora(){
   const agora=new Date();
   const hh=String(agora.getHours()).padStart(2,"0");
   const mm=String(agora.getMinutes()).padStart(2,"0");
-  return `${hh}:${mm}`;
+  return ${hh}:${mm};
 }
 document.querySelectorAll('button[data-horario]').forEach(btn=>{
   btn.addEventListener("click",()=>{
@@ -723,33 +712,22 @@ function calcularDuracaoMin(hInicio,hFim){
   return diff>0?diff:null;
 }
 
-/* =============== MÁSCARA INTELIGENTE PARA CAMPOS DE HORA ===========
-   Requisitos implementados:
-   - Escrever só números (inputmode numeric), aceita '0830' → '08:30'
-   - Ao apagar: não preenche com zeros, se campo ficar vazio → vazio
-   - Se campo incompleto (ex: '08:3') -> validação do submit bloqueia o envio
-   - Não faz "correções inteligentes" — apenas formata inserindo ':' entre o 2º e 3º dígitos
-   - Bloqueia entrada de caracteres não numéricos
-   - Coloca placeholder "__:__" para indicar o formato
-*/
+/* =============== MÁSCARA INTELIGENTE PARA CAMPOS DE HORA =========== */
 function attachTimeMask(el){
   if(!el) return;
   el.addEventListener("input",(e)=>{
     const raw = el.value || "";
-    // remove tudo que não é dígito
-    let digits = raw.replace(/\D/g,"").slice(0,4); // no máximo 4 dígitos HHMM
+    let digits = raw.replace(/\D/g,"").slice(0,4);
     if(digits.length===0){
-      el.value = ""; // vazio — não coloca 00:00
+      el.value = "";
       return;
     }
     if(digits.length<=2){
-      el.value = digits; // mostra os primeiros dígitos (sem dois pontos ainda)
+      el.value = digits;
     }else{
       el.value = digits.slice(0,2) + ":" + digits.slice(2);
     }
   },false);
-
-  // evita colar conteúdo com caracteres estranhos
   el.addEventListener("paste",(e)=>{
     e.preventDefault();
     const text = (e.clipboardData || window.clipboardData).getData("text");
@@ -758,17 +736,7 @@ function attachTimeMask(el){
     if(digits.length<=2) el.value = digits;
     else el.value = digits.slice(0,2) + ":" + digits.slice(2);
   },false);
-
-  // on blur: se cheio com 2 dígitos (ex: "08") automaticamente coloca :00? NÃO — mantemos como inválido
-  // (será validado no envio). Contudo, para melhor UX podemos, opcionalmente, formatar "0830" se usuário digitou rápido
-  el.addEventListener("blur",()=>{
-    // se tem 3 dígitos (ex: '083'), convert para '08:3' (deixa como está) — validação cuidará disso
-    // Se quiser forçar sempre 2 dígitos nos minutos, substituir aqui. No requisito você pediu para NÃO ajustar caso esteja errado.
-    // Então não fazemos ajustes automáticos aqui.
-  });
 }
-
-// Aplica máscara a todos inputs com classe time-input
 document.querySelectorAll(".time-input").forEach(attachTimeMask);
 
 /* ===== Validação de horário: retorna true se formato HH:MM e minutos<60 e horas 0-23 ===== */
@@ -875,7 +843,7 @@ btnSalvar.addEventListener("click",async()=>{
         return;
       }
       if(!validarHoraFormatada(v)){
-        alert(`Horário inválido em "${id}". Use o formato HH:MM (ex: 08:30).`);
+        alert(Horário inválido em "${id}". Use o formato HH:MM (ex: 08:30).);
         return;
       }
     }
@@ -884,7 +852,7 @@ btnSalvar.addEventListener("click",async()=>{
     for(const id of horariosIds){
       const v=horariosObj[id];
       if(v && !validarHoraFormatada(v)){
-        alert(`Horário inválido em "${id}". Use o formato HH:MM ou deixe vazio.`);
+        alert(Horário inválido em "${id}". Use o formato HH:MM ou deixe vazio.);
         return;
       }
     }
@@ -932,7 +900,7 @@ btnSalvar.addEventListener("click",async()=>{
     encerramentoPt,
     motivoNaoFinalizada: encerramentoPt==="Não" ? motivoNao : "",
     observacoes:obs,
-    fotos:fotosSelecionadas,
+    fotos:fotosSelecionadas, // ATENÇÃO: Se as fotos forem grandes, você precisará usar o Firebase Storage para fazer upload e salvar apenas as URLs aqui.
     duracaoMinutos,
     criadoEm:firebase.firestore.FieldValue.serverTimestamp(),
     deviceId:getDeviceId(),
