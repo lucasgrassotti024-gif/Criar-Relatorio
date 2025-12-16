@@ -327,666 +327,672 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-</script>
 
-<script>
-/* ===== THEME ===== */
-const themeToggle=document.getElementById("themeToggle");
-if(localStorage.getItem("tema")==="dark"){
-  document.body.classList.add("dark");
-  themeToggle.textContent="☀️";
-}
-themeToggle.onclick=()=>{
-  document.body.classList.toggle("dark");
-  const dark=document.body.classList.contains("dark");
-  themeToggle.textContent=dark?"☀️":"🌙";
-  localStorage.setItem("tema",dark?"dark":"light");
-};
-
-/* ===== TOAST ===== */
-const toastEl=document.getElementById("toast");
-function showToast(msg,color){
-  toastEl.textContent=msg;
-  toastEl.style.background=color || "#111827";
-  toastEl.classList.add("show");
-  setTimeout(()=>toastEl.classList.remove("show"),2800);
-}
-
-/* ===== Helpers device/id/rascunho (mantive seu código) ===== */
-function getDeviceId(){
-  let id=localStorage.getItem("deviceId_relatorios");
-  if(!id){
-    id="dev-"+Math.random().toString(36).slice(2,10);
-    localStorage.setItem("deviceId_relatorios",id);
+// -----------------------------------------------------------
+// ⭐ CORREÇÃO PRINCIPAL: Garante que o DOM esteja carregado
+// antes de tentar adicionar Event Listeners aos botões
+// -----------------------------------------------------------
+document.addEventListener("DOMContentLoaded", function() {
+  
+  /* ===== THEME ===== */
+  const themeToggle=document.getElementById("themeToggle");
+  if(localStorage.getItem("tema")==="dark"){
+    document.body.classList.add("dark");
+    themeToggle.textContent="☀️";
   }
-  return id;
-}
-function getOperadorIdFixo(){
-  let id=localStorage.getItem("operadorIdFixo_relatorios");
-  if(!id){
-    id="op-"+Math.random().toString(36).slice(2,10);
-    localStorage.setItem("operadorIdFixo_relatorios",id);
-  }
-  return id;
-}
-
-/* ===== RASCUNHO LOCAL (mantive) ===== */
-const DRAFT_KEY = "relatorioCampo_rascunho";
-let numeroPtAtual=null;
-let fotosSelecionadas=[];
-
-function $(id){return document.getElementById(id);}
-
-/* Save/load rascunho (mantive seu código — inalterado estruturalmente) */
-function saveDraft(){
-  try{
-    const draft={
-      numeroPtAtual,
-      numeroPt: $("numeroPt").value,
-      data: $("data").value,
-      equipamento: $("equipamento").value,
-      placaSelect: $("placaSelect").value,
-      placaTexto: $("placaTexto").value,
-      local: $("local").value,
-      tag: $("tag").value,
-      solicitante: $("solicitante").value,
-      emitAbertura: $("emitAbertura").value,
-      emitEncerramento: $("emitEncerramento").value,
-      operadorSelect: $("operadorSelect").value,
-      operadorTexto: $("operadorTexto").value,
-      ajudante: $("ajudante").value,
-      tipoServico: $("tipoServico").value,
-      tipoAtividade: $("tipoAtividade").value,
-      oleo: $("oleo").value,
-      quantidade: $("quantidade").value,
-      encerramentoPt: $("encerramentoPt").value,
-      motivoNaoFinalizada: $("motivoNaoFinalizada").value,
-      ondeDescartadoTipo: $("ondeDescartadoTipo").value,
-      ondeDescartadoTexto: $("ondeDescartadoTexto").value,
-      horarios:{
-        ddsChecklist: $("h_ddsChecklist").value,
-        disposicao: $("h_disposicao").value,
-        chegada: $("h_chegada").value,
-        liberacaoPT: $("h_liberacaoPT").value,
-        inicio: $("h_inicio").value,
-        inicioIntervalo: $("h_inicioIntervalo").value,
-        fimIntervalo: $("h_fimIntervalo").value,
-        fim: $("h_fim").value,
-        trocaTurno: $("h_trocaTurno").value
-      },
-      observacoes: $("observacoes").value,
-      fotos: fotosSelecionadas
-    };
-    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-  }catch(e){
-    console.warn("Erro ao salvar rascunho:",e);
-  }
-}
-function loadDraft(){
-  try{
-    const raw=localStorage.getItem(DRAFT_KEY);
-    if(!raw) return false;
-    const d=JSON.parse(raw);
-    if(d.numeroPt) $("numeroPt").value=d.numeroPt;
-    if(d.numeroPtAtual) numeroPtAtual=d.numeroPtAtual;
-    if(d.data) $("data").value=d.data;
-    if(d.equipamento) $("equipamento").value=d.equipamento;
-    if(d.placaSelect){
-      $("placaSelect").value=d.placaSelect;
-      if(d.placaSelect==="outra") $("placaTexto").style.display="block";
-    }
-    if(d.placaTexto) $("placaTexto").value=d.placaTexto;
-    if(d.local) $("local").value=d.local;
-    if(d.tag) $("tag").value=d.tag;
-    if(d.solicitante) $("solicitante").value=d.solicitante;
-    if(d.emitAbertura) $("emitAbertura").value=d.emitAbertura;
-    if(d.emitEncerramento) $("emitEncerramento").value=d.emitEncerramento;
-    if(d.operadorSelect){
-      $("operadorSelect").value=d.operadorSelect;
-      if(d.operadorSelect==="outra") $("operadorTexto").style.display="block";
-    }
-    if(d.operadorTexto) $("operadorTexto").value=d.operadorTexto;
-    if(!d.operadorSelect && d.operador){
-      $("operadorSelect").value="outra";
-      $("operadorTexto").style.display="block";
-      $("operadorTexto").value=d.operador;
-    }
-    if(d.ajudante) $("ajudante").value=d.ajudante;
-    if(d.tipoServico) $("tipoServico").value=d.tipoServico;
-    if(d.tipoAtividade) $("tipoAtividade").value=d.tipoAtividade;
-    if(d.oleo){
-      $("oleo").value=d.oleo;
-      if(d.oleo==="Sim") $("boxQuantidade").style.display="block";
-    }
-    if(d.quantidade) $("quantidade").value=d.quantidade;
-    if(d.encerramentoPt){
-      $("encerramentoPt").value=d.encerramentoPt;
-      if(d.encerramentoPt==="Não") $("boxMotivoNao").style.display="block";
-    }
-    if(d.motivoNaoFinalizada) $("motivoNaoFinalizada").value=d.motivoNaoFinalizada;
-    if(d.ondeDescartadoTipo) $("ondeDescartadoTipo").value=d.ondeDescartadoTipo;
-    if(d.ondeDescartadoTexto) $("ondeDescartadoTexto").value=d.ondeDescartadoTexto;
-    if(d.horarios){
-      $("h_ddsChecklist").value=d.horarios.ddsChecklist || "";
-      $("h_disposicao").value=d.horarios.disposicao || "";
-      $("h_chegada").value=d.horarios.chegada || "";
-      $("h_liberacaoPT").value=d.horarios.liberacaoPT || "";
-      $("h_inicio").value=d.horarios.inicio || "";
-      $("h_inicioIntervalo").value=d.horarios.inicioIntervalo || "";
-      $("h_fimIntervalo").value=d.horarios.fimIntervalo || "";
-      $("h_fim").value=d.horarios.fim || "";
-      $("h_trocaTurno").value=d.horarios.trocaTurno || "";
-    }
-    fotosSelecionadas = Array.isArray(d.fotos) ? d.fotos : [];
-    renderPreview();
-    updateDescartesBoxVisibility();
-    if($("ondeDescartadoTipo").value==="Outros") $("boxOndeOutros").style.display="block";
-    return true;
-  }catch(e){
-    console.warn("Erro ao carregar rascunho:",e);
-    return false;
-  }
-}
-
-/* ===== Numero PT auto (mantive seu código) ===== */
-async function gerarNumeroPt(){
-  try{
-    const docRef=db.collection("config").doc("contadorPTCampo");
-    const prox=await db.runTransaction(async(tx)=>{
-      const snap=await tx.get(docRef);
-      let atual=99999;
-      if(snap.exists && typeof snap.data().valor==="number"){
-        atual=snap.data().valor;
-      }
-      const novo=atual+1;
-      tx.set(docRef,{valor:novo});
-      return novo;
-    });
-    numeroPtAtual=prox;
-    if(!$("numeroPt").value){
-      $("numeroPt").value=prox;
-    }
-    saveDraft();
-  }catch(err){
-    console.error("Erro ao gerar número PT:",err);
-    alert("Erro ao gerar número da PT. Ver console.");
-  }
-}
-
-/* Data padrão hoje */
-function setDataHoje(){
-  const hoje=new Date();
-  const ano=hoje.getFullYear();
-  const mes=String(hoje.getMonth()+1).padStart(2,"0");
-  const dia=String(hoje.getDate()).padStart(2,"0");
-  $("data").value=`${ano}-${mes}-${dia}`;
-}
-
-/* Placa / Operador / Óleo / Descartes (mantive) */
-const placaSelect=$("placaSelect");
-const placaTexto=$("placaTexto");
-placaSelect.addEventListener("change",()=>{
-  if(placaSelect.value==="outra"){
-    placaTexto.style.display="block";
-  }else{
-    placaTexto.style.display="none";
-    placaTexto.value="";
-  }
-  saveDraft();
-});
-const operadorSelect=$("operadorSelect");
-const operadorTexto=$("operadorTexto");
-operadorSelect.addEventListener("change",()=>{
-  if(operadorSelect.value==="outra"){
-    operadorTexto.style.display="block";
-  }else{
-    operadorTexto.style.display="none";
-    operadorTexto.value="";
-  }
-  saveDraft();
-});
-const oleoSelect=$("oleo");
-const boxQuantidade=$("boxQuantidade");
-const boxDescartes=$("boxDescartes");
-const tipoAtividadeSelect=$("tipoAtividade");
-const ondeDescartadoTipoEl=$("ondeDescartadoTipo");
-const ondeDescartadoTextoEl=$("ondeDescartadoTexto");
-const boxOndeOutros=$("boxOndeOutros");
-function updateDescartesBoxVisibility(){
-  const tipoVal=tipoAtividadeSelect.value;
-  const oleoVal=oleoSelect.value;
-  if(tipoVal==="Descarte" && oleoVal==="Sim"){
-    boxDescartes.style.display="block";
-  }else{
-    boxDescartes.style.display="none";
-    ondeDescartadoTipoEl.value="";
-    ondeDescartadoTextoEl.value="";
-    boxOndeOutros.style.display="none";
-  }
-}
-oleoSelect.addEventListener("change",()=>{
-  if(oleoSelect.value==="Sim"){
-    boxQuantidade.style.display="block";
-  }else{
-    boxQuantidade.style.display="none";
-    $("quantidade").value="";
-  }
-  updateDescartesBoxVisibility();
-  saveDraft();
-});
-tipoAtividadeSelect.addEventListener("change",()=>{
-  updateDescartesBoxVisibility();
-  saveDraft();
-});
-ondeDescartadoTipoEl.addEventListener("change",()=>{
-  if(ondeDescartadoTipoEl.value==="Outros"){
-    boxOndeOutros.style.display="block";
-  }else{
-    boxOndeOutros.style.display="none";
-    ondeDescartadoTextoEl.value="";
-  }
-  saveDraft();
-});
-const encerramentoPtSelect=$("encerramentoPt");
-const boxMotivoNao=$("boxMotivoNao");
-const motivoNaoEl=$("motivoNaoFinalizada");
-encerramentoPtSelect.addEventListener("change",()=>{
-  if(encerramentoPtSelect.value==="Não"){
-    boxMotivoNao.style.display="block";
-  }else{
-    boxMotivoNao.style.display="none";
-    motivoNaoEl.value="";
-  }
-  saveDraft();
-});
-
-/* ===== BOTÕES "Marcar" com hora atual (mantive) ===== */
-function formatHoraAgora(){
-  const agora=new Date();
-  const hh=String(agora.getHours()).padStart(2,"0");
-  const mm=String(agora.getMinutes()).padStart(2,"0");
-  return `${hh}:${mm}`;
-}
-document.querySelectorAll('button[data-horario]').forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    const id=btn.getAttribute("data-horario");
-    const campo=$(id);
-    campo.value=formatHoraAgora();
-    saveDraft();
-  });
-});
-
-/* ===== QUICK FILL (Solicitante) ===== */
-document.querySelectorAll("[data-fill-target]").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    const targetId=btn.getAttribute("data-fill-target");
-    const value=btn.getAttribute("data-fill-value") || btn.textContent.trim();
-    const input=$(targetId);
-    if(input){
-      input.value=value;
-      saveDraft();
-    }
-  });
-});
-
-/* ===== FOTOS (mantive) ===== */
-const btnAddFoto=$("btnAddFoto");
-const inputFotos=$("inputFotos");
-const imagePreview=$("imagePreview");
-btnAddFoto.addEventListener("click",()=>inputFotos.click());
-inputFotos.addEventListener("change",(e)=>{
-  const files=Array.from(e.target.files||[]);
-  files.slice(0,5-fotosSelecionadas.length).forEach(file=>{
-    const reader=new FileReader();
-    reader.onload=ev=>{
-      fotosSelecionadas.push(ev.target.result);
-      renderPreview();
-      saveDraft();
-    };
-    reader.readAsDataURL(file);
-  });
-  inputFotos.value="";
-});
-function renderPreview(){
-  imagePreview.innerHTML="";
-  fotosSelecionadas.forEach((src,i)=>{
-    const img=document.createElement("img");
-    img.src=src;
-    img.className="thumb-img";
-    img.alt="Foto "+(i+1);
-    img.onclick=()=>{
-      const ov=document.createElement("div");
-      ov.style.position="fixed";
-      ov.style.inset="0";
-      ov.style.background="rgba(0,0,0,0.85)";
-      ov.style.display="flex";
-      ov.style.alignItems="center";
-      ov.style.justifyContent="center";
-      ov.style.zIndex="9999";
-      ov.style.cursor="zoom-out";
-      const big=document.createElement("img");
-      big.src=src;
-      big.style.maxWidth="92%";
-      big.style.maxHeight="92%";
-      ov.appendChild(big);
-      ov.onclick=()=>ov.remove();
-      document.body.appendChild(ov);
-    };
-    imagePreview.appendChild(img);
-  });
-}
-
-// ------------------------------------------------------------------
-// ⭐ NOVA FUNÇÃO: Limpar todos os campos do relatório
-// ------------------------------------------------------------------
-function limparCamposRelatorio(){
-  document.querySelectorAll("input,textarea,select").forEach(el=>{
-    if(el.type==="date") return;
-    el.value="";
-  });
-  $("placaTexto").style.display="none";
-  $("operadorTexto").style.display="none";
-  $("oleo").value="";
-  $("boxQuantidade").style.display="none";
-  $("encerramentoPt").value="";
-  $("boxMotivoNao").style.display="none";
-  $("boxDescartes").style.display="none";
-  $("boxOndeOutros").style.display="none";
-  fotosSelecionadas=[];
-  renderPreview();
-  localStorage.removeItem(DRAFT_KEY);
-  setDataHoje(); // Garante que a data do novo relatório seja a de hoje
-}
-// ------------------------------------------------------------------
-
-/* ===== LIMPAR CAMPOS ===== */
-$("btnLimpar").addEventListener("click",()=>{
-  if(!confirm("Limpar todos os campos do relatório?")) return;
-  limparCamposRelatorio(); // Chama a nova função de limpeza
-});
-
-/* ===== Dia da semana / duracao (mantive) ===== */
-function getDiaSemana(dataStr){
-  if(!dataStr) return "";
-  const [ano,mes,dia]=dataStr.split("-").map(Number);
-  const d=new Date(ano,mes-1,dia);
-  const nomes=["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
-  return nomes[d.getDay()]||"";
-}
-function calcularDuracaoMin(hInicio,hFim){
-  if(!hInicio || !hFim) return null;
-  const [hi,mi]=hInicio.split(":").map(Number);
-  const [hf,mf]=hFim.split(":").map(Number);
-  if([hi,mi,hf,mf].some(v=>isNaN(v))) return null;
-  const inicio=hi*60+mi;
-  const fim=hf*60+mf;
-  const diff=fim-inicio;
-  return diff>0?diff:null;
-}
-
-/* =============== MÁSCARA INTELIGENTE PARA CAMPOS DE HORA =========== */
-function attachTimeMask(el){
-  if(!el) return;
-  el.addEventListener("input",(e)=>{
-    const raw = el.value || "";
-    // remove tudo que não é dígito
-    let digits = raw.replace(/\D/g,"").slice(0,4); // no máximo 4 dígitos HHMM
-    if(digits.length===0){
-      el.value = ""; // vazio — não coloca 00:00
-      return;
-    }
-    if(digits.length<=2){
-      el.value = digits; // mostra os primeiros dígitos (sem dois pontos ainda)
-    }else{
-      el.value = digits.slice(0,2) + ":" + digits.slice(2);
-    }
-  },false);
-
-  // evita colar conteúdo com caracteres estranhos
-  el.addEventListener("paste",(e)=>{
-    e.preventDefault();
-    const text = (e.clipboardData || window.clipboardData).getData("text");
-    const digits = (text||"").replace(/\D/g,"").slice(0,4);
-    if(!digits) { el.value=""; return; }
-    if(digits.length<=2) el.value = digits;
-    else el.value = digits.slice(0,2) + ":" + digits.slice(2);
-  },false);
-}
-
-// Aplica máscara a todos inputs com classe time-input
-document.querySelectorAll(".time-input").forEach(attachTimeMask);
-
-/* ===== Validação de horário: retorna true se formato HH:MM e minutos<60 e horas 0-23 ===== */
-function validarHoraFormatada(v){
-  if(!v || typeof v !== "string") return false;
-  if(!v.includes(":")) return false;
-  const [hh,mm]=v.split(":");
-  if(hh.length!==2 || mm.length!==2) return false;
-  if(!/^\d{2}$/.test(hh) || !/^\d{2}$/.test(mm)) return false;
-  const H=parseInt(hh,10);
-  const M=parseInt(mm,10);
-  if(H<0 || H>23) return false;
-  if(M<0 || M>59) return false;
-  return true;
-}
-
-/* ===== SALVAR RELATÓRIO (com validação extra de horários) ===== */
-const btnSalvar=$("btnSalvar");
-btnSalvar.addEventListener("click",async()=>{
-  const numeroPtInput=$("numeroPt").value.trim();
-  const data=$("data").value;
-  const equipamento=$("equipamento").value;
-  const placaSel=placaSelect.value;
-  const placa = placaSel==="outra" ? placaTexto.value.trim() : placaSel;
-  const local=$("local").value.trim();
-  const tag=$("tag").value.trim();
-  const solicitante=$("solicitante").value.trim();
-  const emitAbertura=$("emitAbertura").value.trim();
-  const emitEncerramento=$("emitEncerramento").value.trim();
-  const operadorSel=operadorSelect.value;
-  const operadorTxt=operadorTexto.value.trim();
-  const operador = operadorSel==="outra" ? operadorTxt : operadorSel;
-  const ajudante=$("ajudante").value.trim();
-  const tipoServico=$("tipoServico").value.trim();
-  const tipoAtividade=$("tipoAtividade").value;
-  const oleo=$("oleo").value;
-  const quantidade=$("quantidade").value.trim();
-  const obs=$("observacoes").value.trim();
-  const encerramentoPt=encerramentoPtSelect.value;
-  const motivoNao=motivoNaoEl.value.trim();
-  const ondeTipo=ondeDescartadoTipoEl.value;
-  const ondeTexto=ondeDescartadoTextoEl.value.trim();
-
-  if(!numeroPtInput){
-    alert("Informe o número da PT.");
-    return;
-  }
-  if(
-    !data || !equipamento || !placa ||
-    !local || !tag || !solicitante ||
-    !emitAbertura || !emitEncerramento ||
-    !operador || !ajudante || !tipoServico
-  ){
-    alert("Preencha todos os campos principais (dados e pessoas).");
-    return;
-  }
-  if(!tipoAtividade){
-    alert("Selecione o tipo da atividade.");
-    return;
-  }
-  if(oleo===""){
-    alert("Informe se houve óleo (Sim ou Não).");
-    return;
-  }
-  if(oleo==="Sim" && !quantidade){
-    alert("Informe a quantidade de óleo.");
-    return;
-  }
-  if(tipoAtividade==="Descarte" && oleo==="Sim"){
-    if(!ondeTipo){
-      alert('Informe em "Onde foi descartado?" (IBCs ou Outros).');
-      return;
-    }
-    if(ondeTipo==="Outros" && !ondeTexto){
-      alert('Descreva o local do descarte em "Outros".');
-      return;
-    }
-  }
-  if(!encerramentoPt){
-    alert("Informe se houve encerramento da PT (Sim ou Não).");
-    return;
-  }
-  if(encerramentoPt==="Não" && !motivoNao){
-    alert('Preencha o campo "Por que não foi finalizada?".');
-    return;
-  }
-
-  // Coleta horários
-  const horariosIds = [
-    "h_ddsChecklist","h_disposicao","h_chegada","h_liberacaoPT",
-    "h_inicio","h_inicioIntervalo","h_fimIntervalo","h_fim","h_trocaTurno"
-  ];
-  const horariosObj = {};
-  for(const id of horariosIds){
-    horariosObj[id] = $(id).value.trim();
-  }
-
-  // Se encerramentoPt = Sim -> exige todos os horários e valida formato HH:MM
-  if(encerramentoPt==="Sim"){
-    for(const id of horariosIds){
-      const v = horariosObj[id];
-      if(!v){
-        alert("Preencha todos os horários (DDS, coordenação, chegada, liberação, início/fim, intervalo, troca de turno).");
-        return;
-      }
-      if(!validarHoraFormatada(v)){
-        alert(`Horário inválido em "${id}". Use o formato HH:MM (ex: 08:30).`);
-        return;
-      }
-    }
-  } else {
-    // mesmo que não seja obrigatório, caso preenchido valida o formato
-    for(const id of horariosIds){
-      const v=horariosObj[id];
-      if(v && !validarHoraFormatada(v)){
-        alert(`Horário inválido em "${id}". Use o formato HH:MM ou deixe vazio.`);
-        return;
-      }
-    }
-  }
-
-  let duracaoMinutos=null;
-  if(encerramentoPt==="Sim"){
-    duracaoMinutos=calcularDuracaoMin(horariosObj.h_inicio,horariosObj.h_fim);
-  }
-
-  const diaSemana=getDiaSemana(data);
-  const payload={
-    numeroPT:String(numeroPtInput),
-    data,
-    diaSemana,
-    equipamento,
-    placa,
-    local,
-    tag,
-    solicitante,
-    emitenteAbertura:emitAbertura,
-    emitenteEncerramento:emitEncerramento,
-    operador,
-    ajudante,
-    tipoServico,
-    horarios:{
-      ddsChecklist:horariosObj.h_ddsChecklist,
-      disposicao:horariosObj.h_disposicao,
-      chegada:horariosObj.h_chegada,
-      liberacaoPT:horariosObj.h_liberacaoPT,
-      inicio:horariosObj.h_inicio,
-      inicioIntervalo:horariosObj.h_inicioIntervalo,
-      fimIntervalo:horariosObj.h_fimIntervalo,
-      fim:horariosObj.h_fim,
-      trocaTurno:horariosObj.h_trocaTurno
-    },
-    especificacoes:{
-      tipoAtividade,
-      oleo,
-      quantidade,
-      tipoServico,
-      ondeDescartadoTipo: ondeTipo || "",
-      ondeDescartadoTexto: ondeTexto || ""
-    },
-    encerramentoPt,
-    motivoNaoFinalizada: encerramentoPt==="Não" ? motivoNao : "",
-    observacoes:obs,
-    fotos:fotosSelecionadas,
-    duracaoMinutos,
-    criadoEm:firebase.firestore.FieldValue.serverTimestamp(),
-    deviceId:getDeviceId(),
-    operadorIdFixo:getOperadorIdFixo()
+  themeToggle.onclick=()=>{
+    document.body.classList.toggle("dark");
+    const dark=document.body.classList.contains("dark");
+    themeToggle.textContent=dark?"☀️":"🌙";
+    localStorage.setItem("tema",dark?"dark":"light");
   };
 
-  if(!navigator.onLine){
-    showToast("Sem internet. O relatório continua salvo neste aparelho.", "#eab308");
-    return;
+  /* ===== TOAST ===== */
+  const toastEl=document.getElementById("toast");
+  function showToast(msg,color){
+    toastEl.textContent=msg;
+    toastEl.style.background=color || "#111827";
+    toastEl.classList.add("show");
+    setTimeout(()=>toastEl.classList.remove("show"),2800);
   }
 
-  try{
-    btnSalvar.disabled=true;
-    btnSalvar.textContent="Salvando...";
-    
-    // ⭐ ATUALIZAÇÃO AQUI: Salva no Firestore
-    await db.collection("relatoriosCampo").add(payload);
-    
-    // ⭐ ATUALIZAÇÃO AQUI: Em vez de redirecionar, mostra sucesso e limpa o formulário
-    showToast("✅ Relatório salvo com sucesso!", "#10b981");
-    limparCamposRelatorio();
-    
-    // Garante que a PT volte a ser gerada (se não tiver uma no local)
-    if(!$("numeroPt").value || $("numeroPt").value.toString() === numeroPtInput.toString()){
-        gerarNumeroPt();
+  /* ===== Helpers device/id/rascunho (mantive seu código) ===== */
+  function getDeviceId(){
+    let id=localStorage.getItem("deviceId_relatorios");
+    if(!id){
+      id="dev-"+Math.random().toString(36).slice(2,10);
+      localStorage.setItem("deviceId_relatorios",id);
     }
-
-  }catch(err){
-    console.error("Erro ao salvar relatório:",err);
-    showToast("Erro ao salvar relatório. Verifique a conexão.", "#dc2626");
-  }finally{
-    btnSalvar.disabled=false;
-    btnSalvar.textContent="Salvar relatório";
+    return id;
   }
-});
+  function getOperadorIdFixo(){
+    let id=localStorage.getItem("operadorIdFixo_relatorios");
+    if(!id){
+      id="op-"+Math.random().toString(36).slice(2,10);
+      localStorage.setItem("operadorIdFixo_relatorios",id);
+    }
+    return id;
+  }
 
-/* ===== AUTOSAVE: listeners em todos os campos ===== */
-const camposAutosave = [
-  "numeroPt","data","equipamento","placaSelect","placaTexto","local","tag",
-  "solicitante","emitAbertura","emitEncerramento",
-  "operadorSelect","operadorTexto",
-  "ajudante","tipoServico","tipoAtividade","oleo","quantidade",
-  "encerramentoPt","motivoNaoFinalizada",
-  "ondeDescartadoTipo","ondeDescartadoTexto",
-  "h_ddsChecklist","h_disposicao","h_chegada","h_liberacaoPT",
-  "h_inicio","h_inicioIntervalo","h_fimIntervalo","h_fim","h_trocaTurno",
-  "observacoes"
-];
-camposAutosave.forEach(id=>{
-  const el=$(id);
-  if(!el) return;
-  ["input","change"].forEach(ev=>{
-    el.addEventListener(ev, saveDraft);
+  /* ===== RASCUNHO LOCAL (mantive) ===== */
+  const DRAFT_KEY = "relatorioCampo_rascunho";
+  let numeroPtAtual=null;
+  let fotosSelecionadas=[];
+
+  function $(id){return document.getElementById(id);}
+
+  /* Save/load rascunho (mantive seu código — inalterado estruturalmente) */
+  function saveDraft(){
+    try{
+      const draft={
+        numeroPtAtual,
+        numeroPt: $("numeroPt").value,
+        data: $("data").value,
+        equipamento: $("equipamento").value,
+        placaSelect: $("placaSelect").value,
+        placaTexto: $("placaTexto").value,
+        local: $("local").value,
+        tag: $("tag").value,
+        solicitante: $("solicitante").value,
+        emitAbertura: $("emitAbertura").value,
+        emitEncerramento: $("emitEncerramento").value,
+        operadorSelect: $("operadorSelect").value,
+        operadorTexto: $("operadorTexto").value,
+        ajudante: $("ajudante").value,
+        tipoServico: $("tipoServico").value,
+        tipoAtividade: $("tipoAtividade").value,
+        oleo: $("oleo").value,
+        quantidade: $("quantidade").value,
+        encerramentoPt: $("encerramentoPt").value,
+        motivoNaoFinalizada: $("motivoNaoFinalizada").value,
+        ondeDescartadoTipo: $("ondeDescartadoTipo").value,
+        ondeDescartadoTexto: $("ondeDescartadoTexto").value,
+        horarios:{
+          ddsChecklist: $("h_ddsChecklist").value,
+          disposicao: $("h_disposicao").value,
+          chegada: $("h_chegada").value,
+          liberacaoPT: $("h_liberacaoPT").value,
+          inicio: $("h_inicio").value,
+          inicioIntervalo: $("h_inicioIntervalo").value,
+          fimIntervalo: $("h_fimIntervalo").value,
+          fim: $("h_fim").value,
+          trocaTurno: $("h_trocaTurno").value
+        },
+        observacoes: $("observacoes").value,
+        fotos: fotosSelecionadas
+      };
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    }catch(e){
+      console.warn("Erro ao salvar rascunho:",e);
+    }
+  }
+  function loadDraft(){
+    try{
+      const raw=localStorage.getItem(DRAFT_KEY);
+      if(!raw) return false;
+      const d=JSON.parse(raw);
+      if(d.numeroPt) $("numeroPt").value=d.numeroPt;
+      if(d.numeroPtAtual) numeroPtAtual=d.numeroPtAtual;
+      if(d.data) $("data").value=d.data;
+      if(d.equipamento) $("equipamento").value=d.equipamento;
+      if(d.placaSelect){
+        $("placaSelect").value=d.placaSelect;
+        if(d.placaSelect==="outra") $("placaTexto").style.display="block";
+      }
+      if(d.placaTexto) $("placaTexto").value=d.placaTexto;
+      if(d.local) $("local").value=d.local;
+      if(d.tag) $("tag").value=d.tag;
+      if(d.solicitante) $("solicitante").value=d.solicitante;
+      if(d.emitAbertura) $("emitAbertura").value=d.emitAbertura;
+      if(d.emitEncerramento) $("emitEncerramento").value=d.emitEncerramento;
+      if(d.operadorSelect){
+        $("operadorSelect").value=d.operadorSelect;
+        if(d.operadorSelect==="outra") $("operadorTexto").style.display="block";
+      }
+      if(d.operadorTexto) $("operadorTexto").value=d.operadorTexto;
+      if(!d.operadorSelect && d.operador){
+        $("operadorSelect").value="outra";
+        $("operadorTexto").style.display="block";
+        $("operadorTexto").value=d.operador;
+      }
+      if(d.ajudante) $("ajudante").value=d.ajudante;
+      if(d.tipoServico) $("tipoServico").value=d.tipoServico;
+      if(d.tipoAtividade) $("tipoAtividade").value=d.tipoAtividade;
+      if(d.oleo){
+        $("oleo").value=d.oleo;
+        if(d.oleo==="Sim") $("boxQuantidade").style.display="block";
+      }
+      if(d.quantidade) $("quantidade").value=d.quantidade;
+      if(d.encerramentoPt){
+        $("encerramentoPt").value=d.encerramentoPt;
+        if(d.encerramentoPt==="Não") $("boxMotivoNao").style.display="block";
+      }
+      if(d.motivoNaoFinalizada) $("motivoNaoFinalizada").value=d.motivoNaoFinalizada;
+      if(d.ondeDescartadoTipo) $("ondeDescartadoTipo").value=d.ondeDescartadoTipo;
+      if(d.ondeDescartadoTexto) $("ondeDescartadoTexto").value=d.ondeDescartadoTexto;
+      if(d.horarios){
+        $("h_ddsChecklist").value=d.horarios.ddsChecklist || "";
+        $("h_disposicao").value=d.horarios.disposicao || "";
+        $("h_chegada").value=d.horarios.chegada || "";
+        $("h_liberacaoPT").value=d.horarios.liberacaoPT || "";
+        $("h_inicio").value=d.horarios.inicio || "";
+        $("h_inicioIntervalo").value=d.horarios.inicioIntervalo || "";
+        $("h_fimIntervalo").value=d.horarios.fimIntervalo || "";
+        $("h_fim").value=d.horarios.fim || "";
+        $("h_trocaTurno").value=d.horarios.trocaTurno || "";
+      }
+      fotosSelecionadas = Array.isArray(d.fotos) ? d.fotos : [];
+      renderPreview();
+      updateDescartesBoxVisibility();
+      if($("ondeDescartadoTipo").value==="Outros") $("boxOndeOutros").style.display="block";
+      return true;
+    }catch(e){
+      console.warn("Erro ao carregar rascunho:",e);
+      return false;
+    }
+  }
+
+  /* ===== Numero PT auto (mantive seu código) ===== */
+  async function gerarNumeroPt(){
+    try{
+      const docRef=db.collection("config").doc("contadorPTCampo");
+      const prox=await db.runTransaction(async(tx)=>{
+        const snap=await tx.get(docRef);
+        let atual=99999;
+        if(snap.exists && typeof snap.data().valor==="number"){
+          atual=snap.data().valor;
+        }
+        const novo=atual+1;
+        tx.set(docRef,{valor:novo});
+        return novo;
+      });
+      numeroPtAtual=prox;
+      if(!$("numeroPt").value){
+        $("numeroPt").value=prox;
+      }
+      saveDraft();
+    }catch(err){
+      console.error("Erro ao gerar número PT:",err);
+      alert("Erro ao gerar número da PT. Ver console.");
+    }
+  }
+
+  /* Data padrão hoje */
+  function setDataHoje(){
+    const hoje=new Date();
+    const ano=hoje.getFullYear();
+    const mes=String(hoje.getMonth()+1).padStart(2,"0");
+    const dia=String(hoje.getDate()).padStart(2,"0");
+    $("data").value=`${ano}-${mes}-${dia}`;
+  }
+
+  /* Placa / Operador / Óleo / Descartes (mantive) */
+  const placaSelect=$("placaSelect");
+  const placaTexto=$("placaTexto");
+  placaSelect.addEventListener("change",()=>{
+    if(placaSelect.value==="outra"){
+      placaTexto.style.display="block";
+    }else{
+      placaTexto.style.display="none";
+      placaTexto.value="";
+    }
+    saveDraft();
   });
-});
-
-/* ===== Init (mantive) ===== */
-(function init(){
-  renderPreview(); // caso tenha fotos
-  const temDraft = loadDraft();
-  if(!temDraft){
-    setDataHoje();
-    gerarNumeroPt();
-  }else{
-    if(!$("numeroPt").value){
-      gerarNumeroPt();
+  const operadorSelect=$("operadorSelect");
+  const operadorTexto=$("operadorTexto");
+  operadorSelect.addEventListener("change",()=>{
+    if(operadorSelect.value==="outra"){
+      operadorTexto.style.display="block";
+    }else{
+      operadorTexto.style.display="none";
+      operadorTexto.value="";
+    }
+    saveDraft();
+  });
+  const oleoSelect=$("oleo");
+  const boxQuantidade=$("boxQuantidade");
+  const boxDescartes=$("boxDescartes");
+  const tipoAtividadeSelect=$("tipoAtividade");
+  const ondeDescartadoTipoEl=$("ondeDescartadoTipo");
+  const ondeDescartadoTextoEl=$("ondeDescartadoTexto");
+  const boxOndeOutros=$("boxOndeOutros");
+  function updateDescartesBoxVisibility(){
+    const tipoVal=tipoAtividadeSelect.value;
+    const oleoVal=oleoSelect.value;
+    if(tipoVal==="Descarte" && oleoVal==="Sim"){
+      boxDescartes.style.display="block";
+    }else{
+      boxDescartes.style.display="none";
+      ondeDescartadoTipoEl.value="";
+      ondeDescartadoTextoEl.value="";
+      boxOndeOutros.style.display="none";
     }
   }
-})();
+  oleoSelect.addEventListener("change",()=>{
+    if(oleoSelect.value==="Sim"){
+      boxQuantidade.style.display="block";
+    }else{
+      boxQuantidade.style.display="none";
+      $("quantidade").value="";
+    }
+    updateDescartesBoxVisibility();
+    saveDraft();
+  });
+  tipoAtividadeSelect.addEventListener("change",()=>{
+    updateDescartesBoxVisibility();
+    saveDraft();
+  });
+  ondeDescartadoTipoEl.addEventListener("change",()=>{
+    if(ondeDescartadoTipoEl.value==="Outros"){
+      boxOndeOutros.style.display="block";
+    }else{
+      boxOndeOutros.style.display="none";
+      ondeDescartadoTextoEl.value="";
+    }
+    saveDraft();
+  });
+  const encerramentoPtSelect=$("encerramentoPt");
+  const boxMotivoNao=$("boxMotivoNao");
+  const motivoNaoEl=$("motivoNaoFinalizada");
+  encerramentoPtSelect.addEventListener("change",()=>{
+    if(encerramentoPtSelect.value==="Não"){
+      boxMotivoNao.style.display="block";
+    }else{
+      boxMotivoNao.style.display="none";
+      motivoNaoEl.value="";
+    }
+    saveDraft();
+  });
+
+  /* ===== BOTÕES "Marcar" com hora atual (mantive) ===== */
+  function formatHoraAgora(){
+    const agora=new Date();
+    const hh=String(agora.getHours()).padStart(2,"0");
+    const mm=String(agora.getMinutes()).padStart(2,"0");
+    return `${hh}:${mm}`;
+  }
+  document.querySelectorAll('button[data-horario]').forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const id=btn.getAttribute("data-horario");
+      const campo=$(id);
+      campo.value=formatHoraAgora();
+      saveDraft();
+    });
+  });
+
+  /* ===== QUICK FILL (Solicitante) ===== */
+  document.querySelectorAll("[data-fill-target]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const targetId=btn.getAttribute("data-fill-target");
+      const value=btn.getAttribute("data-fill-value") || btn.textContent.trim();
+      const input=$(targetId);
+      if(input){
+        input.value=value;
+        saveDraft();
+      }
+    });
+  });
+
+  /* ===== FOTOS (mantive) ===== */
+  const btnAddFoto=$("btnAddFoto");
+  const inputFotos=$("inputFotos");
+  const imagePreview=$("imagePreview");
+  btnAddFoto.addEventListener("click",()=>inputFotos.click());
+  inputFotos.addEventListener("change",(e)=>{
+    const files=Array.from(e.target.files||[]);
+    files.slice(0,5-fotosSelecionadas.length).forEach(file=>{
+      const reader=new FileReader();
+      reader.onload=ev=>{
+        fotosSelecionadas.push(ev.target.result);
+        renderPreview();
+        saveDraft();
+      };
+      reader.readAsDataURL(file);
+    });
+    inputFotos.value="";
+  });
+  function renderPreview(){
+    imagePreview.innerHTML="";
+    fotosSelecionadas.forEach((src,i)=>{
+      const img=document.createElement("img");
+      img.src=src;
+      img.className="thumb-img";
+      img.alt="Foto "+(i+1);
+      img.onclick=()=>{
+        const ov=document.createElement("div");
+        ov.style.position="fixed";
+        ov.style.inset="0";
+        ov.style.background="rgba(0,0,0,0.85)";
+        ov.style.display="flex";
+        ov.style.alignItems="center";
+        ov.style.justifyContent="center";
+        ov.style.zIndex="9999";
+        ov.style.cursor="zoom-out";
+        const big=document.createElement("img");
+        big.src=src;
+        big.style.maxWidth="92%";
+        big.style.maxHeight="92%";
+        ov.appendChild(big);
+        ov.onclick=()=>ov.remove();
+        document.body.appendChild(ov);
+      };
+      imagePreview.appendChild(img);
+    });
+  }
+
+  // ------------------------------------------------------------------
+  // ⭐ NOVA FUNÇÃO: Limpar todos os campos do relatório
+  // ------------------------------------------------------------------
+  function limparCamposRelatorio(){
+    document.querySelectorAll("input,textarea,select").forEach(el=>{
+      if(el.type==="date") return;
+      el.value="";
+    });
+    $("placaTexto").style.display="none";
+    $("operadorTexto").style.display="none";
+    $("oleo").value="";
+    $("boxQuantidade").style.display="none";
+    $("encerramentoPt").value="";
+    $("boxMotivoNao").style.display="none";
+    $("boxDescartes").style.display="none";
+    $("boxOndeOutros").style.display="none";
+    fotosSelecionadas=[];
+    renderPreview();
+    localStorage.removeItem(DRAFT_KEY);
+    setDataHoje(); // Garante que a data do novo relatório seja a de hoje
+  }
+  // ------------------------------------------------------------------
+
+  /* ===== LIMPAR CAMPOS ===== */
+  $("btnLimpar").addEventListener("click",()=>{
+    if(!confirm("Limpar todos os campos do relatório?")) return;
+    limparCamposRelatorio(); // Chama a nova função de limpeza
+  });
+
+  /* ===== Dia da semana / duracao (mantive) ===== */
+  function getDiaSemana(dataStr){
+    if(!dataStr) return "";
+    const [ano,mes,dia]=dataStr.split("-").map(Number);
+    const d=new Date(ano,mes-1,dia);
+    const nomes=["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+    return nomes[d.getDay()]||"";
+  }
+  function calcularDuracaoMin(hInicio,hFim){
+    if(!hInicio || !hFim) return null;
+    const [hi,mi]=hInicio.split(":").map(Number);
+    const [hf,mf]=hFim.split(":").map(Number);
+    if([hi,mi,hf,mf].some(v=>isNaN(v))) return null;
+    const inicio=hi*60+mi;
+    const fim=hf*60+mf;
+    const diff=fim-inicio;
+    return diff>0?diff:null;
+  }
+
+  /* =============== MÁSCARA INTELIGENTE PARA CAMPOS DE HORA =========== */
+  function attachTimeMask(el){
+    if(!el) return;
+    el.addEventListener("input",(e)=>{
+      const raw = el.value || "";
+      // remove tudo que não é dígito
+      let digits = raw.replace(/\D/g,"").slice(0,4); // no máximo 4 dígitos HHMM
+      if(digits.length===0){
+        el.value = ""; // vazio — não coloca 00:00
+        return;
+      }
+      if(digits.length<=2){
+        el.value = digits; // mostra os primeiros dígitos (sem dois pontos ainda)
+      }else{
+        el.value = digits.slice(0,2) + ":" + digits.slice(2);
+      }
+    },false);
+
+    // evita colar conteúdo com caracteres estranhos
+    el.addEventListener("paste",(e)=>{
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData("text");
+      const digits = (text||"").replace(/\D/g,"").slice(0,4);
+      if(!digits) { el.value=""; return; }
+      if(digits.length<=2) el.value = digits;
+      else el.value = digits.slice(0,2) + ":" + digits.slice(2);
+    },false);
+  }
+
+  // Aplica máscara a todos inputs com classe time-input
+  document.querySelectorAll(".time-input").forEach(attachTimeMask);
+
+  /* ===== Validação de horário: retorna true se formato HH:MM e minutos<60 e horas 0-23 ===== */
+  function validarHoraFormatada(v){
+    if(!v || typeof v !== "string") return false;
+    if(!v.includes(":")) return false;
+    const [hh,mm]=v.split(":");
+    if(hh.length!==2 || mm.length!==2) return false;
+    if(!/^\d{2}$/.test(hh) || !/^\d{2}$/.test(mm)) return false;
+    const H=parseInt(hh,10);
+    const M=parseInt(mm,10);
+    if(H<0 || H>23) return false;
+    if(M<0 || M>59) return false;
+    return true;
+  }
+
+  /* ===== SALVAR RELATÓRIO (com validação extra de horários) ===== */
+  const btnSalvar=$("btnSalvar");
+  btnSalvar.addEventListener("click",async()=>{
+    const numeroPtInput=$("numeroPt").value.trim();
+    const data=$("data").value;
+    const equipamento=$("equipamento").value;
+    const placaSel=placaSelect.value;
+    const placa = placaSel==="outra" ? placaTexto.value.trim() : placaSel;
+    const local=$("local").value.trim();
+    const tag=$("tag").value.trim();
+    const solicitante=$("solicitante").value.trim();
+    const emitAbertura=$("emitAbertura").value.trim();
+    const emitEncerramento=$("emitEncerramento").value.trim();
+    const operadorSel=operadorSelect.value;
+    const operadorTxt=operadorTexto.value.trim();
+    const operador = operadorSel==="outra" ? operadorTxt : operadorSel;
+    const ajudante=$("ajudante").value.trim();
+    const tipoServico=$("tipoServico").value.trim();
+    const tipoAtividade=$("tipoAtividade").value;
+    const oleo=$("oleo").value;
+    const quantidade=$("quantidade").value.trim();
+    const obs=$("observacoes").value.trim();
+    const encerramentoPt=encerramentoPtSelect.value;
+    const motivoNao=motivoNaoEl.value.trim();
+    const ondeTipo=ondeDescartadoTipoEl.value;
+    const ondeTexto=ondeDescartadoTextoEl.value.trim();
+
+    if(!numeroPtInput){
+      alert("Informe o número da PT.");
+      return;
+    }
+    if(
+      !data || !equipamento || !placa ||
+      !local || !tag || !solicitante ||
+      !emitAbertura || !emitEncerramento ||
+      !operador || !ajudante || !tipoServico
+    ){
+      alert("Preencha todos os campos principais (dados e pessoas).");
+      return;
+    }
+    if(!tipoAtividade){
+      alert("Selecione o tipo da atividade.");
+      return;
+    }
+    if(oleo===""){
+      alert("Informe se houve óleo (Sim ou Não).");
+      return;
+    }
+    if(oleo==="Sim" && !quantidade){
+      alert("Informe a quantidade de óleo.");
+      return;
+    }
+    if(tipoAtividade==="Descarte" && oleo==="Sim"){
+      if(!ondeTipo){
+        alert('Informe em "Onde foi descartado?" (IBCs ou Outros).');
+        return;
+      }
+      if(ondeTipo==="Outros" && !ondeTexto){
+        alert('Descreva o local do descarte em "Outros".');
+        return;
+      }
+    }
+    if(!encerramentoPt){
+      alert("Informe se houve encerramento da PT (Sim ou Não).");
+      return;
+    }
+    if(encerramentoPt==="Não" && !motivoNao){
+      alert('Preencha o campo "Por que não foi finalizada?".');
+      return;
+    }
+
+    // Coleta horários
+    const horariosIds = [
+      "h_ddsChecklist","h_disposicao","h_chegada","h_liberacaoPT",
+      "h_inicio","h_inicioIntervalo","h_fimIntervalo","h_fim","h_trocaTurno"
+    ];
+    const horariosObj = {};
+    for(const id of horariosIds){
+      horariosObj[id] = $(id).value.trim();
+    }
+
+    // Se encerramentoPt = Sim -> exige todos os horários e valida formato HH:MM
+    if(encerramentoPt==="Sim"){
+      for(const id of horariosIds){
+        const v = horariosObj[id];
+        if(!v){
+          alert("Preencha todos os horários (DDS, coordenação, chegada, liberação, início/fim, intervalo, troca de turno).");
+          return;
+        }
+        if(!validarHoraFormatada(v)){
+          alert(`Horário inválido em "${id}". Use o formato HH:MM (ex: 08:30).`);
+          return;
+        }
+      }
+    } else {
+      // mesmo que não seja obrigatório, caso preenchido valida o formato
+      for(const id of horariosIds){
+        const v=horariosObj[id];
+        if(v && !validarHoraFormatada(v)){
+          alert(`Horário inválido em "${id}". Use o formato HH:MM ou deixe vazio.`);
+          return;
+        }
+      }
+    }
+
+    let duracaoMinutos=null;
+    if(encerramentoPt==="Sim"){
+      duracaoMinutos=calcularDuracaoMin(horariosObj.h_inicio,horariosObj.h_fim);
+    }
+
+    const diaSemana=getDiaSemana(data);
+    const payload={
+      numeroPT:String(numeroPtInput),
+      data,
+      diaSemana,
+      equipamento,
+      placa,
+      local,
+      tag,
+      solicitante,
+      emitenteAbertura:emitAbertura,
+      emitenteEncerramento:emitEncerramento,
+      operador,
+      ajudante,
+      tipoServico,
+      horarios:{
+        ddsChecklist:horariosObj.h_ddsChecklist,
+        disposicao:horariosObj.h_disposicao,
+        chegada:horariosObj.h_chegada,
+        liberacaoPT:horariosObj.h_liberacaoPT,
+        inicio:horariosObj.h_inicio,
+        inicioIntervalo:horariosObj.h_inicioIntervalo,
+        fimIntervalo:horariosObj.h_fimIntervalo,
+        fim:horariosObj.h_fim,
+        trocaTurno:horariosObj.h_trocaTurno
+      },
+      especificacoes:{
+        tipoAtividade,
+        oleo,
+        quantidade,
+        tipoServico,
+        ondeDescartadoTipo: ondeTipo || "",
+        ondeDescartadoTexto: ondeTexto || ""
+      },
+      encerramentoPt,
+      motivoNaoFinalizada: encerramentoPt==="Não" ? motivoNao : "",
+      observacoes:obs,
+      fotos:fotosSelecionadas,
+      duracaoMinutos,
+      criadoEm:firebase.firestore.FieldValue.serverTimestamp(),
+      deviceId:getDeviceId(),
+      operadorIdFixo:getOperadorIdFixo()
+    };
+
+    if(!navigator.onLine){
+      showToast("Sem internet. O relatório continua salvo neste aparelho.", "#eab308");
+      return;
+    }
+
+    try{
+      btnSalvar.disabled=true;
+      btnSalvar.textContent="Salvando...";
+      
+      // ⭐ ATUALIZAÇÃO AQUI: Salva no Firestore
+      await db.collection("relatoriosCampo").add(payload);
+      
+      // ⭐ ATUALIZAÇÃO AQUI: Em vez de redirecionar, mostra sucesso e limpa o formulário
+      showToast("✅ Relatório salvo com sucesso!", "#10b981");
+      limparCamposRelatorio();
+      
+      // Garante que a PT volte a ser gerada (se não tiver uma no local)
+      if(!$("numeroPt").value || $("numeroPt").value.toString() === numeroPtInput.toString()){
+          gerarNumeroPt();
+      }
+
+    }catch(err){
+      console.error("Erro ao salvar relatório:",err);
+      showToast("Erro ao salvar relatório. Verifique a conexão.", "#dc2626");
+    }finally{
+      btnSalvar.disabled=false;
+      btnSalvar.textContent="Salvar relatório";
+    }
+  });
+
+  /* ===== AUTOSAVE: listeners em todos os campos ===== */
+  const camposAutosave = [
+    "numeroPt","data","equipamento","placaSelect","placaTexto","local","tag",
+    "solicitante","emitAbertura","emitEncerramento",
+    "operadorSelect","operadorTexto",
+    "ajudante","tipoServico","tipoAtividade","oleo","quantidade",
+    "encerramentoPt","motivoNaoFinalizada",
+    "ondeDescartadoTipo","ondeDescartadoTexto",
+    "h_ddsChecklist","h_disposicao","h_chegada","h_liberacaoPT",
+    "h_inicio","h_inicioIntervalo","h_fimIntervalo","h_fim","h_trocaTurno",
+    "observacoes"
+  ];
+  camposAutosave.forEach(id=>{
+    const el=$(id);
+    if(!el) return;
+    ["input","change"].forEach(ev=>{
+      el.addEventListener(ev, saveDraft);
+    });
+  });
+
+  /* ===== Init (mantive) ===== */
+  (function init(){
+    renderPreview(); // caso tenha fotos
+    const temDraft = loadDraft();
+    if(!temDraft){
+      setDataHoje();
+      gerarNumeroPt();
+    }else{
+      if(!$("numeroPt").value){
+        gerarNumeroPt();
+      }
+    }
+  })();
+
+}); // Fim do DOMContentLoaded
 </script>
 </body>
 </html>
