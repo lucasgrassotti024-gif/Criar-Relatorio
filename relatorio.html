@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
 
 <style>
+/* --- ESTILOS (Mantidos do seu código original) --- */
 :root{
   --primary:#0078ff;
   --accent:#00b4ff;
@@ -311,19 +312,17 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
-/*
-  Usei sua configuração nova (a que você publicou em modular)
-  convertida para formato compat — assim mantém o restante do código
-  que usa firebase.firestore() sem precisar migrar tudo agora.
-*/
+// ==========================================================
+// ⭐ ATUALIZADO: Usando as credenciais do novo projeto: relatorio-rss3-15896
+// ==========================================================
 const firebaseConfig = {
-  apiKey: "AIzaSyCUJmfp0tSjU3f5O1mjckd_UL5FhohDPTM",
-  authDomain: "hidrojato-rss3.firebaseapp.com",
-  projectId: "hidrojato-rss3",
-  storageBucket: "hidrojato-rss3.firebasestorage.app",
-  messagingSenderId: "318770594822",
-  appId: "1:318770594822:web:68c9c199c67632f4c96f87",
-  measurementId: "G-WNNYF6M9CR"
+  apiKey: "AIzaSyCAfBANhkMec6TCGCO9JwrvOB79RbyLw8I",
+  authDomain: "relatorio-rss3-15896.firebaseapp.com",
+  projectId: "relatorio-rss3-15896",
+  storageBucket: "relatorio-rss3-15896.firebasestorage.app",
+  messagingSenderId: "905086909082",
+  appId: "1:905086909082:web:7535afa8dddbd7b691fd23",
+  measurementId: "G-EPGW3FGXX5"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
@@ -513,6 +512,9 @@ document.addEventListener("DOMContentLoaded", function() {
       saveDraft();
     }catch(err){
       console.error("Erro ao gerar número PT:",err);
+      // Mensagem de alerta mantida: se o erro persiste aqui, é um problema
+      // na transação do contador, mas com as regras if true, só deve ocorrer
+      // se a base não estiver inicializada.
       alert("Erro ao gerar número da PT. Ver console.");
     }
   }
@@ -937,10 +939,10 @@ document.addEventListener("DOMContentLoaded", function() {
       btnSalvar.disabled=true;
       btnSalvar.textContent="Salvando...";
       
-      // ⭐ ATUALIZAÇÃO AQUI: Salva no Firestore
+      // Salva no Firestore
       await db.collection("relatoriosCampo").add(payload);
       
-      // ⭐ ATUALIZAÇÃO AQUI: Em vez de redirecionar, mostra sucesso e limpa o formulário
+      // Mostra sucesso e limpa o formulário
       showToast("✅ Relatório salvo com sucesso!", "#10b981");
       limparCamposRelatorio();
       
