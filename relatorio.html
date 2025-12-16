@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
 
 <style>
-/* --- ESTILOS (Mantidos do seu código original) --- */
 :root{
   --primary:#0078ff;
   --accent:#00b4ff;
@@ -163,7 +162,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>DDS e Checklist</label>
-        <input id="h_ddsChecklist" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
+        <input id="h_ddsChecklist" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_ddsChecklist">Marcar</button>
     </div>
@@ -171,7 +170,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Disposição da coordenação</label>
-        <input id="h_disposicao" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
+        <input id="h_disposicao" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_disposicao">Marcar</button>
     </div>
@@ -179,7 +178,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Chegada ao local</label>
-        <input id="h_chegada" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
+        <input id="h_chegada" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_chegada">Marcar</button>
     </div>
@@ -187,7 +186,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Liberação da PT</label>
-        <input id="h_liberacaoPT" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
+        <input id="h_liberacaoPT" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_liberacaoPT">Marcar</button>
     </div>
@@ -195,7 +194,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Início da atividade</label>
-        <input id="h_inicio" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
+        <input id="h_inicio" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_inicio">Marcar</button>
     </div>
@@ -203,7 +202,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Fim da atividade</label>
-        <input id="h_fim" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
+        <input id="h_fim" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_fim">Marcar</button>
     </div>
@@ -211,7 +210,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Início intervalo</label>
-        <input id="h_inicioIntervalo" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
+        <input id="h_inicioIntervalo" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_inicioIntervalo">Marcar</button>
     </div>
@@ -219,7 +218,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Fim intervalo</label>
-        <input id="h_fimIntervalo" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
+        <input id="h_fimIntervalo" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_fimIntervalo">Marcar</button>
     </div>
@@ -227,7 +226,7 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
     <div class="horario-row">
       <div style="flex:1;">
         <label>Troca de turno</label>
-        <input id="h_trocaTurno" class="time-input" type="text" placeholder="_:_" autocomplete="off" inputmode="numeric">
+        <input id="h_trocaTurno" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
       </div>
       <button class="btn" type="button" data-horario="h_trocaTurno">Marcar</button>
     </div>
@@ -312,6 +311,11 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
+/*
+  Usei sua configuração nova (a que você publicou em modular)
+  convertida para formato compat — assim mantém o restante do código
+  que usa firebase.firestore() sem precisar migrar tudo agora.
+*/
 const firebaseConfig = {
   apiKey: "AIzaSyCUJmfp0tSjU3f5O1mjckd_UL5FhohDPTM",
   authDomain: "hidrojato-rss3.firebaseapp.com",
@@ -326,7 +330,6 @@ const db = firebase.firestore();
 </script>
 
 <script>
-/* --- LÓGICA JAVASCRIPT (Mantida do seu código original) --- */
 /* ===== THEME ===== */
 const themeToggle=document.getElementById("themeToggle");
 if(localStorage.getItem("tema")==="dark"){
@@ -516,7 +519,7 @@ function setDataHoje(){
   const ano=hoje.getFullYear();
   const mes=String(hoje.getMonth()+1).padStart(2,"0");
   const dia=String(hoje.getDate()).padStart(2,"0");
-  $("data").value=${ano}-${mes}-${dia};
+  $("data").value=`${ano}-${mes}-${dia}`;
 }
 
 /* Placa / Operador / Óleo / Descartes (mantive) */
@@ -602,7 +605,7 @@ function formatHoraAgora(){
   const agora=new Date();
   const hh=String(agora.getHours()).padStart(2,"0");
   const mm=String(agora.getMinutes()).padStart(2,"0");
-  return ${hh}:${mm};
+  return `${hh}:${mm}`;
 }
 document.querySelectorAll('button[data-horario]').forEach(btn=>{
   btn.addEventListener("click",()=>{
@@ -673,24 +676,33 @@ function renderPreview(){
   });
 }
 
-/* ===== LIMPAR CAMPOS ===== */
-$("btnLimpar").addEventListener("click",()=>{
-  if(!confirm("Limpar todos os campos do relatório?")) return;
+// ------------------------------------------------------------------
+// ⭐ NOVA FUNÇÃO: Limpar todos os campos do relatório
+// ------------------------------------------------------------------
+function limparCamposRelatorio(){
   document.querySelectorAll("input,textarea,select").forEach(el=>{
     if(el.type==="date") return;
     el.value="";
   });
-  placaTexto.style.display="none";
-  operadorTexto.style.display="none";
-  oleoSelect.value="";
-  boxQuantidade.style.display="none";
-  encerramentoPtSelect.value="";
-  boxMotivoNao.style.display="none";
-  boxDescartes.style.display="none";
-  boxOndeOutros.style.display="none";
+  $("placaTexto").style.display="none";
+  $("operadorTexto").style.display="none";
+  $("oleo").value="";
+  $("boxQuantidade").style.display="none";
+  $("encerramentoPt").value="";
+  $("boxMotivoNao").style.display="none";
+  $("boxDescartes").style.display="none";
+  $("boxOndeOutros").style.display="none";
   fotosSelecionadas=[];
   renderPreview();
   localStorage.removeItem(DRAFT_KEY);
+  setDataHoje(); // Garante que a data do novo relatório seja a de hoje
+}
+// ------------------------------------------------------------------
+
+/* ===== LIMPAR CAMPOS ===== */
+$("btnLimpar").addEventListener("click",()=>{
+  if(!confirm("Limpar todos os campos do relatório?")) return;
+  limparCamposRelatorio(); // Chama a nova função de limpeza
 });
 
 /* ===== Dia da semana / duracao (mantive) ===== */
@@ -717,17 +729,20 @@ function attachTimeMask(el){
   if(!el) return;
   el.addEventListener("input",(e)=>{
     const raw = el.value || "";
-    let digits = raw.replace(/\D/g,"").slice(0,4);
+    // remove tudo que não é dígito
+    let digits = raw.replace(/\D/g,"").slice(0,4); // no máximo 4 dígitos HHMM
     if(digits.length===0){
-      el.value = "";
+      el.value = ""; // vazio — não coloca 00:00
       return;
     }
     if(digits.length<=2){
-      el.value = digits;
+      el.value = digits; // mostra os primeiros dígitos (sem dois pontos ainda)
     }else{
       el.value = digits.slice(0,2) + ":" + digits.slice(2);
     }
   },false);
+
+  // evita colar conteúdo com caracteres estranhos
   el.addEventListener("paste",(e)=>{
     e.preventDefault();
     const text = (e.clipboardData || window.clipboardData).getData("text");
@@ -737,6 +752,8 @@ function attachTimeMask(el){
     else el.value = digits.slice(0,2) + ":" + digits.slice(2);
   },false);
 }
+
+// Aplica máscara a todos inputs com classe time-input
 document.querySelectorAll(".time-input").forEach(attachTimeMask);
 
 /* ===== Validação de horário: retorna true se formato HH:MM e minutos<60 e horas 0-23 ===== */
@@ -843,7 +860,7 @@ btnSalvar.addEventListener("click",async()=>{
         return;
       }
       if(!validarHoraFormatada(v)){
-        alert(Horário inválido em "${id}". Use o formato HH:MM (ex: 08:30).);
+        alert(`Horário inválido em "${id}". Use o formato HH:MM (ex: 08:30).`);
         return;
       }
     }
@@ -852,7 +869,7 @@ btnSalvar.addEventListener("click",async()=>{
     for(const id of horariosIds){
       const v=horariosObj[id];
       if(v && !validarHoraFormatada(v)){
-        alert(Horário inválido em "${id}". Use o formato HH:MM ou deixe vazio.);
+        alert(`Horário inválido em "${id}". Use o formato HH:MM ou deixe vazio.`);
         return;
       }
     }
@@ -900,7 +917,7 @@ btnSalvar.addEventListener("click",async()=>{
     encerramentoPt,
     motivoNaoFinalizada: encerramentoPt==="Não" ? motivoNao : "",
     observacoes:obs,
-    fotos:fotosSelecionadas, // ATENÇÃO: Se as fotos forem grandes, você precisará usar o Firebase Storage para fazer upload e salvar apenas as URLs aqui.
+    fotos:fotosSelecionadas,
     duracaoMinutos,
     criadoEm:firebase.firestore.FieldValue.serverTimestamp(),
     deviceId:getDeviceId(),
@@ -915,9 +932,19 @@ btnSalvar.addEventListener("click",async()=>{
   try{
     btnSalvar.disabled=true;
     btnSalvar.textContent="Salvando...";
+    
+    // ⭐ ATUALIZAÇÃO AQUI: Salva no Firestore
     await db.collection("relatoriosCampo").add(payload);
-    localStorage.removeItem(DRAFT_KEY);
-    window.location.href="index.html";
+    
+    // ⭐ ATUALIZAÇÃO AQUI: Em vez de redirecionar, mostra sucesso e limpa o formulário
+    showToast("✅ Relatório salvo com sucesso!", "#10b981");
+    limparCamposRelatorio();
+    
+    // Garante que a PT volte a ser gerada (se não tiver uma no local)
+    if(!$("numeroPt").value || $("numeroPt").value.toString() === numeroPtInput.toString()){
+        gerarNumeroPt();
+    }
+
   }catch(err){
     console.error("Erro ao salvar relatório:",err);
     showToast("Erro ao salvar relatório. Verifique a conexão.", "#dc2626");
