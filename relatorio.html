@@ -308,7 +308,6 @@ footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);backgro
 </footer>
 
 <div id="toast" class="toast"></div>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
@@ -371,6 +370,38 @@ document.addEventListener("DOMContentLoaded", function() {
       localStorage.setItem("operadorIdFixo_relatorios",id);
     }
     return id;
+  }
+
+  /* ===== FUNÇÃO DE COMPRESSÃO (ADICIONADA PARA FUNCIONAR FOTOS) ===== */
+  function compressImage(base64Str) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = base64Str;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 800;
+        const MAX_HEIGHT = 600;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', 0.7)); // Qualidade 70%
+      };
+    });
   }
 
   /* ===== RASCUNHO LOCAL (mantive) ===== */
@@ -512,9 +543,6 @@ document.addEventListener("DOMContentLoaded", function() {
       saveDraft();
     }catch(err){
       console.error("Erro ao gerar número PT:",err);
-      // Mensagem de alerta mantida: se o erro persiste aqui, é um problema
-      // na transação do contador, mas com as regras if true, só deve ocorrer
-      // se a base não estiver inicializada.
       alert("Erro ao gerar número da PT. Ver console.");
     }
   }
@@ -635,7 +663,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   });
 
-  /* ===== FOTOS (mantive) ===== */
+  /* ===== FOTOS (MODIFICADO APENAS PARA COMPRESSÃO) ===== */
   const btnAddFoto=$("btnAddFoto");
   const inputFotos=$("inputFotos");
   const imagePreview=$("imagePreview");
@@ -644,8 +672,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const files=Array.from(e.target.files||[]);
     files.slice(0,5-fotosSelecionadas.length).forEach(file=>{
       const reader=new FileReader();
-      reader.onload=ev=>{
-        fotosSelecionadas.push(ev.target.result);
+      reader.onload=async ev=>{
+        // COMPRIME A IMAGEM ANTES DE ADICIONAR
+        const compressed = await compressImage(ev.target.result);
+        fotosSelecionadas.push(compressed);
         renderPreview();
         saveDraft();
       };
