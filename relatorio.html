@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Relatório de Campo - RSS3</title>
+<title>Relatório de Campo</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
 
 <style>
-/* --- VARIÁVEIS DE CORES E TEMA --- */
-:root {
+/* --- ESTILOS --- */
+:root{
   --primary:#0078ff;
   --accent:#00b4ff;
   --bg:#f5f8fb;
@@ -19,10 +19,8 @@
   --border:#e3e6eb;
   --shadow:0 8px 28px rgba(0,0,0,0.08);
   --danger: #ef4444;
-  --success: #10b981;
 }
-
-.dark {
+.dark{
   --bg:#0f1419;
   --card:#1b2228;
   --text:#e8eef5;
@@ -30,116 +28,72 @@
   --border:#2b3139;
   --shadow:0 6px 22px rgba(0,0,0,0.6);
 }
+*{box-sizing:border-box;font-family:"Inter",sans-serif;transition:background-color .18s ease,color .18s ease,border-color .18s ease;}
+body{margin:0;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--border);box-shadow:var(--shadow);position:sticky;top:0;z-index:10;}
+header h1{margin:0;font-family:"Outfit";font-weight:800;font-size:1.2rem;color:var(--primary);}
+#themeToggle{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;}
+main{flex:1;max-width:920px;margin:20px auto;padding:16px;}
+.card{background:var(--card);border-radius:12px;padding:16px;border:1px solid var(--border);box-shadow:var(--shadow);}
+h2{margin:0 0 10px;font-family:"Outfit";font-weight:800;color:var(--primary);font-size:1.1rem;}
+.section-title{margin:18px 0 8px;font-weight:700;font-size:.95rem;color:var(--primary);}
+label{display:block;margin-top:10px;font-weight:600;font-size:.85rem;}
+input,select,textarea{width:100%;padding:9px 10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);font-size:.9rem;outline:none;}
+textarea{resize:vertical;min-height:70px;}
+input::placeholder,textarea::placeholder{color:#9aa4b2;}
+.dark input,.dark select,.dark textarea{background:#232a30;border-color:#333a42;color:#eaf0f7;}
+.dark input::placeholder,.dark textarea::placeholder{color:#aeb9c4;}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;}
+.horario-row{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.horario-row input{flex:1;}
+.horario-row button{flex:0 0 120px;}
+.btn{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;padding:11px 14px;border-radius:10px;font-weight:700;font-size:.95rem;cursor:pointer;}
+.btn:hover{transform:translateY(-1px);}
+.btn-sec{background:#ddd;color:#222;}
+.quick-options{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+.quick-btn{border-radius:999px;border:1px solid var(--border);background:rgba(15,23,42,0.03);padding:4px 9px;font-size:.75rem;cursor:pointer;color:var(--muted);}
+.dark .quick-btn{background:#232a30;border-color:#333a42;color:#e5e7eb;}
+.quick-btn:hover{background:rgba(0,120,255,0.06);}
 
-/* --- ESTILOS GERAIS --- */
-* { box-sizing: border-box; font-family: "Inter", sans-serif; transition: background-color .18s ease, color .18s ease; }
-body { margin: 0; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
-
-/* HEADER */
-header {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 12px 16px; background: var(--card); border-bottom: 1px solid var(--border);
-  box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100;
-}
-header h1 { margin: 0; font-family: "Outfit"; font-weight: 800; font-size: 1.2rem; color: var(--primary); }
-
-#themeToggle {
-  width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--border);
-  background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center;
-}
-
-/* CONTAINER PRINCIPAL */
-main { flex: 1; max-width: 920px; margin: 20px auto; padding: 16px; width: 100%; }
-
-/* AUDITORIA / NOTIFICAÇÕES */
-.audit-section { margin-bottom: 30px; }
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
-.stat-card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid var(--border); text-align: center; }
-.stat-card span { display: block; font-size: 0.7rem; color: var(--muted); text-transform: uppercase; margin-bottom: 5px; }
-.stat-card b { font-size: 1.2rem; color: var(--primary); }
-
-.notif-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-.card-notif {
-  background: var(--card); padding: 14px; border-radius: 12px; border: 1px solid var(--border);
-  border-left: 5px solid var(--primary); display: flex; align-items: center; gap: 12px;
-  position: relative; animation: fadeIn 0.3s ease;
-}
-.card-notif.urgente { border-left-color: var(--danger); }
-.btn-excluir-notif { position: absolute; top: 8px; right: 8px; background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1.1rem; }
-
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-/* FORMULÁRIO */
-.card { background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid var(--border); box-shadow: var(--shadow); }
-h2 { margin: 0 0 15px; font-family: "Outfit"; font-weight: 800; color: var(--primary); font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
-.section-title { margin: 20px 0 10px; font-weight: 700; font-size: .95rem; color: var(--primary); display: flex; align-items: center; gap: 8px; }
-
-.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-
-label { display: block; margin-top: 10px; font-weight: 600; font-size: .85rem; margin-bottom: 4px; }
-input, select, textarea {
-  width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);
-  background: transparent; color: var(--text); font-size: .9rem; outline: none;
-}
-.dark input, .dark select, .dark textarea { background: #232a30; border-color: #333a42; }
-
-/* HORÁRIOS */
-.horario-row { display: flex; align-items: flex-end; gap: 8px; margin-top: 8px; }
-.horario-row div { flex: 1; }
-.btn-marcar {
-  background: var(--primary); color: white; border: none; padding: 10px;
-  border-radius: 8px; font-weight: 700; cursor: pointer; height: 38px; min-width: 80px;
+/* Container das fotos */
+#imagePreview{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;}
+.thumb-wrapper{position:relative;width:120px;height:80px;}
+.thumb-img{width:100%;height:100%;object-fit:cover;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.15);cursor:zoom-in;}
+.btn-del-foto{
+  position:absolute;
+  top:-8px;
+  right:-8px;
+  background:var(--danger);
+  color:white;
+  border:none;
+  border-radius:50%;
+  width:24px;
+  height:24px;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+  z-index:5;
 }
 
-/* BOTÕES ESPECIAIS */
-.quick-options { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
-.quick-btn {
-  border-radius: 20px; border: 1px solid var(--border); background: rgba(0,120,255,0.05);
-  padding: 4px 12px; font-size: .75rem; cursor: pointer; color: var(--primary); font-weight: 600;
-}
-
-.btn-main {
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  color: white; border: none; padding: 14px; border-radius: 10px;
-  font-weight: 700; font-size: 1rem; cursor: pointer; width: 100%; margin-top: 20px;
-}
-
-/* FOTOS */
-#imagePreview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
-.thumb-wrapper { position: relative; width: 80px; height: 80px; }
-.thumb-img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
-.btn-del-foto {
-  position: absolute; top: -5px; right: -5px; background: var(--danger);
-  color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer;
-}
-
-footer { text-align: center; padding: 20px; font-size: .8rem; color: var(--muted); }
+footer{text-align:center;padding:12px;font-size:.8rem;color:var(--muted);background:var(--card);border-top:1px solid var(--border);}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);padding:8px 14px;border-radius:999px;background:#111827;color:#f9fafb;font-size:.78rem;font-weight:600;display:none;z-index:9999;box-shadow:0 8px 20px rgba(0,0,0,0.45);}
+.toast.show{display:block;}
+@media(max-width:600px){main{padding:10px;} .horario-row button{flex:0 0 100px;font-size:.75rem;padding:9px;}}
+.time-input{font-family:inherit;}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Sistema RSS3 - Relatório</h1>
+  <h1>Relatório de Campo</h1>
   <button id="themeToggle" type="button">🌙</button>
 </header>
 
 <main>
-  <section class="audit-section">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-      <h2 style="border:none; margin:0;">Central de Auditoria</h2>
-      <input type="date" id="dataFiltro" style="width: auto;">
-    </div>
-    
-    <div class="stats-grid">
-      <div class="stat-card"><span>Enviados</span><b id="statEnviados">0</b></div>
-      <div class="stat-card"><span>Pendentes</span><b id="statPendencias" style="color:var(--danger)">0</b></div>
-      <div class="stat-card"><span>Analisando</span><b id="statData">--/--</b></div>
-    </div>
-
-    <div class="notif-list" id="listaNotificacoes"></div>
-    <button class="btn-marcar" style="width:100%; margin-bottom: 20px;" onclick="verificarPendenciasReal()">🔄 Sincronizar Dados</button>
-  </section>
-
   <div class="card">
     <h2>Preencher Relatório</h2>
 
@@ -147,335 +101,631 @@ footer { text-align: center; padding: 20px; font-size: .8rem; color: var(--muted
     <div class="grid-2">
       <div>
         <label>Número da PT</label>
-        <input id="numeroPt" type="text" readonly placeholder="Gerando...">
+        <input id="numeroPt" type="text" autocomplete="off">
       </div>
       <div>
         <label>Data</label>
-        <input id="dataRelatorio" type="date">
+        <input id="data" type="date" autocomplete="off">
       </div>
       <div>
         <label>Equipamento</label>
         <select id="equipamento">
           <option value="">Selecione...</option>
           <option value="Hidrojato">Hidrojato</option>
-          <option value="Hidrovácuo">Hidrovácuo</option>
+          <option value="Hidrovacuo">Hidrovácuo</option>
         </select>
       </div>
       <div>
         <label>Placa</label>
-        <select id="placa">
+        <select id="placaSelect">
           <option value="">Selecione...</option>
           <option value="FOQ6H01">FOQ6H01</option>
           <option value="IVR1B32">IVR1B32</option>
           <option value="JBK7F63">JBK7F63</option>
+          <option value="JBL1H84">JBL1H84</option>
+          <option value="LRA8855">LRA8855</option>
+          <option value="SKID">SKID</option>
           <option value="PPC6I87">PPC6I87</option>
+          <option value="TDK6G18">TDK6G18</option>
+          <option value="KPR0F00">KPR0F00</option>
           <option value="outra">Outra (digitar)</option>
         </select>
+        <input id="placaTexto" type="text" placeholder="Digite a placa..." style="margin-top:6px;display:none;" autocomplete="off">
       </div>
     </div>
 
     <div class="grid-2">
       <div>
         <label>Local</label>
-        <input id="local" type="text" placeholder="Ex: CR1">
+        <input id="local" type="text" autocomplete="off">
       </div>
       <div>
         <label>TAG</label>
-        <input id="tag" type="text" placeholder="Ex: 571">
+        <input id="tag" type="text" autocomplete="off">
       </div>
       <div>
         <label>Solicitante</label>
-        <input id="solicitante" type="text">
+        <input id="solicitante" type="text" autocomplete="off">
         <div class="quick-options">
-          <button type="button" class="quick-btn" onclick="preencherCampo('solicitante', 'CMPC')">CMPC</button>
+          <button type="button" class="quick-btn" data-fill-target="solicitante" data-fill-value="CMPC">CMPC</button>
         </div>
       </div>
       <div>
-        <label>Emitente Abertura</label>
-        <input id="emitAbertura" type="text">
+        <label>Emitente abertura</label>
+        <input id="emitAbertura" type="text" autocomplete="off">
       </div>
       <div>
-        <label>Emitente Encerramento</label>
-        <input id="emitEncerramento" type="text">
+        <label>Emitente encerramento</label>
+        <input id="emitEncerramento" type="text" autocomplete="off">
       </div>
       <div>
         <label>Operador</label>
-        <select id="operador">
+        <select id="operadorSelect">
           <option value="">Selecione...</option>
           <option value="Bruno Ramos">Bruno Ramos</option>
+          <option value="Carlos Alexandre">Carlos Alexandre</option>
+          <option value="Jaques">Jaques</option>
+          <option value="Júlio César">Júlio César</option>
           <option value="Lucas Coelho">Lucas Coelho</option>
           <option value="Robson Silva">Robson Silva</option>
+          <option value="outra">Outro (digitar)</option>
         </select>
+        <input id="operadorTexto" type="text" placeholder="Digite o nome do operador..." style="margin-top:6px;display:none;" autocomplete="off">
       </div>
       <div>
         <label>Ajudante</label>
-        <input id="ajudante" type="text">
+        <input id="ajudante" type="text" autocomplete="off">
       </div>
       <div>
-        <label>Tipo de Serviço</label>
-        <input id="tipoServico" type="text">
+        <label>Tipo de serviço</label>
+        <input id="tipoServico" type="text" placeholder="Ex.: Limpeza de caixa..." autocomplete="off">
       </div>
     </div>
 
-    <div class="section-title">Horários detalhados</div>
-    
-    <div class="grid-2">
-      <div class="horario-row">
-        <div><label>DDS e Checklist</label><input id="h_dds" class="time-input" placeholder="00:00"></div>
-        <button class="btn-marcar" onclick="marcarAgora('h_dds')">Marcar</button>
+    <div class="section-title">Horários</div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>DDS e Checklist</label>
+        <input id="h_ddsChecklist" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
       </div>
-      <div class="horario-row">
-        <div><label>Coordenação</label><input id="h_coord" class="time-input" placeholder="00:00"></div>
-        <button class="btn-marcar" onclick="marcarAgora('h_coord')">Marcar</button>
-      </div>
-      <div class="horario-row">
-        <div><label>Chegada ao Local</label><input id="h_chegada" class="time-input" placeholder="00:00"></div>
-        <button class="btn-marcar" onclick="marcarAgora('h_chegada')">Marcar</button>
-      </div>
-      <div class="horario-row">
-        <div><label>Liberação PT</label><input id="h_liberacao" class="time-input" placeholder="00:00"></div>
-        <button class="btn-marcar" onclick="marcarAgora('h_liberacao')">Marcar</button>
-      </div>
-      <div class="horario-row">
-        <div><label>Início Atividade</label><input id="h_inicio" class="time-input" placeholder="00:00"></div>
-        <button class="btn-marcar" onclick="marcarAgora('h_inicio')">Marcar</button>
-      </div>
-      <div class="horario-row">
-        <div><label>Fim Atividade</label><input id="h_fim" class="time-input" placeholder="00:00"></div>
-        <button class="btn-marcar" onclick="marcarAgora('h_fim')">Marcar</button>
-      </div>
-      <div class="horario-row">
-        <div><label>Início Intervalo</label><input id="h_intervalo_ini" class="time-input" placeholder="00:00"></div>
-        <button class="btn-marcar" onclick="marcarAgora('h_intervalo_ini')">Marcar</button>
-      </div>
-      <div class="horario-row">
-        <div><label>Fim Intervalo</label><input id="h_intervalo_fim" class="time-input" placeholder="00:00"></div>
-        <button class="btn-marcar" onclick="marcarAgora('h_intervalo_fim')">Marcar</button>
-      </div>
-      <div class="horario-row">
-        <div><label>Troca de Turno</label><input id="h_troca" class="time-input" placeholder="00:00"></div>
-        <button class="btn-marcar" onclick="marcarAgora('h_troca')">Marcar</button>
-      </div>
+      <button class="btn" type="button" data-horario="h_ddsChecklist">Marcar</button>
     </div>
 
-    <div class="section-title">Encerramento e Atividade</div>
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Disposição da coordenação</label>
+        <input id="h_disposicao" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_disposicao">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Chegada ao local</label>
+        <input id="h_chegada" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_chegada">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Liberação da PT</label>
+        <input id="h_liberacaoPT" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_liberacaoPT">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Início da atividade</label>
+        <input id="h_inicio" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_inicio">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Fim da atividade</label>
+        <input id="h_fim" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_fim">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Início intervalo</label>
+        <input id="h_inicioIntervalo" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_inicioIntervalo">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Fim intervalo</label>
+        <input id="h_fimIntervalo" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_fimIntervalo">Marcar</button>
+    </div>
+
+    <div class="horario-row">
+      <div style="flex:1;">
+        <label>Troca de turno</label>
+        <input id="h_trocaTurno" class="time-input" type="text" placeholder="__:__" autocomplete="off" inputmode="numeric">
+      </div>
+      <button class="btn" type="button" data-horario="h_trocaTurno">Marcar</button>
+    </div>
+
+    <div class="section-title">Encerramento da PT</div>
     <div class="grid-2">
       <div>
         <label>Encerramento da PT?</label>
         <select id="encerramentoPt">
+          <option value="">Selecione...</option>
           <option value="Sim">Sim</option>
           <option value="Não">Não</option>
         </select>
       </div>
+      <div id="boxMotivoNao" style="display:none;">
+        <label>Por que não foi finalizada?</label>
+        <input id="motivoNaoFinalizada" type="text" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="section-title">Especificações da atividade</div>
+    <div class="grid-2">
       <div>
         <label>Tipo</label>
         <select id="tipoAtividade">
-          <option value="Limpeza">Limpeza</option>
-          <option value="Descarte">Descarte</option>
+          <option value="">Selecione...</option>
           <option value="Sucção">Sucção</option>
+          <option value="Descarte">Descarte</option>
+          <option value="Hidrojato">Hidrojato</option>
         </select>
       </div>
       <div>
         <label>Óleo</label>
         <select id="oleo">
-          <option value="Não">Não</option>
+          <option value="">Selecione...</option>
           <option value="Sim">Sim</option>
+          <option value="Não">Não</option>
         </select>
       </div>
       <div id="boxQuantidade" style="display:none;">
-        <label>Quantidade de Óleo</label>
-        <input id="qtdOleo" type="text" placeholder="Ex: 500L">
+        <label>Quantidade (se tiver óleo)</label>
+        <input id="quantidade" type="text" placeholder="Ex.: 500 L" autocomplete="off">
       </div>
     </div>
 
-    <div id="boxDescarte" style="display:none;">
-        <label>Local de Descarte</label>
-        <select id="localDescarte">
-            <option value="IBCs">IBCs</option>
-            <option value="Outros">Outros...</option>
-        </select>
-        <input id="localDescarteOutros" type="text" placeholder="Especifique..." style="display:none; margin-top:10px;">
+    <div id="boxDescartes" style="display:none; margin-top:8px;">
+      <label>Onde foi descartado?</label>
+      <select id="ondeDescartadoTipo">
+        <option value="">Selecione...</option>
+        <option value="IBCs">IBCs</option>
+        <option value="Outros">Outros</option>
+      </select>
+      <div id="boxOndeOutros" style="display:none; margin-top:8px;">
+        <input id="ondeDescartadoTexto" type="text" placeholder="Descreva o local (ex.: lago, caixa, tanque...)" autocomplete="off">
+      </div>
     </div>
 
-    <div class="section-title">Fotos (Máx 5)</div>
-    <button class="btn-marcar" type="button" onclick="document.getElementById('inputFotos').click()">📸 Adicionar Fotos</button>
-    <input type="file" id="inputFotos" accept="image/*" multiple style="display:none">
+    <div class="section-title">Fotos</div>
+    <div style="display:flex;gap:10px;align-items:center;margin-top:6px;flex-wrap:wrap;">
+      <button id="btnAddFoto" class="btn" type="button">Adicionar foto</button>
+      <input id="inputFotos" type="file" accept="image/*" multiple style="display:none">
+      <span style="font-size:.75rem;color:var(--muted);">Máx. 5 fotos</span>
+    </div>
     <div id="imagePreview"></div>
 
-    <label>Observações</label>
-    <textarea id="observacoes" rows="3" placeholder="Algo importante..."></textarea>
+    <label style="margin-top:16px;">Observações</label>
+    <textarea id="observacoes" placeholder="Algo importante sobre a atividade..." autocomplete="off"></textarea>
 
-    <div class="grid-2" style="margin-top:20px;">
-        <button class="btn-main" onclick="enviarRelatorio()">Salvar Relatório</button>
-        <button class="btn-main" style="background:var(--muted);" onclick="limparTudo()">Limpar Campos</button>
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button id="btnSalvar" class="btn" type="button">Salvar relatório</button>
+      <button id="btnLimpar" class="btn btn-sec" type="button">Limpar campos</button>
     </div>
   </div>
 </main>
 
-<footer>© 2025 RSS3 - Sistema Integrado de Campo</footer>
+<footer>
+  © 2025 | Relatórios de Campo — RSS3
+</footer>
 
+<div id="toast" class="toast"></div>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-
 <script>
-// CONFIG FIREBASE
+// ==========================================================
+// CONFIGURAÇÃO FIREBASE
+// ==========================================================
 const firebaseConfig = {
   apiKey: "AIzaSyCAfBANhkMec6TCGCO9JwrvOB79RbyLw8I",
   authDomain: "relatorio-rss3-15896.firebaseapp.com",
   projectId: "relatorio-rss3-15896",
   storageBucket: "relatorio-rss3-15896.firebasestorage.app",
   messagingSenderId: "905086909082",
-  appId: "1:905086909082:web:7535afa8dddbd7b691fd23"
+  appId: "1:905086909082:web:7535afa8dddbd7b691fd23",
+  measurementId: "G-EPGW3FGXX5"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// MODO NOTURNO
-const themeBtn = document.getElementById("themeToggle");
-themeBtn.onclick = () => {
+document.addEventListener("DOMContentLoaded", function() {
+  
+  /* ===== THEME ===== */
+  const themeToggle = document.getElementById("themeToggle");
+  if(localStorage.getItem("tema") === "dark"){
+    document.body.classList.add("dark");
+    themeToggle.textContent = "☀️";
+  }
+  themeToggle.onclick = () => {
     document.body.classList.toggle("dark");
-    themeBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
-};
+    const dark = document.body.classList.contains("dark");
+    themeToggle.textContent = dark ? "☀️" : "🌙";
+    localStorage.setItem("tema", dark ? "dark" : "light");
+  };
 
-// MÁSCARA DE HORÁRIO (0800 -> 08:00)
-document.querySelectorAll('.time-input').forEach(el => {
-    el.oninput = (e) => {
-        let v = e.target.value.replace(/\D/g, "");
-        if (v.length === 4) e.target.value = v.slice(0, 2) + ":" + v.slice(2);
-        else e.target.value = v;
+  /* ===== TOAST ===== */
+  const toastEl = document.getElementById("toast");
+  function showToast(msg, color){
+    toastEl.textContent = msg;
+    toastEl.style.background = color || "#111827";
+    toastEl.classList.add("show");
+    setTimeout(() => toastEl.classList.remove("show"), 2800);
+  }
+
+  /* ===== HELPERS ===== */
+  function getDeviceId(){
+    let id = localStorage.getItem("deviceId_relatorios");
+    if(!id){
+      id = "dev-" + Math.random().toString(36).slice(2,10);
+      localStorage.setItem("deviceId_relatorios", id);
+    }
+    return id;
+  }
+  function getOperadorIdFixo(){
+    let id = localStorage.getItem("operadorIdFixo_relatorios");
+    if(!id){
+      id = "op-" + Math.random().toString(36).slice(2,10);
+      localStorage.setItem("operadorIdFixo_relatorios", id);
+    }
+    return id;
+  }
+
+  function compressImage(base64Str) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = base64Str;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 800;
+        const MAX_HEIGHT = 600;
+        let width = img.width;
+        let height = img.height;
+        if (width > height) {
+          if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+        } else {
+          if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+        }
+        canvas.width = width; canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', 0.7));
+      };
+    });
+  }
+
+  /* ===== RASCUNHO & ESTADO ===== */
+  const DRAFT_KEY = "relatorioCampo_rascunho";
+  let numeroPtAtual = null;
+  let fotosSelecionadas = [];
+
+  function $(id){ return document.getElementById(id); }
+
+  function saveDraft(){
+    try {
+      const draft = {
+        numeroPtAtual,
+        numeroPt: $("numeroPt").value,
+        data: $("data").value,
+        equipamento: $("equipamento").value,
+        placaSelect: $("placaSelect").value,
+        placaTexto: $("placaTexto").value,
+        local: $("local").value,
+        tag: $("tag").value,
+        solicitante: $("solicitante").value,
+        emitAbertura: $("emitAbertura").value,
+        emitEncerramento: $("emitEncerramento").value,
+        operadorSelect: $("operadorSelect").value,
+        operadorTexto: $("operadorTexto").value,
+        ajudante: $("ajudante").value,
+        tipoServico: $("tipoServico").value,
+        tipoAtividade: $("tipoAtividade").value,
+        oleo: $("oleo").value,
+        quantidade: $("quantidade").value,
+        encerramentoPt: $("encerramentoPt").value,
+        motivoNaoFinalizada: $("motivoNaoFinalizada").value,
+        ondeDescartadoTipo: $("ondeDescartadoTipo").value,
+        ondeDescartadoTexto: $("ondeDescartadoTexto").value,
+        horarios: {
+          ddsChecklist: $("h_ddsChecklist").value,
+          disposicao: $("h_disposicao").value,
+          chegada: $("h_chegada").value,
+          liberacaoPT: $("h_liberacaoPT").value,
+          inicio: $("h_inicio").value,
+          inicioIntervalo: $("h_inicioIntervalo").value,
+          fimIntervalo: $("h_fimIntervalo").value,
+          fim: $("h_fim").value,
+          trocaTurno: $("h_trocaTurno").value
+        },
+        observacoes: $("observacoes").value,
+        fotos: fotosSelecionadas
+      };
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    } catch(e) { console.warn("Erro rascunho:", e); }
+  }
+
+  function loadDraft(){
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if(!raw) return false;
+      const d = JSON.parse(raw);
+      if(d.numeroPt) $("numeroPt").value = d.numeroPt;
+      if(d.numeroPtAtual) numeroPtAtual = d.numeroPtAtual;
+      if(d.data) $("data").value = d.data;
+      if(d.equipamento) $("equipamento").value = d.equipamento;
+      if(d.placaSelect){
+        $("placaSelect").value = d.placaSelect;
+        if(d.placaSelect === "outra") $("placaTexto").style.display = "block";
+      }
+      if(d.placaTexto) $("placaTexto").value = d.placaTexto;
+      if(d.local) $("local").value = d.local;
+      if(d.tag) $("tag").value = d.tag;
+      if(d.solicitante) $("solicitante").value = d.solicitante;
+      if(d.emitAbertura) $("emitAbertura").value = d.emitAbertura;
+      if(d.emitEncerramento) $("emitEncerramento").value = d.emitEncerramento;
+      if(d.operadorSelect){
+        $("operadorSelect").value = d.operadorSelect;
+        if(d.operadorSelect === "outra") $("operadorTexto").style.display = "block";
+      }
+      if(d.operadorTexto) $("operadorTexto").value = d.operadorTexto;
+      if(d.ajudante) $("ajudante").value = d.ajudante;
+      if(d.tipoServico) $("tipoServico").value = d.tipoServico;
+      if(d.tipoAtividade) $("tipoAtividade").value = d.tipoAtividade;
+      if(d.oleo){
+        $("oleo").value = d.oleo;
+        if(d.oleo === "Sim") $("boxQuantidade").style.display = "block";
+      }
+      if(d.quantidade) $("quantidade").value = d.quantidade;
+      if(d.encerramentoPt){
+        $("encerramentoPt").value = d.encerramentoPt;
+        if(d.encerramentoPt === "Não") $("boxMotivoNao").style.display = "block";
+      }
+      if(d.motivoNaoFinalizada) $("motivoNaoFinalizada").value = d.motivoNaoFinalizada;
+      if(d.ondeDescartadoTipo) $("ondeDescartadoTipo").value = d.ondeDescartadoTipo;
+      if(d.ondeDescartadoTexto) $("ondeDescartadoTexto").value = d.ondeDescartadoTexto;
+      if(d.horarios){
+        $("h_ddsChecklist").value = d.horarios.ddsChecklist || "";
+        $("h_disposicao").value = d.horarios.disposicao || "";
+        $("h_chegada").value = d.horarios.chegada || "";
+        $("h_liberacaoPT").value = d.horarios.liberacaoPT || "";
+        $("h_inicio").value = d.horarios.inicio || "";
+        $("h_inicioIntervalo").value = d.horarios.inicioIntervalo || "";
+        $("h_fimIntervalo").value = d.horarios.fimIntervalo || "";
+        $("h_fim").value = d.horarios.fim || "";
+        $("h_trocaTurno").value = d.horarios.trocaTurno || "";
+      }
+      fotosSelecionadas = Array.isArray(d.fotos) ? d.fotos : [];
+      renderPreview();
+      updateDescartesBoxVisibility();
+      if($("ondeDescartadoTipo").value === "Outros") $("boxOndeOutros").style.display = "block";
+      return true;
+    } catch(e) { return false; }
+  }
+
+  /* ===== LOGICA DE CAMPOS ===== */
+  async function gerarNumeroPt(){
+    try {
+      const docRef = db.collection("config").doc("contadorPTCampo");
+      const prox = await db.runTransaction(async(tx) => {
+        const snap = await tx.get(docRef);
+        let atual = 99999;
+        if(snap.exists && typeof snap.data().valor === "number"){ atual = snap.data().valor; }
+        const novo = atual + 1;
+        tx.set(docRef, {valor: novo});
+        return novo;
+      });
+      numeroPtAtual = prox;
+      if(!$("numeroPt").value) $("numeroPt").value = prox;
+      saveDraft();
+    } catch(err) { console.error("Erro PT:", err); }
+  }
+
+  function setDataHoje(){
+    const hoje = new Date();
+    $("data").value = hoje.toISOString().split('T')[0];
+  }
+
+  $("placaSelect").onchange = () => {
+    $("placaTexto").style.display = $("placaSelect").value === "outra" ? "block" : "none";
+    if($("placaSelect").value !== "outra") $("placaTexto").value = "";
+    saveDraft();
+  };
+
+  $("operadorSelect").onchange = () => {
+    $("operadorTexto").style.display = $("operadorSelect").value === "outra" ? "block" : "none";
+    if($("operadorSelect").value !== "outra") $("operadorTexto").value = "";
+    saveDraft();
+  };
+
+  function updateDescartesBoxVisibility(){
+    const show = $("tipoAtividade").value === "Descarte" && $("oleo").value === "Sim";
+    $("boxDescartes").style.display = show ? "block" : "none";
+  }
+
+  $("oleo").onchange = () => {
+    $("boxQuantidade").style.display = $("oleo").value === "Sim" ? "block" : "none";
+    updateDescartesBoxVisibility();
+    saveDraft();
+  };
+
+  $("tipoAtividade").onchange = () => { updateDescartesBoxVisibility(); saveDraft(); };
+  
+  $("ondeDescartadoTipo").onchange = () => {
+    $("boxOndeOutros").style.display = $("ondeDescartadoTipo").value === "Outros" ? "block" : "none";
+    saveDraft();
+  };
+
+  $("encerramentoPt").onchange = () => {
+    $("boxMotivoNao").style.display = $("encerramentoPt").value === "Não" ? "block" : "none";
+    saveDraft();
+  };
+
+  /* ===== HORARIOS & MASCARA ===== */
+  document.querySelectorAll('button[data-horario]').forEach(btn => {
+    btn.onclick = () => {
+      const agora = new Date();
+      $(btn.getAttribute("data-horario")).value = String(agora.getHours()).padStart(2,"0") + ":" + String(agora.getMinutes()).padStart(2,"0");
+      saveDraft();
     };
+  });
+
+  document.querySelectorAll(".time-input").forEach(el => {
+    el.oninput = () => {
+      let v = el.value.replace(/\D/g,"").slice(0,4);
+      if(v.length > 2) v = v.slice(0,2) + ":" + v.slice(2);
+      el.value = v;
+    };
+  });
+
+  /* ===== GESTÃO DE FOTOS (COM EXCLUIR) ===== */
+  const btnAddFoto = $("btnAddFoto");
+  const inputFotos = $("inputFotos");
+  const imagePreview = $("imagePreview");
+
+  btnAddFoto.onclick = () => inputFotos.click();
+
+  inputFotos.onchange = (e) => {
+    const files = Array.from(e.target.files || []);
+    files.slice(0, 5 - fotosSelecionadas.length).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = async ev => {
+        const compressed = await compressImage(ev.target.result);
+        fotosSelecionadas.push(compressed);
+        renderPreview();
+        saveDraft();
+      };
+      reader.readAsDataURL(file);
+    });
+    inputFotos.value = "";
+  };
+
+  function removerFoto(index) {
+    fotosSelecionadas.splice(index, 1);
+    renderPreview();
+    saveDraft();
+  }
+
+  function renderPreview(){
+    imagePreview.innerHTML = "";
+    fotosSelecionadas.forEach((src, i) => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "thumb-wrapper";
+
+      const img = document.createElement("img");
+      img.src = src;
+      img.className = "thumb-img";
+      img.onclick = () => abrirZoom(src);
+
+      const btnDel = document.createElement("button");
+      btnDel.innerHTML = "×";
+      btnDel.className = "btn-del-foto";
+      btnDel.title = "Excluir foto";
+      btnDel.onclick = (e) => { e.stopPropagation(); removerFoto(i); };
+
+      wrapper.appendChild(img);
+      wrapper.appendChild(btnDel);
+      imagePreview.appendChild(wrapper);
+    });
+  }
+
+  function abrirZoom(src){
+    const ov = document.createElement("div");
+    ov.style = "position:fixed;inset:0;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:9999;cursor:zoom-out;";
+    const big = document.createElement("img");
+    big.src = src; big.style = "max-width:95%;max-height:95%;border-radius:4px;";
+    ov.appendChild(big);
+    ov.onclick = () => ov.remove();
+    document.body.appendChild(ov);
+  }
+
+  /* ===== SALVAR & LIMPAR ===== */
+  function limparCamposRelatorio(){
+    document.querySelectorAll("input,textarea,select").forEach(el => { if(el.type !== "date") el.value = ""; });
+    fotosSelecionadas = [];
+    renderPreview();
+    localStorage.removeItem(DRAFT_KEY);
+    setDataHoje();
+    gerarNumeroPt();
+  }
+
+  $("btnLimpar").onclick = () => { if(confirm("Limpar tudo?")) limparCamposRelatorio(); };
+
+  $("btnSalvar").onclick = async () => {
+    const pt = $("numeroPt").value.trim();
+    if(!pt || !$("data").value || !$("local").value || !$("operadorSelect").value){
+      alert("Preencha os dados obrigatórios."); return;
+    }
+
+    const payload = {
+      numeroPT: pt,
+      data: $("data").value,
+      equipamento: $("equipamento").value,
+      placa: $("placaSelect").value === "outra" ? $("placaTexto").value : $("placaSelect").value,
+      local: $("local").value,
+      tag: $("tag").value,
+      solicitante: $("solicitante").value,
+      operador: $("operadorSelect").value === "outra" ? $("operadorTexto").value : $("operadorSelect").value,
+      ajudante: $("ajudante").value,
+      tipoServico: $("tipoServico").value,
+      especificacoes: { 
+        tipoAtividade: $("tipoAtividade").value, 
+        oleo: $("oleo").value, 
+        quantidade: $("quantidade").value 
+      },
+      horarios: {
+        inicio: $("h_inicio").value,
+        fim: $("h_fim").value
+      },
+      fotos: fotosSelecionadas,
+      criadoEm: firebase.firestore.FieldValue.serverTimestamp(),
+      deviceId: getDeviceId()
+    };
+
+    try {
+      $("btnSalvar").disabled = true;
+      $("btnSalvar").textContent = "Enviando...";
+      await db.collection("relatoriosCampo").add(payload);
+      showToast("✅ Enviado com sucesso!", "#10b981");
+      limparCamposRelatorio();
+    } catch(e) {
+      showToast("❌ Erro ao salvar", "#ef4444");
+    } finally {
+      $("btnSalvar").disabled = false;
+      $("btnSalvar").textContent = "Salvar relatório";
+    }
+  };
+
+  /* ===== INIT ===== */
+  if(!loadDraft()){ setDataHoje(); gerarNumeroPt(); }
+  
+  // Autosave nos inputs
+  document.querySelectorAll("input, select, textarea").forEach(el => {
+    el.onchange = saveDraft;
+    el.oninput = saveDraft;
+  });
+
 });
-
-// LOGICA DE CAMPOS DINÂMICOS
-document.getElementById("oleo").onchange = (e) => {
-    document.getElementById("boxQuantidade").style.display = e.target.value === "Sim" ? "block" : "none";
-    verificarDescarte();
-};
-document.getElementById("tipoAtividade").onchange = verificarDescarte;
-
-function verificarDescarte() {
-    const oleo = document.getElementById("oleo").value;
-    const tipo = document.getElementById("tipoAtividade").value;
-    document.getElementById("boxDescarte").style.display = (oleo === "Sim" && tipo === "Descarte") ? "block" : "none";
-}
-
-document.getElementById("localDescarte").onchange = (e) => {
-    document.getElementById("localDescarteOutros").style.display = e.target.value === "Outros" ? "block" : "none";
-};
-
-// FUNÇÕES AUXILIARES
-function marcarAgora(id) {
-    const d = new Date();
-    document.getElementById(id).value = String(d.getHours()).padStart(2,'0') + ":" + String(d.getMinutes()).padStart(2,'0');
-}
-
-function preencherCampo(id, val) { document.getElementById(id).value = val; }
-
-// FOTOS
-let listaFotos = [];
-document.getElementById("inputFotos").onchange = (e) => {
-    const files = Array.from(e.target.files);
-    files.slice(0, 5 - listaFotos.length).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-            listaFotos.push(ev.target.result);
-            renderFotos();
-        };
-        reader.readAsDataURL(file);
-    });
-};
-
-function renderFotos() {
-    const p = document.getElementById("imagePreview");
-    p.innerHTML = "";
-    listaFotos.forEach((f, i) => {
-        p.innerHTML += `<div class="thumb-wrapper"><img src="${f}" class="thumb-img"><button class="btn-del-foto" onclick="listaFotos.splice(${i},1);renderFotos()">×</button></div>`;
-    });
-}
-
-// AUDITORIA E NOTIFICAÇÕES
-const inputFiltro = document.getElementById("dataFiltro");
-inputFiltro.value = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-
-async function verificarPendenciasReal() {
-    const dataAlvo = inputFiltro.value;
-    const lista = document.getElementById("listaNotificacoes");
-    const ignoradas = JSON.parse(localStorage.getItem('notif_ignoradas') || "[]");
-    
-    document.getElementById("statData").textContent = dataAlvo.split('-').reverse().join('/');
-    lista.innerHTML = "Sincronizando...";
-
-    try {
-        const snap = await db.collection("relatoriosCampo").where("data", "==", dataAlvo).get();
-        const rels = snap.docs.map(d => d.data());
-        lista.innerHTML = "";
-        let pends = 0;
-
-        // Regra Turnos (Simples)
-        const turnos = [
-            {n: "Turno 1", h: "07:30"},
-            {n: "Turno 2", h: "14:40"},
-            {n: "Turno 3", h: "23:40"}
-        ];
-
-        turnos.forEach(t => {
-            const id = `t-${t.n}-${dataAlvo}`;
-            if (!ignoradas.includes(id)) {
-                const existe = rels.some(r => (r.horarios?.inicio || "").startsWith(t.h.split(':')[0]));
-                if (!existe) {
-                    gerarCard(id, `Falta cobertura: ${t.n}`, `Nenhum relatório às ${t.h}`, "urgente");
-                    pends++;
-                }
-            }
-        });
-
-        document.getElementById("statEnviados").textContent = rels.length;
-        document.getElementById("statPendencias").textContent = pends;
-    } catch(e) { console.error(e); }
-}
-
-function gerarCard(id, tit, msg, cls) {
-    const div = document.createElement("div");
-    div.className = `card-notif ${cls}`;
-    div.innerHTML = `<button class="btn-excluir-notif" onclick="ignorarNotif('${id}', this)">×</button><b>${tit}</b><p>${msg}</p>`;
-    document.getElementById("listaNotificacoes").prepend(div);
-}
-
-function ignorarNotif(id, btn) {
-    const ign = JSON.parse(localStorage.getItem('notif_ignoradas') || "[]");
-    ign.push(id);
-    localStorage.setItem('notif_ignoradas', JSON.stringify(ign));
-    btn.parentElement.remove();
-}
-
-// SALVAR RELATÓRIO
-async function enviarRelatorio() {
-    const pt = document.getElementById("numeroPt").value;
-    const data = {
-        numeroPt: pt,
-        data: document.getElementById("dataRelatorio").value,
-        operador: document.getElementById("operador").value,
-        horarios: { inicio: document.getElementById("h_inicio").value, fim: document.getElementById("h_fim").value },
-        fotos: listaFotos,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    };
-    
-    try {
-        await db.collection("relatoriosCampo").add(data);
-        alert("Salvo!");
-        location.reload();
-    } catch(e) { alert("Erro!"); }
-}
-
-// AUTO GERAR PT
-async function gerarPt() {
-    const d = await db.collection("config").doc("contador").get();
-    let num = (d.exists ? d.data().val : 100000) + 1;
-    document.getElementById("numeroPt").value = num;
-}
-
-gerarPt();
-verificarPendenciasReal();
 </script>
 </body>
 </html>
