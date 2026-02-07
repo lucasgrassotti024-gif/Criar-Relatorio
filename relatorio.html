@@ -1102,16 +1102,9 @@ setTimeout(syncOfflineQueue, 3000);
 
   /* ===== Init (mantive) ===== */
   (function init(){
+    setDataHoje();
+gerarNumeroPt();
     renderPreview(); // caso tenha fotos
-    const temDraft = loadDraft();
-    if(!temDraft){
-      setDataHoje();
-      gerarNumeroPt();
-    }else{
-      if(!$("numeroPt").value){
-        gerarNumeroPt();
-      }
-    }
   })();
 
 }); // Fim do DOMContentLoaded
