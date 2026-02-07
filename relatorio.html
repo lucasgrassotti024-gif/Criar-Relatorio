@@ -319,14 +319,12 @@ const db = firebase.firestore();
   // ================================
 // FIRESTORE OFFLINE PERSISTENCE
 // ================================
-db.enablePersistence().catch((err) => {
-  console.warn("⚠️ Offline persistence desativada:", err.code);
-});
+db.enablePersistence()
   .then(() => {
     console.log("🔥 Firestore offline persistence ATIVADO");
   })
   .catch((err) => {
-    console.warn("⚠️ Offline persistence:", err);
+    console.warn("⚠️ Offline persistence desativada:", err.code);
   });
 
 
