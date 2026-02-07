@@ -1036,7 +1036,7 @@ if(!navigator.onLine){
   console.error("❌ ERRO FINAL AO SALVAR:", err.code || err.message || err);
   showToast("Erro ao salvar relatório. Detalhes no console.", "#dc2626");
 }
-    }finally{
+  finally{
       btnSalvar.disabled=false;
       btnSalvar.textContent="Salvar relatório";
     }
