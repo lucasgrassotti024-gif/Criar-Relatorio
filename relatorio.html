@@ -319,7 +319,9 @@ const db = firebase.firestore();
   // ================================
 // FIRESTORE OFFLINE PERSISTENCE
 // ================================
-db.enablePersistence({ synchronizeTabs: true })
+db.enablePersistence().catch((err) => {
+  console.warn("⚠️ Offline persistence desativada:", err.code);
+});
   .then(() => {
     console.log("🔥 Firestore offline persistence ATIVADO");
   })
@@ -1003,8 +1005,19 @@ if(!navigator.onLine){
   addToOfflineQueue(payload);
   showToast("📴 Sem internet. Relatório salvo OFFLINE e será sincronizado automaticamente.", "#eab308");
 } else {
+  try {
   await db.collection("relatoriosCampo").add(payload);
   showToast("✅ Relatório salvo com sucesso!", "#10b981");
+} catch (fireErr) {
+  console.error("🔥 Firestore erro real:", fireErr);
+
+  // fallback offline garantido
+  addToOfflineQueue(payload);
+  showToast(
+    "⚠️ Erro ao enviar. Relatório salvo localmente e será sincronizado.",
+    "#f59e0b"
+  );
+}
 }
 
 
@@ -1022,8 +1035,9 @@ if(!navigator.onLine){
       }
 
     }catch(err){
-      console.error("Erro ao salvar relatório:",err);
-      showToast("Erro ao salvar relatório. Verifique a conexão.", "#dc2626");
+  console.error("❌ ERRO FINAL AO SALVAR:", err.code || err.message || err);
+  showToast("Erro ao salvar relatório. Detalhes no console.", "#dc2626");
+}
     }finally{
       btnSalvar.disabled=false;
       btnSalvar.textContent="Salvar relatório";
