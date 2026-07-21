@@ -163,11 +163,46 @@ select.classificacao{
     font-weight:700;
 }
 
+#imagePreview{
+
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:15px;
+
+}
+
+.thumb-img{
+
+    width:150px;
+    height:100px;
+    object-fit:cover;
+    border-radius:8px;
+    cursor:pointer;
+    box-shadow:0 6px 18px rgba(0,0,0,.15);
+
+}
+
+@media(max-width:700px){
+
+    .thumb-img{
+
+        width:120px;
+        height:90px;
+
+    }
+
+}
+
+select option{
+    background:#ffffff;
+    color:#000000;
+}
+    
 </style>
 </head>
 
 <body>
-
 <header>
 
 <h1>Auditoria Comportamental</h1>
@@ -175,7 +210,6 @@ select.classificacao{
 <button id="themeToggle">🌙</button>
 
 </header>
-
 <main>
 
 <div class="card">
@@ -259,11 +293,10 @@ Descrição do desvio
 </thead>
 
 <tbody id="tbodyAuditoria">
-
+    
 <tr>
 
 <td>Posição das Pessoas</td>
-
 <td>Uso correto de postura</td>
 
 <td>
@@ -271,89 +304,65 @@ Descrição do desvio
 <select class="classificacao">
 
 <option></option>
-
 <option>Seguro</option>
-
 <option>Desvio</option>
-
 <option>Positivo</option>
 
 </select>
-
 </td>
-
 <td>
 
 <textarea></textarea>
 
 </td>
-
 </tr>
-
 <tr>
 
 <td>Ordem e Limpeza</td>
-
 <td>Área organizada</td>
-
+    
 <td>
 
 <select class="classificacao">
 
 <option></option>
-
 <option>Seguro</option>
-
 <option>Desvio</option>
-
 <option>Positivo</option>
 
 </select>
-
 </td>
-
 <td>
 
 <textarea></textarea>
 
 </td>
-
 </tr>
-
 <tr>
 
 <td>Ferramentas</td>
-
 <td>Ferramenta adequada</td>
-
+    
 <td>
 
 <select class="classificacao">
 
 <option></option>
-
 <option>Seguro</option>
-
 <option>Desvio</option>
-
 <option>Positivo</option>
 
 </select>
-
 </td>
-
 <td>
 
 <textarea></textarea>
 
 </td>
-
 </tr>
-
 <tr>
 
 <td>Procedimentos</td>
-
 <td>Execução conforme procedimento</td>
 
 <td>
@@ -361,29 +370,21 @@ Descrição do desvio
 <select class="classificacao">
 
 <option></option>
-
 <option>Seguro</option>
-
 <option>Desvio</option>
-
 <option>Positivo</option>
 
 </select>
-
 </td>
-
 <td>
 
 <textarea></textarea>
 
 </td>
-
 </tr>
-
 <tr>
 
 <td>EPI</td>
-
 <td>Uso correto dos EPIs</td>
 
 <td>
@@ -391,31 +392,22 @@ Descrição do desvio
 <select class="classificacao">
 
 <option></option>
-
 <option>Seguro</option>
-
 <option>Desvio</option>
-
 <option>Positivo</option>
 
 </select>
-
 </td>
-
 <td>
 
 <textarea></textarea>
 
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
-
 </div>
-
+    
 <div class="section">
 
 <h2>Comportamentos seguros encontrados</h2>
@@ -424,14 +416,42 @@ Descrição do desvio
 
 </div>
 
+    <div class="section">
+
+    <h2>📷 Evidências Fotográficas</h2>
+
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+
+        <button
+            id="addImage"
+            type="button"
+            class="btn"
+            style="margin-top:0;">
+
+            Adicionar Foto
+
+        </button>
+
+        <input
+            id="inputImage"
+            type="file"
+            accept="image/*"
+            capture="environment"
+            multiple
+            style="display:none;">
+
+    </div>
+
+    <div id="imagePreview"></div>
+
+</div>
+
 <button class="btn" id="btnSalvar">
 
 Salvar Auditoria
 
 </button>
-
 </div>
-
 </main>
 
 
@@ -455,8 +475,65 @@ firebase.initializeApp(firebaseConfig);
 
 const db=firebase.firestore();
 
-db.enablePersistence().catch(()=>{});
+let imagensSelecionadas=[];
 
+const addImage=document.getElementById("addImage");
+const inputImage=document.getElementById("inputImage");
+const imagePreview=document.getElementById("imagePreview");
+
+   function renderPreview(){
+
+    imagePreview.innerHTML="";
+    imagensSelecionadas.forEach((src,index)=>{
+
+        const img=document.createElement("img");
+
+        img.src=src;
+        img.className="thumb-img";
+        img.onclick=()=>{
+
+            const overlay=document.createElement("div");
+
+            overlay.style.position="fixed";
+            overlay.style.inset="0";
+            overlay.style.background="rgba(0,0,0,.85)";
+            overlay.style.display="flex";
+            overlay.style.alignItems="center";
+            overlay.style.justifyContent="center";
+            overlay.style.zIndex="9999";
+
+            const grande=document.createElement("img");
+
+            grande.src=src;
+            grande.style.maxWidth="90%";
+            grande.style.maxHeight="90%";
+            grande.style.borderRadius="12px";
+
+            overlay.appendChild(grande);
+            overlay.onclick=()=>overlay.remove();
+            document.body.appendChild(overlay);
+  };
+
+        imagePreview.appendChild(img);
+ });}
+
+addImage.onclick=()=>{
+    inputImage.click();
+};
+
+inputImage.onchange=e=>{
+    [...e.target.files].forEach(file=>{
+
+        const reader=new FileReader();
+
+        reader.onload=ev=>{
+            imagensSelecionadas.push(ev.target.result);
+            renderPreview(); };
+        reader.readAsDataURL(file);  });
+    inputImage.value=""; };
+    
+
+db.enablePersistence().catch(()=>{});
 const themeToggle=document.getElementById("themeToggle");
 
 if(localStorage.getItem("tema")=="dark"){
@@ -467,258 +544,151 @@ if(localStorage.getItem("tema")=="dark"){
 themeToggle.onclick=()=>{
 
     document.body.classList.toggle("dark");
-
     if(document.body.classList.contains("dark")){
-
         localStorage.setItem("tema","dark");
-
         themeToggle.innerHTML="☀️";
 
     }else{
 
         localStorage.setItem("tema","light");
-
         themeToggle.innerHTML="🌙";
-
-    }
-
-};
+ }};
 
 const DRAFT="auditoria_rascunho";
-
 function salvarRascunho(){
 
     const dados={
 
         auditor:auditor.value,
-
         equipe:equipe.value,
-
         local:local.value,
-
         contrato:contrato.value,
-
         pessoas:pessoas.value,
-
         data:data.value,
-
         comportamento:comportamentos.value,
-
         status:document.querySelector("input[name=status]:checked")?.parentElement.innerText||"",
-
         linhas:[]
-
-    };
+ };
 
     document.querySelectorAll("#tbodyAuditoria tr").forEach(tr=>{
 
         dados.linhas.push({
-
             classe:tr.cells[0].innerText,
-
             subclasse:tr.cells[1].innerText,
-
             classificacao:tr.querySelector("select").value,
-
             descricao:tr.querySelector("textarea").value
+  }); });
 
-        });
-
-    });
-
-    localStorage.setItem(DRAFT,JSON.stringify(dados));
-
-}
+    localStorage.setItem(DRAFT,JSON.stringify(dados));}
 
 function carregarRascunho(){
 
     const raw=localStorage.getItem(DRAFT);
 
     if(!raw) return;
-
     const dados=JSON.parse(raw);
-
     auditor.value=dados.auditor||"";
-
     equipe.value=dados.equipe||"";
-
     local.value=dados.local||"";
-
     contrato.value=dados.contrato||"";
-
     pessoas.value=dados.pessoas||"";
-
     data.value=dados.data||"";
-
     comportamentos.value=dados.comportamento||"";
-
     document.querySelectorAll("#tbodyAuditoria tr").forEach((tr,i)=>{
 
         if(!dados.linhas[i]) return;
 
         tr.querySelector("select").value=dados.linhas[i].classificacao;
-
         tr.querySelector("textarea").value=dados.linhas[i].descricao;
-
-    });
-
-}
+  });}
 
 document.querySelectorAll("input,textarea,select").forEach(campo=>{
 
     campo.addEventListener("input",salvarRascunho);
-
     campo.addEventListener("change",salvarRascunho);
-
 });
 
 function toast(msg){
-
-    alert(msg);
-
-}
+    alert(msg);}
 
 function gerarObjeto(){
-
+    
     const linhas=[];
-
     document.querySelectorAll("#tbodyAuditoria tr").forEach(tr=>{
 
         linhas.push({
-
             classe:tr.cells[0].innerText,
-
             subclasse:tr.cells[1].innerText,
-
             classificacao:tr.querySelector("select").value,
-
             descricao:tr.querySelector("textarea").value
-
-        });
-
-    });
+      });});
 
     return{
 
         auditor:auditor.value,
-
         equipe:equipe.value,
-
         local:local.value,
-
         contrato:contrato.value,
-
         pessoas:pessoas.value,
-
         data:data.value,
-
         status:document.querySelector("input[name=status]:checked")?.parentElement.innerText||"",
-
         linhas,
-
         comportamentos:comportamentos.value,
-
         criadoEm:firebase.firestore.FieldValue.serverTimestamp()
-
-    };
-
-}
+ };}
 
 btnSalvar.onclick=async()=>{
 
     if(!auditor.value){
-
         toast("Informe o auditor");
-
-        return;
-
-    }
+        return; }
 
     if(!equipe.value){
-
         toast("Informe a equipe");
-
-        return;
-
-    }
+        return; }
 
     if(!data.value){
-
         toast("Informe a data");
-
-        return;
-
-    }
-
+        return; }
+    
     const objeto=gerarObjeto();
 
     try{
-
         await db.collection("auditorias").add(objeto);
-
         localStorage.removeItem(DRAFT);
-
         toast("Auditoria salva.");
-
-        limparFormulario();
-
-    }
+        limparFormulario();  }
 
     catch(e){
-
         console.log(e);
-
         toast("Erro ao salvar.");
-
-    }
-
-};
+    }};
 
 function limparFormulario(){
-
+    
     document.querySelectorAll("input").forEach(i=>{
-
+        
         if(i.type=="radio"){
-
             i.checked=false;
-
-            return;
-
-        }
+            return;}
 
         if(i.type=="date"){
-
             i.value="";
-
-            return;
-
-        }
-
+            return;}
         i.value="";
-
     });
 
     document.querySelectorAll("textarea").forEach(t=>t.value="");
-
-    document.querySelectorAll("select").forEach(s=>s.selectedIndex=0);
-
-}
-
+    document.querySelectorAll("select").forEach(s=>s.selectedIndex=0);}
+    
 (function(){
 
     carregarRascunho();
 
     const hoje=new Date();
-
     if(!data.value){
-
         data.value=hoje.toISOString().substring(0,10);
-
-    }
-
-})();
-
-
+}})();
 
 // ===========================
 // CLASSES DA AUDITORIA
@@ -735,8 +705,7 @@ subclasses:[
 "Espaço confinado",
 "Bloqueio de energia",
 "Ergonomia"
-]
-},
+]},
 
 {
 classe:"Ordem, Limpeza e Organização",
@@ -745,8 +714,7 @@ subclasses:[
 "Materiais espalhados",
 "Resíduos",
 "Vazamentos"
-]
-},
+]},
 
 {
 classe:"Ferramental e Equipamentos",
@@ -755,8 +723,7 @@ subclasses:[
 "Inspeção",
 "Proteções",
 "Equipamento danificado"
-]
-},
+]},
 
 {
 classe:"Procedimentos",
@@ -765,8 +732,7 @@ subclasses:[
 "APR",
 "Permissão de Trabalho",
 "Comunicação"
-]
-},
+]},
 
 {
 classe:"EPI",
@@ -777,10 +743,7 @@ subclasses:[
 "Respirador",
 "Cinto",
 "Calçado"
-]
-}
-
-];
+]}];
 
 
 //===========================
@@ -790,15 +753,10 @@ subclasses:[
 const tbody=document.getElementById("tbodyAuditoria");
 
 tbody.innerHTML="";
-
 auditoria.forEach(grupo=>{
-
     grupo.subclasses.forEach((item,index)=>{
-
         const tr=document.createElement("tr");
-
         tr.innerHTML=`
-
         <td>
 
             ${index==0 ? grupo.classe : ""}
@@ -808,38 +766,25 @@ auditoria.forEach(grupo=>{
         <td>
 
             ${item}
-
         </td>
-
         <td>
-
             <select>
 
-                <option value=""></option>
-
-                <option>Conforme</option>
-
-                <option>Desvio</option>
-
-                <option>Positivo</option>
-
+               <option value=""></option>
+               <option>Conscientizado o colaborador / Corrigida a condição insegura</option>
+               <option>Interrompido o serviço</option>
+               <option>Solicitado a correção da condição insegura / Comunicado ao Supervisor</option>
+               
             </select>
-
         </td>
-
         <td>
 
             <textarea></textarea>
 
-        </td>
-
-        `;
+        </td>;
 
         tbody.appendChild(tr);
-
-    });
-
-});
+        });});
 
     
 </script>
