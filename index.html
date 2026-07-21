@@ -121,6 +121,17 @@ main{
 }
 .box button:hover{transform:translateY(-2px);}
 
+.botoes{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:20px;
+}
+
+.botoes button{
+    width:100%;
+}
+  
 /* FOOTER */
 footer{
   text-align:center;
@@ -149,7 +160,17 @@ footer{
       Registre as atividades de campo de forma rápida e padronizada.
       Preencha os dados da PT, horários, especificações e observações.
     </p>
-    <button id="novoRelatorioBtn" type="button">➕ Novo relatório</button>
+    <div class="botoes">
+
+  <button id="novoRelatorioBtn" type="button">
+    📋 Novo Relatório
+  </button>
+
+  <button id="novaAuditoriaBtn" type="button">
+    ✅ Nova Auditoria
+  </button>
+
+</div>
   </div>
 </main>
 
@@ -175,6 +196,11 @@ toggle.onclick=()=>{
 document.getElementById("novoRelatorioBtn").addEventListener("click",()=>{
   window.location.href = "relatorio.html";
 });
+
+document.getElementById("novaAuditoriaBtn").addEventListener("click",()=>{
+  window.location.href = "auditoria.html";
+});
+  
 </script>
 
 </body>
