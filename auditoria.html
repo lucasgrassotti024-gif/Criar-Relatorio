@@ -298,7 +298,7 @@ Descrição do desvio
 <select class="classificacao">
 
 <option></option>
-<option>Conscientizado o colaborador / Corrigida a condição insegura</option></option>
+<option>Conscientizado o colaborador / Corrigida a condição insegura</option>
 <option>Desvio</option>
 <option>Positivo</option>
 
@@ -628,6 +628,9 @@ function gerarObjeto(){
         status:document.querySelector("input[name=status]:checked")?.parentElement.innerText||"",
         linhas,
         comportamentos:comportamentos.value,
+
+        fotos: imagensSelecionadas,
+        
         criadoEm:firebase.firestore.FieldValue.serverTimestamp()
  };}
 
@@ -673,7 +676,11 @@ function limparFormulario(){
     });
 
     document.querySelectorAll("textarea").forEach(t=>t.value="");
-    document.querySelectorAll("select").forEach(s=>s.selectedIndex=0);}
+    document.querySelectorAll("select").forEach(s=>s.selectedIndex=0);
+
+    imagensSelecionadas = [];
+    imagePreview.innerHTML = "";
+    }
     
 (function(){
 
@@ -775,7 +782,7 @@ auditoria.forEach(grupo=>{
 
             <textarea></textarea>
 
-        </td>;
+        </td>`;
 
         tbody.appendChild(tr);
 
