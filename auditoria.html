@@ -304,7 +304,7 @@ Descrição do desvio
 <select class="classificacao">
 
 <option></option>
-<option>Seguro</option>
+<option>Conscientizado o colaborador / Corrigida a condição insegura</option></option>
 <option>Desvio</option>
 <option>Positivo</option>
 
@@ -314,7 +314,7 @@ Descrição do desvio
 
 <textarea></textarea>
 
-</td>
+</td>`;
 </tr>
 <tr>
 
@@ -326,9 +326,9 @@ Descrição do desvio
 <select class="classificacao">
 
 <option></option>
-<option>Seguro</option>
-<option>Desvio</option>
-<option>Positivo</option>
+<option>Conscientizado o colaborador / Corrigida a condição insegura</option>
+<option>Interrompido o serviço</option>
+<option>Solicitado a correção da condição insegura / Comunicado ao Supervisor</option>
 
 </select>
 </td>
@@ -348,9 +348,9 @@ Descrição do desvio
 <select class="classificacao">
 
 <option></option>
-<option>Seguro</option>
-<option>Desvio</option>
-<option>Positivo</option>
+<option>Conscientizado o colaborador / Corrigida a condição insegura</option>
+<option>Interrompido o serviço</option>
+<option>Solicitado a correção da condição insegura / Comunicado ao Supervisor</option>
 
 </select>
 </td>
@@ -370,9 +370,9 @@ Descrição do desvio
 <select class="classificacao">
 
 <option></option>
-<option>Seguro</option>
-<option>Desvio</option>
-<option>Positivo</option>
+<option>Conscientizado o colaborador / Corrigida a condição insegura</option>
+<option>Interrompido o serviço</option>
+<option>Solicitado a correção da condição insegura / Comunicado ao Supervisor</option>
 
 </select>
 </td>
@@ -391,10 +391,10 @@ Descrição do desvio
 
 <select class="classificacao">
 
-<option></option>
-<option>Seguro</option>
-<option>Desvio</option>
-<option>Positivo</option>
+ <option></option>
+<option>Conscientizado o colaborador / Corrigida a condição insegura</option>
+<option>Interrompido o serviço</option>
+<option>Solicitado a correção da condição insegura / Comunicado ao Supervisor</option>
 
 </select>
 </td>
@@ -768,7 +768,7 @@ auditoria.forEach(grupo=>{
             ${item}
         </td>
         <td>
-            <select>
+            <select class="classificacao">
 
                <option value=""></option>
                <option>Conscientizado o colaborador / Corrigida a condição insegura</option>
@@ -784,7 +784,12 @@ auditoria.forEach(grupo=>{
         </td>;
 
         tbody.appendChild(tr);
-        });});
+
+        tr.querySelector("select").addEventListener("change", salvarRascunho);
+        tr.querySelector("textarea").addEventListener("input", salvarRascunho);
+        
+        });
+        });
 
     
 </script>
