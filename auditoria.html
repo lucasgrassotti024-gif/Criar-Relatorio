@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Auditoria Comportamental</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --primary:#0078ff;
+    --accent:#00b4ff;
+    --bg:#f5f8fb;
+    --card:#fff;
+    --text:#1b1b1b;
+    --border:#e5e7eb;
+    --shadow:0 8px 28px rgba(0,0,0,.08);
+}
+
+.dark{
+    --bg:#0f1419;
+    --card:#1b2228;
+    --text:#edf2f7;
+    --border:#2d3748;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,sans-serif;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+}
+
+header{
+    background:var(--card);
+    box-shadow:var(--shadow);
+    border-bottom:1px solid var(--border);
+    padding:15px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:50;
+}
+
+header h1{
+    font-family:Outfit;
+    color:var(--primary);
+}
+
+#themeToggle{
+    width:40px;
+    height:40px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    cursor:pointer;
+    background:none;
+    font-size:18px;
+}
+
+main{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+.card{
+    background:var(--card);
+    border-radius:15px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
+    padding:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
+
+label{
+    display:block;
+    margin-bottom:5px;
+    font-weight:600;
+    font-size:14px;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background:transparent;
+    color:var(--text);
+}
+
+textarea{
+    resize:vertical;
+}
+
+.section{
+    margin-top:25px;
+}
+
+.section h2{
+    color:var(--primary);
+    margin-bottom:15px;
+    font-family:Outfit;
+}
+
+.status{
+    display:flex;
+    gap:25px;
+    margin-top:20px;
+    font-weight:600;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+th{
+    background:#0078ff;
+    color:white;
+    padding:10px;
+    font-size:13px;
+}
+
+td{
+    border:1px solid var(--border);
+    padding:8px;
+}
+
+td textarea{
+    min-height:45px;
+}
+
+select.classificacao{
+    min-width:110px;
+}
+
+.btn{
+    margin-top:25px;
+    background:linear-gradient(135deg,#0078ff,#00b4ff);
+    color:white;
+    border:none;
+    padding:13px 22px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:700;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>Auditoria Comportamental</h1>
+
+<button id="themeToggle">🌙</button>
+
+</header>
+
+<main>
+
+<div class="card">
+
+<div class="grid">
+
+<div>
+<label>Auditor</label>
+<input id="auditor">
+</div>
+
+<div>
+<label>Equipe Observada</label>
+<input id="equipe">
+</div>
+
+<div>
+<label>Local Observado</label>
+<input id="local">
+</div>
+
+<div>
+<label>Contrato</label>
+<input id="contrato">
+</div>
+
+<div>
+<label>Nº Pessoas</label>
+<input id="pessoas" type="number">
+</div>
+
+<div>
+<label>Data</label>
+<input id="data" type="date">
+</div>
+
+</div>
+
+<div class="status">
+
+<label>
+<input type="radio" name="status">
+Sem desvios
+</label>
+
+<label>
+<input type="radio" name="status">
+Com desvios
+</label>
+
+</div>
+
+<div class="section">
+
+<h2>Auditoria</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="width:180px">
+Classe
+</th>
+
+<th style="width:220px">
+Subclasse
+</th>
+
+<th style="width:120px">
+Classificação
+</th>
+
+<th>
+Descrição do desvio
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tbodyAuditoria">
+
+<tr>
+
+<td>Posição das Pessoas</td>
+
+<td>Uso correto de postura</td>
+
+<td>
+
+<select class="classificacao">
+
+<option></option>
+
+<option>Seguro</option>
+
+<option>Desvio</option>
+
+<option>Positivo</option>
+
+</select>
+
+</td>
+
+<td>
+
+<textarea></textarea>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Ordem e Limpeza</td>
+
+<td>Área organizada</td>
+
+<td>
+
+<select class="classificacao">
+
+<option></option>
+
+<option>Seguro</option>
+
+<option>Desvio</option>
+
+<option>Positivo</option>
+
+</select>
+
+</td>
+
+<td>
+
+<textarea></textarea>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Ferramentas</td>
+
+<td>Ferramenta adequada</td>
+
+<td>
+
+<select class="classificacao">
+
+<option></option>
+
+<option>Seguro</option>
+
+<option>Desvio</option>
+
+<option>Positivo</option>
+
+</select>
+
+</td>
+
+<td>
+
+<textarea></textarea>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Procedimentos</td>
+
+<td>Execução conforme procedimento</td>
+
+<td>
+
+<select class="classificacao">
+
+<option></option>
+
+<option>Seguro</option>
+
+<option>Desvio</option>
+
+<option>Positivo</option>
+
+</select>
+
+</td>
+
+<td>
+
+<textarea></textarea>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>EPI</td>
+
+<td>Uso correto dos EPIs</td>
+
+<td>
+
+<select class="classificacao">
+
+<option></option>
+
+<option>Seguro</option>
+
+<option>Desvio</option>
+
+<option>Positivo</option>
+
+</select>
+
+</td>
+
+<td>
+
+<textarea></textarea>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h2>Comportamentos seguros encontrados</h2>
+
+<textarea id="comportamentos" rows="6"></textarea>
+
+</div>
+
+<button class="btn" id="btnSalvar">
+
+Salvar Auditoria
+
+</button>
+
+</div>
+
+</main>
+
+
+
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<script>
+
+const firebaseConfig={
+    apiKey:"SUA_APIKEY",
+    authDomain:"SEU_PROJETO.firebaseapp.com",
+    projectId:"SEU_PROJETO",
+    storageBucket:"SEU_PROJETO.appspot.com",
+    messagingSenderId:"000000000",
+    appId:"APPID"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db=firebase.firestore();
+
+db.enablePersistence().catch(()=>{});
+
+const themeToggle=document.getElementById("themeToggle");
+
+if(localStorage.getItem("tema")=="dark"){
+    document.body.classList.add("dark");
+    themeToggle.innerHTML="☀️";
+}
+
+themeToggle.onclick=()=>{
+
+    document.body.classList.toggle("dark");
+
+    if(document.body.classList.contains("dark")){
+
+        localStorage.setItem("tema","dark");
+
+        themeToggle.innerHTML="☀️";
+
+    }else{
+
+        localStorage.setItem("tema","light");
+
+        themeToggle.innerHTML="🌙";
+
+    }
+
+};
+
+const DRAFT="auditoria_rascunho";
+
+function salvarRascunho(){
+
+    const dados={
+
+        auditor:auditor.value,
+
+        equipe:equipe.value,
+
+        local:local.value,
+
+        contrato:contrato.value,
+
+        pessoas:pessoas.value,
+
+        data:data.value,
+
+        comportamento:comportamentos.value,
+
+        status:document.querySelector("input[name=status]:checked")?.parentElement.innerText||"",
+
+        linhas:[]
+
+    };
+
+    document.querySelectorAll("#tbodyAuditoria tr").forEach(tr=>{
+
+        dados.linhas.push({
+
+            classe:tr.cells[0].innerText,
+
+            subclasse:tr.cells[1].innerText,
+
+            classificacao:tr.querySelector("select").value,
+
+            descricao:tr.querySelector("textarea").value
+
+        });
+
+    });
+
+    localStorage.setItem(DRAFT,JSON.stringify(dados));
+
+}
+
+function carregarRascunho(){
+
+    const raw=localStorage.getItem(DRAFT);
+
+    if(!raw) return;
+
+    const dados=JSON.parse(raw);
+
+    auditor.value=dados.auditor||"";
+
+    equipe.value=dados.equipe||"";
+
+    local.value=dados.local||"";
+
+    contrato.value=dados.contrato||"";
+
+    pessoas.value=dados.pessoas||"";
+
+    data.value=dados.data||"";
+
+    comportamentos.value=dados.comportamento||"";
+
+    document.querySelectorAll("#tbodyAuditoria tr").forEach((tr,i)=>{
+
+        if(!dados.linhas[i]) return;
+
+        tr.querySelector("select").value=dados.linhas[i].classificacao;
+
+        tr.querySelector("textarea").value=dados.linhas[i].descricao;
+
+    });
+
+}
+
+document.querySelectorAll("input,textarea,select").forEach(campo=>{
+
+    campo.addEventListener("input",salvarRascunho);
+
+    campo.addEventListener("change",salvarRascunho);
+
+});
+
+function toast(msg){
+
+    alert(msg);
+
+}
+
+function gerarObjeto(){
+
+    const linhas=[];
+
+    document.querySelectorAll("#tbodyAuditoria tr").forEach(tr=>{
+
+        linhas.push({
+
+            classe:tr.cells[0].innerText,
+
+            subclasse:tr.cells[1].innerText,
+
+            classificacao:tr.querySelector("select").value,
+
+            descricao:tr.querySelector("textarea").value
+
+        });
+
+    });
+
+    return{
+
+        auditor:auditor.value,
+
+        equipe:equipe.value,
+
+        local:local.value,
+
+        contrato:contrato.value,
+
+        pessoas:pessoas.value,
+
+        data:data.value,
+
+        status:document.querySelector("input[name=status]:checked")?.parentElement.innerText||"",
+
+        linhas,
+
+        comportamentos:comportamentos.value,
+
+        criadoEm:firebase.firestore.FieldValue.serverTimestamp()
+
+    };
+
+}
+
+btnSalvar.onclick=async()=>{
+
+    if(!auditor.value){
+
+        toast("Informe o auditor");
+
+        return;
+
+    }
+
+    if(!equipe.value){
+
+        toast("Informe a equipe");
+
+        return;
+
+    }
+
+    if(!data.value){
+
+        toast("Informe a data");
+
+        return;
+
+    }
+
+    const objeto=gerarObjeto();
+
+    try{
+
+        await db.collection("auditorias").add(objeto);
+
+        localStorage.removeItem(DRAFT);
+
+        toast("Auditoria salva.");
+
+        limparFormulario();
+
+    }
+
+    catch(e){
+
+        console.log(e);
+
+        toast("Erro ao salvar.");
+
+    }
+
+};
+
+function limparFormulario(){
+
+    document.querySelectorAll("input").forEach(i=>{
+
+        if(i.type=="radio"){
+
+            i.checked=false;
+
+            return;
+
+        }
+
+        if(i.type=="date"){
+
+            i.value="";
+
+            return;
+
+        }
+
+        i.value="";
+
+    });
+
+    document.querySelectorAll("textarea").forEach(t=>t.value="");
+
+    document.querySelectorAll("select").forEach(s=>s.selectedIndex=0);
+
+}
+
+(function(){
+
+    carregarRascunho();
+
+    const hoje=new Date();
+
+    if(!data.value){
+
+        data.value=hoje.toISOString().substring(0,10);
+
+    }
+
+})();
+
+</script>
+
+</body>
+
+</html>
+
+
+// ===========================
+// CLASSES DA AUDITORIA
+// ===========================
+
+const auditoria = [
+
+{
+classe:"Posição das Pessoas",
+subclasses:[
+"Posição de risco",
+"Linha de fogo",
+"Trabalho em altura",
+"Espaço confinado",
+"Bloqueio de energia",
+"Ergonomia"
+]
+},
+
+{
+classe:"Ordem, Limpeza e Organização",
+subclasses:[
+"Organização",
+"Materiais espalhados",
+"Resíduos",
+"Vazamentos"
+]
+},
+
+{
+classe:"Ferramental e Equipamentos",
+subclasses:[
+"Ferramenta adequada",
+"Inspeção",
+"Proteções",
+"Equipamento danificado"
+]
+},
+
+{
+classe:"Procedimentos",
+subclasses:[
+"Procedimento seguido",
+"APR",
+"Permissão de Trabalho",
+"Comunicação"
+]
+},
+
+{
+classe:"EPI",
+subclasses:[
+"Capacete",
+"Óculos",
+"Luva",
+"Respirador",
+"Cinto",
+"Calçado"
+]
+}
+
+];
+
+
+//===========================
+// MONTA TABELA
+//===========================
+
+const tbody=document.getElementById("tbodyAuditoria");
+
+tbody.innerHTML="";
+
+auditoria.forEach(grupo=>{
+
+    grupo.subclasses.forEach((item,index)=>{
+
+        const tr=document.createElement("tr");
+
+        tr.innerHTML=`
+
+        <td>
+
+            ${index==0 ? grupo.classe : ""}
+
+        </td>
+
+        <td>
+
+            ${item}
+
+        </td>
+
+        <td>
+
+            <select>
+
+                <option value=""></option>
+
+                <option>Conforme</option>
+
+                <option>Desvio</option>
+
+                <option>Positivo</option>
+
+            </select>
+
+        </td>
+
+        <td>
+
+            <textarea></textarea>
+
+        </td>
+
+        `;
+
+        tbody.appendChild(tr);
+
+    });
+
+});
