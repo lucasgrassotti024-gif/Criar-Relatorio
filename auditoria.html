@@ -438,13 +438,19 @@ Descrição do desvio
 
     <div id="imagePreview"></div>
 
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:25px;">
+
+    <button class="btn" id="btnSalvar">
+        Salvar Auditoria
+    </button>
+
+    <button class="btn" id="btnLimpar" type="button"
+        style="background:#6b7280;">
+        Limpar Campos
+    </button>
+
 </div>
-
-<button class="btn" id="btnSalvar">
-
-Salvar Auditoria
-
-</button>
+    
 </div>
 </main>
 
@@ -475,15 +481,24 @@ const addImage=document.getElementById("addImage");
 const inputImage=document.getElementById("inputImage");
 const imagePreview=document.getElementById("imagePreview");
 
-   function renderPreview(){
+  function renderPreview(){
 
     imagePreview.innerHTML="";
+
     imagensSelecionadas.forEach((src,index)=>{
+
+        const box=document.createElement("div");
+
+        box.style.position="relative";
+
+        box.style.display="inline-block";
 
         const img=document.createElement("img");
 
         img.src=src;
+
         img.className="thumb-img";
+
         img.onclick=()=>{
 
             const overlay=document.createElement("div");
@@ -504,12 +519,48 @@ const imagePreview=document.getElementById("imagePreview");
             grande.style.borderRadius="12px";
 
             overlay.appendChild(grande);
-            overlay.onclick=()=>overlay.remove();
-            document.body.appendChild(overlay);
-  };
 
-        imagePreview.appendChild(img);
- });}
+            overlay.onclick=()=>overlay.remove();
+
+            document.body.appendChild(overlay);
+
+        };
+
+        const excluir=document.createElement("button");
+
+        excluir.innerHTML="✕";
+
+        excluir.style.position="absolute";
+        excluir.style.top="-8px";
+        excluir.style.right="-8px";
+        excluir.style.width="28px";
+        excluir.style.height="28px";
+        excluir.style.borderRadius="50%";
+        excluir.style.border="none";
+        excluir.style.background="#e53935";
+        excluir.style.color="#fff";
+        excluir.style.cursor="pointer";
+        excluir.style.fontWeight="bold";
+
+        excluir.onclick=(e)=>{
+
+            e.stopPropagation();
+
+            imagensSelecionadas.splice(index,1);
+
+            renderPreview();
+
+        };
+
+        box.appendChild(img);
+
+        box.appendChild(excluir);
+
+        imagePreview.appendChild(box);
+
+    });
+
+}
 
 addImage.onclick=()=>{
     inputImage.click();
@@ -653,9 +704,15 @@ btnSalvar.onclick=async()=>{
     try{
         await db.collection("auditorias").add(objeto);
         localStorage.removeItem(DRAFT);
+        
         toast("Auditoria salva.");
-        limparFormulario();  }
 
+        setTimeout(()=>{
+
+    window.location.href="index.html";
+
+},1200);      
+}
     catch(e){
         console.log(e);
         toast("Erro ao salvar.");
@@ -792,6 +849,17 @@ auditoria.forEach(grupo=>{
         });
         });
 
+
+document.getElementById("btnLimpar").onclick=()=>{
+
+    if(confirm("Deseja limpar todos os campos?")){
+
+        limparFormulario();
+        localStorage.removeItem(DRAFT);
+
+    }
+
+};
     
 </script>
 
