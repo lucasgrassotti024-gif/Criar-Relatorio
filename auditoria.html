@@ -192,6 +192,89 @@ select.classificacao{
 
   }  
 }
+
+
+@media (max-width: 768px){
+
+    main{
+        padding:12px;
+    }
+
+    .card{
+        padding:12px;
+    }
+
+   table{
+    table-layout:auto;
+}
+
+    th,
+    td{
+        padding:6px;
+        font-size:12px;
+        word-break:break-word;
+    }
+
+    th:nth-child(1),
+    td:nth-child(1){
+        width:22%;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2){
+        width:28%;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3){
+        width:25%;
+    }
+
+    th:nth-child(4),
+    td:nth-child(4){
+        width:25%;
+    }
+
+    select,
+    textarea{
+        font-size:12px;
+        padding:6px;
+    }
+
+    textarea{
+        min-height:70px;
+    }
+
+    header h1{
+        font-size:20px;
+    }
+
+}
+
+ @media (max-width:768px){
+
+     th{
+    font-size:11px;
+    padding:4px;
+}
+
+td{
+    padding:4px;
+}
+
+select{
+    font-size:11px;
+}
+
+textarea{
+    font-size:11px;
+}
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+}
     
 </style>
 </head>
@@ -263,27 +346,17 @@ Com desvios
 <table>
 
 <thead>
-
 <tr>
 
-<th style="width:180px">
-Classe
-</th>
+    <th>Classe</th>
 
-<th style="width:220px">
-Subclasse
-</th>
+    <th>Subclasse</th>
 
-<th style="width:120px">
-Classificação
-</th>
+    <th>Classificação</th>
 
-<th>
-Descrição do desvio
-</th>
+    <th>Descrição do desvio</th>
 
 </tr>
-
 </thead>
 
 <tbody id="tbodyAuditoria">
