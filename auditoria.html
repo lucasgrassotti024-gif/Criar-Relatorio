@@ -126,8 +126,15 @@ textarea{
     font-weight:600;
 }
 
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    margin-top:20px;
+}
+
 table{
     width:100%;
+    min-width:850px;
     border-collapse:collapse;
     margin-top:20px;
 }
@@ -204,35 +211,16 @@ select.classificacao{
         padding:12px;
     }
 
-   table{
+    table{
     table-layout:auto;
-}
+    min-width:850px;
+    }
 
     th,
     td{
-        padding:6px;
-        font-size:12px;
-        word-break:break-word;
-    }
-
-    th:nth-child(1),
-    td:nth-child(1){
-        width:22%;
-    }
-
-    th:nth-child(2),
-    td:nth-child(2){
-        width:28%;
-    }
-
-    th:nth-child(3),
-    td:nth-child(3){
-        width:25%;
-    }
-
-    th:nth-child(4),
-    td:nth-child(4){
-        width:25%;
+    padding:6px;
+    font-size:12px;
+    white-space:nowrap;
     }
 
     select,
@@ -357,6 +345,8 @@ Com desvios
 <div class="section">
 
 <h2>Auditoria</h2>
+
+<div class="table-wrapper">    
 
 <table>
 
@@ -488,6 +478,9 @@ Com desvios
 </tr>
 </tbody>
 </table>
+
+</div>
+
 </div>
     
 <div class="section">
