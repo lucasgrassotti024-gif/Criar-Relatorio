@@ -926,14 +926,19 @@ btnSalvar.onclick=async()=>{
 }
 catch (e) {
 
-    console.log(e);
-    addToOfflineQueue(objeto);
-    localStorage.removeItem(DRAFT);
-    toast("Sem internet. Auditoria salva no aparelho e será enviada automaticamente.");
-    setTimeout(() => {
-        window.location.href = "index.html";
+    console.error(e);
 
-    }, 1200);
+    alert(
+        "Código: " + e.code +
+        "\n\n" +
+        "Mensagem:\n" + e.message
+    );
+
+    addToOfflineQueue(objeto);
+
+    localStorage.removeItem(DRAFT);
+
+    toast("Erro ao salvar.");
 
 }
 };    
