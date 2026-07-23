@@ -637,6 +637,18 @@ const addImage=document.getElementById("addImage");
 const inputImage=document.getElementById("inputImage");
 const imagePreview=document.getElementById("imagePreview");
 
+const auditor = document.getElementById("auditor");
+const equipe = document.getElementById("equipe");
+const local = document.getElementById("local");
+const contrato = document.getElementById("contrato");
+const pessoas = document.getElementById("pessoas");
+const data = document.getElementById("data");
+const comportamentos = document.getElementById("comportamentos");
+
+btnSalvar.onclick = async () => { alert("1"); if(!auditor.value){
+    
+const btnLimpar = document.getElementById("btnLimpar");    
+
   function renderPreview(){
 
     imagePreview.innerHTML="";
@@ -733,8 +745,6 @@ inputImage.onchange=e=>{
         reader.readAsDataURL(file);  });
     inputImage.value=""; };
     
-
-db.enablePersistence().catch(()=>{});
 
 // ================================
 // FILA OFFLINE DE AUDITORIAS
@@ -912,6 +922,8 @@ btnSalvar.onclick=async()=>{
         return; }
     
     const objeto=gerarObjeto();
+
+    alert("2");
 
     try {
 
