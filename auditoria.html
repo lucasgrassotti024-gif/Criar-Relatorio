@@ -848,55 +848,59 @@ function limparFormulario(){
 // CLASSES DA AUDITORIA
 // ===========================
 
-const auditoria = [
+const auditoria=[
 
 {
 classe:"Posição das Pessoas",
+
 subclasses:[
-"Posição de risco",
-"Linha de fogo",
-"Trabalho em altura",
-"Espaço confinado",
-"Bloqueio de energia",
-"Ergonomia"
+
+'"Linha de fogo" (Ser atingido por objetos ou equipamento)',
+'Ficar preso entre',
+'Risco de queda',
+'Risco de queimadura',
+'Risco de choque elétrico',
+'Risco Ergonômico (Postura inadequada / levantamento de peso)',
+'Risco Químico'
 ]},
 
 {
 classe:"Ordem, Limpeza e Organização",
+
 subclasses:[
-"Organização",
-"Materiais espalhados",
-"Resíduos",
-"Vazamentos"
+
+'Frente de trabalho em desordem (ferramentas e materiais espalhados)',
+'Resíduos gerados não segregados de forma correta'
+
 ]},
 
 {
-classe:"Ferramental e Equipamentos",
+classe:"Ferramental / Equipamento",
 subclasses:[
-"Ferramenta adequada",
-"Inspeção",
-"Proteções",
-"Equipamento danificado"
+'Impróprios para o tipo de serviço',
+'Ferramentas improvisadas',
+'Ferramentas sem o selo de inspeção de segurança'
 ]},
 
 {
 classe:"Procedimentos",
 subclasses:[
-"Procedimento seguido",
-"APR",
-"Permissão de Trabalho",
-"Comunicação"
+'Check List preenchido incorretamente',
+'AST/PT faltando assinaturas dos executantes',
+'Procedimento de LOTO não seguido',
+'Faltando documentação exigida na frente de trabalho'
 ]},
-
+    
 {
 classe:"EPI",
 subclasses:[
-"Capacete",
-"Óculos",
-"Luva",
-"Respirador",
-"Cinto",
-"Calçado"
+'Cabeça',
+'Sistema respiratório',
+'Olhos e faces',
+'Ouvidos',
+'Mãos e braços',
+'Tronco',
+'Pés e pernas'
 ]}];
 
 
