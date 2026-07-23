@@ -675,6 +675,39 @@ inputImage.onchange=e=>{
     
 
 db.enablePersistence().catch(()=>{});
+
+// ================================
+// FILA OFFLINE DE AUDITORIAS
+// ================================
+
+const OFFLINE_QUEUE_KEY = "filaAuditoriasOffline";
+
+function getOfflineQueue() {
+    try {
+        return JSON.parse(localStorage.getItem(OFFLINE_QUEUE_KEY)) || [];
+    } catch {
+        return [];
+    }
+}
+
+function saveOfflineQueue(queue) {
+    localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(queue));
+}
+
+function addToOfflineQueue(payload) {
+    const queue = getOfflineQueue();
+
+    queue.push({
+        id: "offline-" + Date.now(),
+        payload,
+        criadoEm: Date.now()
+    });
+
+    saveOfflineQueue(queue);
+
+    console.log("📥 Auditoria salva OFFLINE");
+}
+    
 const themeToggle=document.getElementById("themeToggle");
 
 if(localStorage.getItem("tema")=="dark"){
@@ -781,6 +814,29 @@ function gerarObjeto(){
         criadoEm:firebase.firestore.FieldValue.serverTimestamp()
  };}
 
+async function sincronizarFilaOffline() {
+
+    if (!navigator.onLine) return;
+    const fila = getOfflineQueue();
+    if (!fila.length) return;
+    const restante = [];
+    for (const item of fila) {
+
+        try {
+            await db.collection("auditorias").add(item.payload);
+        } catch {
+            restante.push(item);
+
+        }
+    }
+    
+    saveOfflineQueue(restante);
+} 
+
+window.addEventListener("online", sincronizarFilaOffline);
+window.addEventListener("load", sincronizarFilaOffline);
+setInterval(sincronizarFilaOffline, 10000); 
+    
 btnSalvar.onclick=async()=>{
 
     if(!auditor.value){
@@ -797,22 +853,30 @@ btnSalvar.onclick=async()=>{
     
     const objeto=gerarObjeto();
 
-    try{
-        await db.collection("auditorias").add(objeto);
-        localStorage.removeItem(DRAFT);
-        
-        toast("Auditoria salva.");
+    try {
 
-        setTimeout(()=>{
+    await db.collection("auditorias").add(objeto);
 
-    window.location.href="index.html";
+    localStorage.removeItem(DRAFT);
+    toast("Auditoria salva.");
+    setTimeout(() => {
+        window.location.href = "index.html";
+    }, 1200);
 
-},1200);      
 }
-    catch(e){
-        console.log(e);
-        toast("Erro ao salvar.");
-    }};
+catch (e) {
+
+    console.log(e);
+    addToOfflineQueue(objeto);
+    localStorage.removeItem(DRAFT);
+    toast("Sem internet. Auditoria salva no aparelho e será enviada automaticamente.");
+    setTimeout(() => {
+        window.location.href = "index.html";
+
+    }, 1200);
+
+}
+};    
 
 function limparFormulario(){
     
