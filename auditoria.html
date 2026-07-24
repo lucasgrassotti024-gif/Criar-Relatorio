@@ -922,15 +922,20 @@ btnSalvar.onclick=async()=>{
         toast("Informe a data");
         return; }
     
-    const objeto=gerarObjeto();
+    const objeto = gerarObjeto();
 
-    alert("2");
+console.log(objeto);
+alert(JSON.stringify(objeto));
+
+alert("2");
 
     try {
 
-    await db.collection("auditorias").add(objeto);
+   await db.collection("auditorias").add(objeto);
 
-    localStorage.removeItem(DRAFT);
+alert("SALVOU NO FIREBASE");
+
+localStorage.removeItem(DRAFT);
     toast("Auditoria salva.");
     setTimeout(() => {
         window.location.href = "index.html";
@@ -942,16 +947,15 @@ catch (e) {
     console.error(e);
 
     alert(
-        "Código: " + e.code +
-        "\n\n" +
-        "Mensagem:\n" + e.message
+`Código:
+${e.code}
+
+Mensagem:
+${e.message}
+
+Stack:
+${e.stack}`
     );
-
-    addToOfflineQueue(objeto);
-
-    localStorage.removeItem(DRAFT);
-
-    toast("Erro ao salvar.");
 
 }
 };    
